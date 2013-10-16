@@ -31,12 +31,15 @@ kmain()
 
 	print_hello();
 
+	/*
+	print("Hello");
 	char buffer[20];
 	long prueba=1234;
 	print(to_string(buffer,prueba));
+	*/
 /*Calcula cantidad de memoria*/
-	/*char buffer[20];
-	print(to_string(buffer,get_memory()));*/
+	char buffer[20];
+	print(to_string(buffer,1234567));
 
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */

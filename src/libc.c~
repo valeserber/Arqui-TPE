@@ -1,5 +1,5 @@
 #include "../include/kc.h"
-
+#define MAX_MEMORY 0x01100000
 
 /***************************************************************
 *k_clear_screen
@@ -13,7 +13,7 @@ void k_clear_screen()
 	unsigned int i=0;
 	while(i < (80*25*2))
 	{
-		vidmem[i]='7';
+		vidmem[i]='-';
 		i++;
 		vidmem[i]=WHITE_TXT;
 		i++;
@@ -87,14 +87,14 @@ long str_length(char * string)
 
 long get_memory() 
 {
-	long bytes=0;
-	char * mem= (char *) 0x00200000;
-	while(mem< (char *)0xFFFFFFFF){
-		*mem=48;
-		if(*mem==48){
-			*mem=192;
-			if(*mem==192){
-				bytes++;
+	long bytes=2097152;
+	int * mem= (int *)0x00200000;
+	while(mem< (int *)MAX_MEMORY){
+		*mem=67;
+		if(*mem==67){
+			*mem=142;
+			if(*mem==142){
+				bytes+=4;
 			}
 		}
 		mem++;
@@ -120,6 +120,16 @@ char * to_string(char* string, long number)
 		number= number/10;
 	}
 	string[i]=0;
+	int stop=i;
+	int k=0;
+	i--;
+	while(i>=stop/2){
+		char aux= string[k];
+		string[k]=string[i];
+		string[i]=aux;
+		k++;
+		i--;
+	}	
 	return string;
 }
 /***************************************************************

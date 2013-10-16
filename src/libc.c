@@ -1,5 +1,7 @@
 #include "../include/kc.h"
-
+#define MAX_MEMORY 0x01100000
+#define TWO_MB 2097152
+#define INITIAL_MEM 0x00200000
 
 /***************************************************************
 *k_clear_screen
@@ -13,7 +15,7 @@ void k_clear_screen()
 	unsigned int i=0;
 	while(i < (80*25*2))
 	{
-		vidmem[i]='7';
+		vidmem[i]='-';
 		i++;
 		vidmem[i]=WHITE_TXT;
 		i++;
@@ -87,14 +89,14 @@ long str_length(char * string)
 
 long get_memory() 
 {
-	long bytes=0;
-	char * mem= (char *) 0x00200000;
-	while(mem< (char *)0xFFFFFFFF){
-		*mem=48;
-		if(*mem==48){
-			*mem=192;
-			if(*mem==192){
-				bytes++;
+	long bytes=TWO_MB;
+	int * mem= (int *)INITIAL_MEM;
+	while(mem< (int *)MAX_MEMORY){
+		*mem=67;
+		if(*mem==67){
+			*mem=142;
+			if(*mem==142){
+				bytes+=4;
 			}
 		}
 		mem++;
