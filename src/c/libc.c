@@ -7,7 +7,7 @@
 * Borra la pantalla en modo texto color.
 ****************************************************************/
 
-void k_clear_screen() 
+void k_clear_screen()
 {
 	char *vidmem = (char *) VIDMEM_ADDRESS;
 	unsigned int i=0;
@@ -23,7 +23,7 @@ void k_clear_screen()
 * Imprime hola mundo en pantalla en modo texto color.
 ****************************************************************/
 
-void print_hello() 
+void print_hello()
 {
 	char *vidmem = (char *) VIDMEM_ADDRESS;
 	unsigned int i=0;
@@ -41,7 +41,7 @@ void print_hello()
 * Imprime en pantalla en modo texto color.
 ****************************************************************/
 
-void print(char * string) 
+void print(char * string)
 {
 	char *vidmem = (char *) VIDMEM_ADDRESS;
 	unsigned int i=0;
@@ -60,7 +60,7 @@ void print(char * string)
 * Devuelve la longitud del string.
 ****************************************************************/
 
-size_t strlen(char * string) 
+size_t strlen(char * string)
 {
 	size_t len=0;
 	while(string[len]!='\0'){
@@ -75,7 +75,7 @@ size_t strlen(char * string)
 * Calcula la cantidad de memoria comenzando en 2MB.
 ****************************************************************/
 
-size_t get_memory() 
+size_t get_memory()
 {
 	size_t bytes=TWO_MB;
 	int * mem= (int *)INITIAL_MEM;
@@ -98,7 +98,7 @@ size_t get_memory()
 * Convierte de long a char *.
 ****************************************************************/
 
-char * to_string(char* string, long number) 
+char * to_string(char* string, long number)
 {
 	int i=0;
 	if(number==0){
@@ -116,7 +116,7 @@ char * to_string(char* string, long number)
 		char aux= string[k];
 		string[k++]=string[i];
 		string[i--]=aux;
-	}	
+	}
 	return string;
 }
 /***************************************************************
@@ -125,7 +125,7 @@ char * to_string(char* string, long number)
 *
 *Recibe: Puntero a elemento de la IDT
 *	 Selector a cargar en el descriptor de interrupcion
-*	 Puntero a rutina de atencion de interrupcion	
+*	 Puntero a rutina de atencion de interrupcion
 *	 Derechos de acceso del segmento
 *	 Cero
 ****************************************************************/

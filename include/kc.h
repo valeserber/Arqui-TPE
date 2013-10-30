@@ -24,7 +24,7 @@ void print_hello();
 void print(char * string);
 
 /*Longitud del string*/
-long str_length(char * string);
+long strlen(char * string);
 
 /*Calcula cantidad de memoria*/
 long get_memory();
@@ -33,7 +33,7 @@ long get_memory();
 char * to_string(char * string, long number);
 
 /* Inicializa la entrada del IDT */
-void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset, byte access,
-			 byte cero);
+void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset,
+        byte access, byte cero);
 
 #endif

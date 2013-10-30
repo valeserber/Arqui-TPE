@@ -1,4 +1,0 @@
-menuentry "TP5 Kernel" {
-	multiboot /boot/kernel.bin
-}
-

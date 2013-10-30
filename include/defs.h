@@ -1,14 +1,27 @@
 /***************************************************
-  Defs.h
-	
+  defs.h
+
 ****************************************************/
 
 #ifndef _defs_
 #define _defs_
 
-#define byte unsigned char
-#define word short int
-#define dword int
+#define MAX_MEMORY      0x01100000
+#define TWO_MB          2097152
+#define INITIAL_MEM     0x00200000
+#define VIDMEM_ADDRESS  0xb8000
+#define SCREEN_ROWS     25
+#define SCREEN_COLS     80
+#define CHAR_SIZE       2
+#define SCREEN_SIZE     SCREEN_COLS*SCREEN_ROWS*CHAR_SIZE
+
+/*
+ * Type definitions
+ */
+typedef unsigned char byte;
+typedef short int word;
+typedef int dword;
+typedef unsigned int size_t;
 
 /* Flags para derechos de acceso de los segmentos */
 #define ACS_PRESENT     0x80            /* segmento presente en memoria */
@@ -17,7 +30,7 @@
 #define ACS_READ        0x02            /* segmento de lectura */
 #define ACS_WRITE       0x02            /* segmento de escritura */
 #define ACS_IDT         ACS_DSEG
-#define ACS_INT_386 	0x0E		/* Interrupt GATE 32 bits */
+#define ACS_INT_386     0x0E            /* Interrupt GATE 32 bits */
 #define ACS_INT         ( ACS_PRESENT | ACS_INT_386 )
 
 
@@ -25,7 +38,7 @@
 #define ACS_DATA        (ACS_PRESENT | ACS_DSEG | ACS_WRITE)
 #define ACS_STACK       (ACS_PRESENT | ACS_DSEG | ACS_WRITE)
 
-#pragma pack (1) 		/* Alinear las siguiente estructuras a 1 byte */
+#pragma pack (1)        /* Alinear las siguiente estructuras a 1 byte */
 
 /* Descriptor de segmento */
 typedef struct {
@@ -44,7 +57,7 @@ typedef struct {
             selector;
   byte      cero,
             access;
-  word	    offset_h;
+  word      offset_h;
 } DESCR_INT;
 
 /* IDTR  */
@@ -53,7 +66,4 @@ typedef struct {
   dword base;
 } IDTR;
 
-     
-
 #endif
-
