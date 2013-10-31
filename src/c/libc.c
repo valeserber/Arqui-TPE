@@ -1,7 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-extern  void write(char ch, FILE * stream);
+extern  void _write(char ch, FILE * stream);
 
 /***************************************************************
 *k_clear_screen
@@ -130,7 +130,7 @@ char * to_string(char* string, long number)
 int putc(int c, FILE *stream)
 {
     char ch = c;
-    write(ch, stream);
+    _write(ch, stream);
     return c;
 }
 
