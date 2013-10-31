@@ -1,0 +1,10 @@
+#include "../../include/kc.h"
+#include "../../include/defs.h"
+
+void int_08() {
+
+    char *video = (char *) 0xb8000;
+    video[tickpos+=2]='*';
+
+}
+
