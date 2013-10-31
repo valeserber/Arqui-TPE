@@ -1,6 +1,9 @@
 #include "../include/kc.h"
 #include "./include/defs.h"
 
+typedef enum {STDIN, STDOUT, STDERR} stream;
+typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
+
 /***************************************************************
 *k_clear_screen
 *
@@ -132,7 +135,17 @@ int putc(int c, FILE *stream)
     return c;
 }
 
-// void int_80h(int interruption, int fd, ...etc )
+void int_80h(int interruption, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
+{
+    switch(interruption){
+        case SYS_WRITE:
+            sys_write(arg1, arg2, arg3);
+            break;
+        case SYS_READ:
+            sys_read(arg1,arg2, arg3);
+            break;
+    }
+}
 
 /***************************************************************
 *setup_IDT_entry

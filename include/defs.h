@@ -6,14 +6,17 @@
 #ifndef _defs_
 #define _defs_
 
-#define MAX_MEMORY      0x01100000
-#define TWO_MB          2097152
-#define INITIAL_MEM     0x00200000
-#define VIDMEM_ADDRESS  0xb8000
-#define SCREEN_ROWS     25
-#define SCREEN_COLS     80
-#define CHAR_SIZE       2
-#define SCREEN_SIZE     SCREEN_COLS*SCREEN_ROWS*CHAR_SIZE
+#define MAX_MEMORY          0x01100000
+#define TWO_MB              2097152
+#define INITIAL_MEM         0x00200000
+#define VIDMEM_ADDRESS      0xb8000
+#define CHAR_SIZE           2
+#define SCREEN_COLS         80
+#define MAIN_SCREEN_ADDRESS 0xb8640
+#define MAIN_SCREEN_ROWS    15
+#define MAIN_SCREEN_SIZE    SCREEN_COLS*MAIN_SCREEN_ROWS*CHAR_SIZE
+#define UPPER_SCREEN_ROWS   10
+#define UPPER_SCREEN_SIZE   SCREEN_COLS*UPPER_SCREEN_ROWS*CHAR_SIZE
 
 /*
  * Type definitions
