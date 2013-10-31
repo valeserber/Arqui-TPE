@@ -7,7 +7,7 @@ GLOBAL  _debug
 
 EXTERN  int_08
 EXTERN  int_09
-EXTERN  int_80h
+EXTERN  int_80
 
 
 SECTION .text

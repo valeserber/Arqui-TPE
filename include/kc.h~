@@ -36,5 +36,7 @@ char * to_string(char * string, long number);
 void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset,
         byte access, byte cero);
 
+/* Write User Space */
+void write(char ch, FILE * stream);
 
 #endif

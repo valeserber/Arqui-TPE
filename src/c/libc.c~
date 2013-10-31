@@ -1,7 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-extern  void write(char ch, FILE * stream);
+extern write(char ch, FILE * stream);
 
 /***************************************************************
 *k_clear_screen
