@@ -1,5 +1,5 @@
 #include "../include/kc.h"
-#include "./definitions.h"
+#include "./include/defs.h"
 
 /***************************************************************
 *k_clear_screen
@@ -119,6 +119,21 @@ char * to_string(char* string, long number)
     }
     return string;
 }
+
+/***************************************************************
+* putc
+*
+***************************************************************/
+// TODO ver el return
+int putc(int c, FILE *stream)
+{
+    char ch = c;
+    write(ch, stream);
+    return c;
+}
+
+// void int_80h(int interruption, int fd, ...etc )
+
 /***************************************************************
 *setup_IDT_entry
 * Inicializa un descriptor de la IDT
