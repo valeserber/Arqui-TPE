@@ -1,7 +1,7 @@
 GLOBAL  _read_msw,_lidt
 GLOBAL  _int_08_hand, _int_09_hand, _int_80_hand
 GLOBAL 	_write
-GLOBAL  _mascaraPIC1,_mascaraPIC2,_Cli,_Sti
+GLOBAL  _mascaraPIC1, _mascaraPIC2, _Cli, _Sti
 GLOBAL  _debug
 
 EXTERN  int_08
@@ -95,12 +95,9 @@ _int_09_hand:                   ;Keyboard Handler
     iret
 
 _int_80h_hand:
-    push    ds
-    push    es
-    pusha
-    push    eax             ;TODO pusheo antes de que me lo pisen?
-    mov     ax, 10h
-    mov     ds, ax
+    push    ebp
+    mov     ebp, esp
+    push    eax
     push    ebx
     push    ecx
     push    edx
@@ -108,12 +105,9 @@ _int_80h_hand:
     push    edi
     call    int_80h
     add     esp, 24
-    mov     al, 20h
-    out     20h, al
-    popa
-    pop     es
-    pop     ds
-    iret
+    mov     esp, ebp
+    pop     ebp
+    ret
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;

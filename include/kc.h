@@ -21,16 +21,16 @@ void k_clear_screen();
 void print_hello();
 
 /*Imprime en pantalla*/
-void print(char * string);
+void print(char * str);
 
 /*Longitud del string*/
-size_t strlen(char * string);
+size_t strlen(char * str);
 
 /*Calcula cantidad de memoria*/
 size_t get_memory();
 
 /*Convierte de long a char* */
-char * to_string(char * string, long number);
+char * to_string(char * str, long number);
 
 /* Inicializa la entrada del IDT */
 void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset,
