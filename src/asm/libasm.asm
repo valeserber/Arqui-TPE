@@ -1,6 +1,6 @@
 GLOBAL  _read_msw,_lidt
 GLOBAL  _int_08_hand, _int_09_hand, _int_80h_hand
-GLOBAL 	_write
+GLOBAL  _read, _write
 GLOBAL  _mascaraPIC1, _mascaraPIC2, _Cli, _Sti
 GLOBAL  _debug
 
@@ -51,9 +51,21 @@ _lidt:                          ;Carga el IDTR
     pop     ebp
     retn
 
+_read:
+    push    ebp
+    mov     ebp, esp
+    mov     eax, 3              ;sys_read  number
+    mov     ebx, [ebp +8]
+    mov     ecx, [ebp + 12]
+    mov     edx, [ebp + 16]
+    int     80h
+    leave
+    ret
+
 _write:
     push    ebp
     mov     ebp, esp
+    mov     eax, 4              ;sys_write number
     mov     ebx, [ebp+8]        ;ebx = fd
     mov     ecx, [ebp+12]       ;ecx = *buf
     mov     edx, [ebp+16]       ;edx = count
