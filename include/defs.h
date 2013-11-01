@@ -27,6 +27,7 @@ typedef short int word;
 typedef int dword;
 typedef unsigned int size_t;
 typedef signed int ssize_t;
+typedef enum {false, true} bool;
 
 /* Flags para derechos de acceso de los segmentos */
 #define ACS_PRESENT     0x80            /* segmento presente en memoria */
