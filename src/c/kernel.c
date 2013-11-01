@@ -22,7 +22,7 @@ kmain()
 
 /*Imprime hola mundo. */
 
-    print_hello();
+    //print_hello();
 
     /*
     print("Hello");
@@ -31,8 +31,8 @@ kmain()
     print(to_string(buffer,prueba));
     */
 /*Calcula cantidad de memoria*/
-    char buffer[20];
-    print(to_string(buffer,get_memory()));
+   // char buffer[20];
+   // print(to_string(buffer,get_memory()));
 
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */

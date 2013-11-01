@@ -16,7 +16,7 @@ void k_clear_screen()
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
-    while(i < MAIN_SCREEN_SIZE){
+    while(i < UPPER_SCREEN_SIZE){
         vidmem[i++]='-';
         vidmem[i++]=WHITE_TXT;
     };
@@ -32,9 +32,9 @@ void print_hello()
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
-    unsigned int j=80*15*2;
+    unsigned int j=UPPER_SCREEN_SIZE;
     char *string = "Hola mundo";
-    while(j < (80*15*2)+20){
+    while(j < (UPPER_SCREEN_SIZE)+20){
         vidmem[j++]=string[i++];
         vidmem[j++]=WHITE_TXT;
     };
@@ -50,7 +50,7 @@ void print(char * string)
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
-    unsigned int j=0;
+    unsigned int j=UPPER_SCREEN_SIZE;
     size_t length= strlen(string);
     while(i < length && j < MAIN_SCREEN_SIZE)
     {

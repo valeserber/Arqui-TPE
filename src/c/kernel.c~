@@ -1,10 +1,10 @@
 #include "../../include/kasm.h"
 #include "../../include/defs.h"
 
-DESCR_INT idt[0xA];     /* IDT de 10 entradas*/
+DESCR_INT idt[0xFF];    /* 256 entries IDT*/
 IDTR idtr;              /* IDTR */
 
-int tickpos=640;
+//int tickpos=640;
 
 
 /**********************************************
@@ -31,16 +31,17 @@ kmain()
     print(to_string(buffer,prueba));
     */
 /*Calcula cantidad de memoria*/
-    char buffer[20];
-    print(to_string(buffer,get_memory()));
+   // char buffer[20];
+   // print(to_string(buffer,get_memory()));
 
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
 
         setup_IDT_entry (&idt[0x08], 0x08, (dword)&_int_08_hand, ACS_INT, 0);
-        setup_IDT_entry (&idt[0x08], 0x08, (dword)&_int_09_hand, ACS_INT, 0);
+        setup_IDT_entry (&idt[0x09], 0x08, (dword)&_int_09_hand, ACS_INT, 0);
+        setup_IDT_entry (&idt[0x80], 0x08, (dword)&_int_80h_hand, ACS_INT, 0);
 
-/* Carga de IDTR    */
+/* Load IDTR    */
 
     idtr.base = 0;
     idtr.base +=(dword) &idt;
