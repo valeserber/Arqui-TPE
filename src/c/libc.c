@@ -1,7 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-extern  void _write(char ch, FILE * stream);
+extern  void _write(int fd, const void *buf, size_t count);
 
 typedef enum {STDIN, STDOUT, STDERR} stream;
 typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
@@ -16,7 +16,7 @@ void k_clear_screen()
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
-    while(i < SCREEN_SIZE){
+    while(i < MAIN_SCREEN_SIZE){
         vidmem[i++]='-';
         vidmem[i++]=WHITE_TXT;
     };
@@ -52,7 +52,7 @@ void print(char * string)
     unsigned int i=0;
     unsigned int j=0;
     size_t length= strlen(string);
-    while(i < length && j < SCREEN_SIZE)
+    while(i < length && j < MAIN_SCREEN_SIZE)
     {
         vidmem[j++]=string[i++];
         vidmem[j++]=WHITE_TXT;
@@ -103,7 +103,7 @@ size_t get_memory()
 * Convierte de long a char *.
 ****************************************************************/
 
-char * to_string(char* string, long number)
+char * to_string(char* str, long number)
 {
     int i=0;
     if(number==0){
@@ -111,18 +111,18 @@ char * to_string(char* string, long number)
     }
     while(number!=0){
         char n= (number%10)+'0';
-        string[i++]=n;
+        str[i++]=n;
         number /= 10;
     }
-    string[i]=0;
+    str[i]=0;
     int stop=i--;
     int k=0;
     while(i >= stop/2){
-        char aux= string[k];
-        string[k++]=string[i];
-        string[i--]=aux;
+        char aux= str[k];
+        str[k++]=str[i];
+        str[i--]=aux;
     }
-    return string;
+    return str;
 }
 
 /***************************************************************
@@ -132,19 +132,19 @@ char * to_string(char* string, long number)
 // TODO ver el return
 int putc(int c, FILE *stream)
 {
-    char ch = c;
-    _write(ch, stream);
+    unsigned char ch = c;
+    _write(stream->fd, &ch, 1);
     return c;
 }
 
-void int_80h(int interruption, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
+void int_80h(int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-    switch(interruption){
+    switch(sysCallNumber){
         case SYS_WRITE:
-            sys_write(arg1, arg2, arg3);
+//          write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:
-            sys_read(arg1,arg2, arg3);
+//          read(arg1,arg2, arg3);
             break;
     }
 }

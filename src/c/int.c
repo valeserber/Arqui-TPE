@@ -8,8 +8,13 @@ void int_08() {
 
 }
 
+void int_09()
+{
+
+}
+
 //TODO
-void sys_write(int fd, const void * buf, size_t count){
+void write(int fd, const void * buf, size_t count){
     char *vidmem = (char *) MAIN_SCREEN_ADDRESS;
     unsigned int i=0;
     while(i < count && writepos < MAIN_SCREEN_SIZE)
