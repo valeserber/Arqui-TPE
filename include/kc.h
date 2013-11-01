@@ -36,5 +36,13 @@ char * to_string(char * str, long number);
 void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset,
         byte access, byte cero);
 
+/*Convierte de scancode a codigo ascii*/
+int scancodeToAscii(unsigned char scancode);
+
+/*Inicializa el buffer de teclado*/
+void buffer_initialize(BUFFER buf);
+
+/*Agrega al buffer lo ingresado por teclado*/
+void addToKeyboardBuffer(int ascii_c);
 
 #endif

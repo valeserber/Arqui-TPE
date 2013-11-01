@@ -18,6 +18,9 @@
 #define UPPER_SCREEN_ROWS   10
 #define UPPER_SCREEN_SIZE   SCREEN_COLS*UPPER_SCREEN_ROWS*CHAR_SIZE
 #define INT_MIN             (-2147483647-1)
+#define BUFFER_SIZE	    256
+#define KEYS		    0x59
+#define NOTHING		    0
 
 /*
  * Type definitions
@@ -76,5 +79,10 @@ typedef struct{
   size_t size;
   char * buffer;
 } FILE;
+
+typedef struct{
+  unsigned char buffer[BUFFER_SIZE];
+  int buffer_pos;
+} BUFFER;
 
 #endif

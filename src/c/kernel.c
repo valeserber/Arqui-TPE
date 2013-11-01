@@ -3,6 +3,7 @@
 
 DESCR_INT idt[0xFF];    /* 256 entries IDT*/
 IDTR idtr;              /* IDTR */
+BUFFER keyboard_buffer; /* keyboard buffer*/
 
 //int tickpos=640;
 
@@ -52,9 +53,12 @@ kmain()
     _Cli();
 /* Habilito interrupcion de timer tick*/
 
-    _mascaraPIC1(0xFE);
-    _mascaraPIC2(0xFF);
+  //  _mascaraPIC1(0xFE); //1111 1110 master PIC habilitado el timer tick
+    _mascaraPIC1(0xFD);      //1111 1101  habilito el teclado
+    _mascaraPIC2(0xFF); //1111 1111 slave PIC
     _Sti();
+
+    buffer_initialize(keyboard_buffer);
 
     while(1){}
 }

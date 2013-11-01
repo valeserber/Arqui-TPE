@@ -12,7 +12,10 @@ void int_08(){
 void int_09(unsigned char scancode){
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
-    if(ascii_c != 0) addToKeyboardBuffer(ascii_c);
+    if(ascii_c !=0){
+    	putc(ascii_c,1);
+        addToKeyboardBuffer(ascii_c);
+    }
     _Sti();
 }
 

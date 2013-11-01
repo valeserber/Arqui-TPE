@@ -128,10 +128,17 @@ char * to_string(char* str, long number)
 *
 ***************************************************************/
 // TODO ver el return
-int putc(int c, FILE *stream)
+/*int putc(int c, FILE *stream)
 {
     unsigned char ch = c;
     _write(stream->fd, &ch, 1);
+    return c;
+}*/
+
+int putc(int c, int fd)
+{
+    unsigned char ch = c;
+    _write(fd, &ch, 1);
     return c;
 }
 
