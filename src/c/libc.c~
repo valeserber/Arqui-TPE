@@ -1,7 +1,10 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-extern  void write(char ch, FILE * stream);
+//extern  void _write(int fd,char * buf,int count);
+
+typedef enum {STDIN, STDOUT, STDERR} stream;
+typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
 
 /***************************************************************
 *k_clear_screen
@@ -13,7 +16,7 @@ void k_clear_screen()
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
-    while(i < SCREEN_SIZE){
+    while(i < MAIN_SCREEN_SIZE){
         vidmem[i++]='-';
         vidmem[i++]=WHITE_TXT;
     };
@@ -49,7 +52,7 @@ void print(char * string)
     unsigned int i=0;
     unsigned int j=0;
     size_t length= strlen(string);
-    while(i < length && j < SCREEN_SIZE)
+    while(i < length && j < MAIN_SCREEN_SIZE)
     {
         vidmem[j++]=string[i++];
         vidmem[j++]=WHITE_TXT;
@@ -130,11 +133,21 @@ char * to_string(char* string, long number)
 int putc(int c, FILE *stream)
 {
     char ch = c;
-    write(ch, stream);
+    _write(stream->fd,&ch,1);
     return c;
 }
 
-// void int_80h(int interruption, int fd, ...etc )
+void int_80h(int interruption, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
+{
+    switch(interruption){
+        case SYS_WRITE:
+            sys_write(arg1, arg2, arg3);
+            break;
+        case SYS_READ:
+            sys_read(arg1,arg2, arg3);
+            break;
+    }
+}
 
 /***************************************************************
 *setup_IDT_entry

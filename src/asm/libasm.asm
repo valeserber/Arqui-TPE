@@ -52,7 +52,7 @@ _lidt:                          ;Carga el IDTR
     pop     ebp
     retn
 
-write:
+_write:
     push    ebp
     mov     ebp, esp
     mov     ebx, [ebp+8]        ;ebx = fd

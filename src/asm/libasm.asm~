@@ -7,11 +7,10 @@ GLOBAL  _debug
 
 EXTERN  int_08
 EXTERN  int_09
-EXTERN  int_80
+EXTERN  int_80h
 
 
 SECTION .text
-
 
 _Cli:
     cli                         ;limpia flag de interrupciones

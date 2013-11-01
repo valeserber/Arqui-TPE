@@ -4,8 +4,7 @@
 DESCR_INT idt[0xA];     /* IDT de 10 entradas*/
 IDTR idtr;              /* IDTR */
 
-int tickpos=640;
-int writepos=0;  /* va de 0 a 2399*/
+//int tickpos=640;
 
 
 /**********************************************

@@ -1,7 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-extern  void _write(char ch, FILE * stream);
+extern  void _write(int fd,char * buf,int count);
 
 typedef enum {STDIN, STDOUT, STDERR} stream;
 typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
@@ -16,7 +16,7 @@ void k_clear_screen()
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
-    while(i < SCREEN_SIZE){
+    while(i < MAIN_SCREEN_SIZE){
         vidmem[i++]='-';
         vidmem[i++]=WHITE_TXT;
     };
@@ -52,7 +52,7 @@ void print(char * string)
     unsigned int i=0;
     unsigned int j=0;
     size_t length= strlen(string);
-    while(i < length && j < SCREEN_SIZE)
+    while(i < length && j < MAIN_SCREEN_SIZE)
     {
         vidmem[j++]=string[i++];
         vidmem[j++]=WHITE_TXT;
@@ -133,7 +133,7 @@ char * to_string(char* string, long number)
 int putc(int c, FILE *stream)
 {
     char ch = c;
-    _write(ch, stream);
+    _write(stream->fd,&ch,1);
     return c;
 }
 

@@ -22,6 +22,6 @@ void	    _int_80_hand();	/* System call */
 
 void        _debug (void);
 
-void        _write(char ch, FILE * stream); /*write user space*/
+void        _write(int fd,char * buf,int count); /*write user space*/
 
 
