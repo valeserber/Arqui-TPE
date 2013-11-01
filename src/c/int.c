@@ -1,23 +1,25 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-void int_08() {
-
-    char *video = (char *) 0xb8000;
+void int_08()
+{
+    char *video = (char *)0xb8000;
     video[tickpos+=2]='*';
+}
+
+void int_09(unsigned char scancode){
 
 }
 
 //TODO
-void sys_write(int fd, const void * buf, size_t count){
-    char *vidmem = (char *) MAIN_SCREEN_ADDRESS;
+void sys_write(int fd, const void *buf, size_t count){
+    char *vidmem = (char *)MAIN_SCREEN_ADDRESS;
     unsigned int i=0;
-    while(i < count && writepos < MAIN_SCREEN_SIZE)
-    {
+    while(i < count && writepos < MAIN_SCREEN_SIZE){
         vidmem[writepos++]=buf[i++];
         vidmem[writepos++]=WHITE_TXT;
     }
-    if(writepos==MAIN_SCREEN_SIZE){
-	writepos=0;
+    if(writepos == MAIN_SCREEN_SIZE){
+        writepos = 0;
     }
 }

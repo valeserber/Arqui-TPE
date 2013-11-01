@@ -67,10 +67,8 @@ void print(char * string)
 
 size_t strlen(char * string)
 {
-    size_t len=0;
-    while(string[len]!='\0'){
-        len++;
-    }
+    size_t len = 0;
+    while(string[len++]);
     return len;
 }
 
@@ -137,15 +135,16 @@ int putc(int c, FILE *stream)
     return c;
 }
 
-void int_80h(int interruption, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
+void int_80h(int sys_call, unsigned int arg1, char *arg2, int arg3, int arg4, int arg5)
 {
-    switch(interruption){
-        case SYS_WRITE:
+    switch(sys_call){
+        case WRITE:
             sys_write(arg1, arg2, arg3);
             break;
-        case SYS_READ:
+        case READ:
             sys_read(arg1,arg2, arg3);
             break;
+        default: break;
     }
 }
 

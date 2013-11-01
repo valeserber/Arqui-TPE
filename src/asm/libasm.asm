@@ -52,7 +52,7 @@ _lidt:                          ;Carga el IDTR
     pop     ebp
     retn
 
-write:
+_write:
     push    ebp
     mov     ebp, esp
     mov     ebx, [ebp+8]        ;ebx = fd
@@ -96,12 +96,9 @@ _int_09_hand:                   ;Keyboard Handler
     iret
 
 _int_80h_hand:
-    push    ds
-    push    es
-    pusha
-    push    eax             ;TODO pusheo antes de que me lo pisen?
-    mov     ax, 10h
-    mov     ds, ax
+    push    ebp
+    mov     ebp, esp
+    push    eax
     push    ebx
     push    ecx
     push    edx
@@ -109,12 +106,9 @@ _int_80h_hand:
     push    edi
     call    int_80h
     add     esp, 24
-    mov     al, 20h
-    out     20h, al
-    popa
-    pop     es
-    pop     ds
-    iret
+    mov     esp, ebp
+    pop     ebp
+    ret
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
