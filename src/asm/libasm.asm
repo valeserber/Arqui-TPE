@@ -1,5 +1,5 @@
 GLOBAL  _read_msw,_lidt
-GLOBAL  _int_08_hand, _int_09_hand, _int_80_hand
+GLOBAL  _int_08_hand, _int_09_hand, _int_80h_hand
 GLOBAL 	_write
 GLOBAL  _mascaraPIC1, _mascaraPIC2, _Cli, _Sti
 GLOBAL  _debug

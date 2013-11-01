@@ -143,6 +143,7 @@ void int_80h(int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4,
             break;
         case SYS_READ:
 //          read(arg1,arg2, arg3);
+	    break;
     }
 }
 

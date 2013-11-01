@@ -18,7 +18,7 @@ void        _Sti(void);         /* Enable interruptions */
 
 void        _int_08_hand();     /* Timer tick */
 void        _int_09_hand();     /* Keyboard */
-void        _int_80_hand();     /* System call */
+void        _int_80h_hand();     /* System call */
 
 void        _debug (void);
 

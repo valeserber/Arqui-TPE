@@ -1,11 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-<<<<<<< HEAD
-extern  void _write(int fd,char * buf,int count);
-=======
 extern  void _write(int fd, const void *buf, size_t count);
->>>>>>> 027a1c7387ff12cc7b1eee62c3f3e042e9adfc36
 
 typedef enum {STDIN, STDOUT, STDERR} stream;
 typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
