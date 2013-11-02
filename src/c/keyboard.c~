@@ -211,6 +211,6 @@ void addToKeyboardBuffer(int ascii_c){
 	keyboard_buffer.buffer_pos=0;
    }
    keyboard_buffer.buffer[keyboard_buffer.buffer_pos]=(unsigned char)ascii_c;
-   keyboard_buffer.buffer_pos++;
+   keyboard_buffer.buffer_pos+=1;
 }
 

@@ -101,7 +101,7 @@ size_t get_memory()
 * Convierte de long a char *.
 ****************************************************************/
 
-char * to_string(char* str, int number)
+char * to_string(char* str, long number)
 {
     int i=0;
     if(number==0){
@@ -137,6 +137,7 @@ char * to_string(char* str, int number)
 
 int putc(int c, int fd)
 {
+	print("en putc");
     unsigned char ch = c;
     _write(fd, &ch, 1);
     return c;
