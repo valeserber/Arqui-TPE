@@ -198,11 +198,11 @@ int scancodeToAscii(unsigned char scancode){
 }
 
 
-void buffer_initialize(BUFFER buf){
-    buf.buffer_pos=0;
+void buffer_initialize(BUFFER * buf){
+    buf->buffer_pos=0;
     int i;
     for(i=0;i<BUFFER_SIZE;i++){
-	buf.buffer[i]=0;
+	buf->buffer[i]=0;
     }
 }
 
