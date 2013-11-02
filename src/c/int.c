@@ -49,5 +49,15 @@ void write(int fd, const void * buf, size_t count){
 }
 
 ssize_t read(int fd, const void *buf, size_t count){
-    return 0; //TODO stub
+//   char * b=(char *) buf;
+//   int i;
+//   int j=0; 
+//   for(i=0; i<count;i++){
+//	b[i]=keyboard_buffer[j++];	
+//	if(j==BUFFER_SIZE){
+//		j=0;
+//	}
+//   }
+  
+   return 0; //TODO stub
 }
