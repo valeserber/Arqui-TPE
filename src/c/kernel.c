@@ -6,7 +6,6 @@ IDTR idtr;              /* IDTR */
 BUFFER keyboard_buffer; /* keyboard buffer*/
 
 //int tickpos=640;
-char holi[20];
 
 /**********************************************
 kmain()

@@ -2,7 +2,6 @@
 #include "../../include/defs.h"
 
 extern  void _write(int fd, const void *buf, size_t count);
-extern char holi[20];
 
 typedef enum {STDIN, STDOUT, STDERR} stream;
 //typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
@@ -171,12 +170,8 @@ int putc(int c, int fd)
 
 void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-	int n=sysCallNumber+48;
-	print(tostring(holi,n));
-
     switch(sysCallNumber){
         case SYS_WRITE:
-		print("int 80h ");
           write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:

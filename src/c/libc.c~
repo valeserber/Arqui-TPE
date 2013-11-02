@@ -171,19 +171,8 @@ int putc(int c, int fd)
 
 void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-<<<<<<< HEAD
-	int n=sysCallNumber+48;
-	print(tostring(holi,n));
-=======
-	char holi[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	long n = sysCallNumber;
-	print(to_string(holi,n));
-	// print(to_string(holi,4));
->>>>>>> bfde4b1bc3666f0ee5144add97fc5b2801c9deb9
-
     switch(sysCallNumber){
         case SYS_WRITE:
-		print("int 80h ");
           write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:
