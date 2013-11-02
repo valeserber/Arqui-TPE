@@ -36,3 +36,7 @@ void write(int fd, const void * buf, size_t count){
         writepos = UPPER_SCREEN_SIZE;
     }
 }
+
+ssize_t read(int fd, const void *buf, size_t count){
+    return 0; //TODO stub
+}

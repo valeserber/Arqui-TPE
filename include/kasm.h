@@ -22,6 +22,7 @@ void        _int_80h_hand();     /* System call */
 
 void        _debug (void);
 
-void        _write(int fd,char * buf,int count); /*write user space*/
+void        _write(int fd, char *buf, int count); /*write user space*/
+void        _read(int fd, char *buf, int count);
 
 
