@@ -198,15 +198,15 @@ int scancodeToAscii(unsigned char scancode){
 }
 
 
-void buffer_initialize(BUFFER buf){
-    buf.buffer_pos=0;
+void buffer_initialize(BUFFER * buf){
+    buf->buffer_pos=0;
     int i;
     for(i=0;i<BUFFER_SIZE;i++){
-	buf.buffer[i]=0;
+	buf->buffer[i]=0;
     }
 }
 
-void addToKeyboardBuffer(int ascii_c){
+void addToKeyboardBuffer(char ascii_c){
    if(keyboard_buffer.buffer_pos == BUFFER_SIZE){
 	keyboard_buffer.buffer_pos=0;
    }

@@ -16,7 +16,6 @@ Punto de entrada de código C.
 kmain()
 {
     int i,num;
-    buffer_initialize(keyboard_buffer);
 
 /* Borra la pantalla. */
 
@@ -59,7 +58,7 @@ kmain()
     _mascaraPIC2(0xFF); //1111 1111 slave PIC
     _Sti();
 
-
+    buffer_initialize(&keyboard_buffer);
     while(1){}
 }
 

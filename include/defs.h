@@ -19,7 +19,7 @@
 #define UPPER_SCREEN_SIZE   SCREEN_COLS*UPPER_SCREEN_ROWS*CHAR_SIZE
 #define INT_MIN             (-2147483647-1)
 #define BUFFER_SIZE	    256
-#define KEYS		    91 
+#define KEYS		    91
 #define NOTHING		    0
 
 /*

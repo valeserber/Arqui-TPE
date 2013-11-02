@@ -19,18 +19,17 @@ void int_09(unsigned char scancode){
     int ascii_c = scancodeToAscii(scancode);
     
     if(ascii_c !=0){
-      // putc(ascii_c,1);
-       addToKeyboardBuffer(ascii_c);
-      //esto es para imprimir, dsp hay que borrarlo
-        int j;
-	char i=0;
-	for(j=0; j< BUFFER_SIZE; j++,i++){
+      // addToKeyboardBuffer(ascii_c);
+       //putc(ascii_c,1);
+/*        int j;
+	int i=0;
+	for(j=0; i < BUFFER_SIZE;){
  	vidmem[j++]=keyboard_buffer.buffer[i++];
-        vidmem[j]=WHITE_TXT;
+        vidmem[j++]=WHITE_TXT;
        //hasta aca
-	}
-	
-    }
+	}	
+*/  
+  }
     _Sti();
 }
 

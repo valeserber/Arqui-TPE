@@ -1,5 +1,7 @@
- mkdir bin
- cd ./bin
+#if [ ! -d ./bin ]
+#    then mkdir bin
+#fi
+cd ./bin
 rm -rf *
 nasm -f aout ../src/asm/libasm.asm -o libasm.o
 nasm -f aout ../src/asm/loader.asm -o kstart.o

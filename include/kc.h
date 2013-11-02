@@ -40,9 +40,9 @@ void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset,
 int scancodeToAscii(unsigned char scancode);
 
 /*Inicializa el buffer de teclado*/
-void buffer_initialize(BUFFER buf);
+void buffer_initialize(BUFFER * buf);
 
 /*Agrega al buffer lo ingresado por teclado*/
-void addToKeyboardBuffer(int ascii_c);
+void addToKeyboardBuffer(char ascii_c);
 
 #endif

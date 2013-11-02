@@ -146,7 +146,7 @@ void int_80h(int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4,
 {
     switch(sysCallNumber){
         case SYS_WRITE:
-//          write((int)arg1, (void *)arg2, (size_t)arg3);
+          write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:
 //          read(arg1,arg2, arg3);
