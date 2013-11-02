@@ -5,9 +5,9 @@
 extern void _write(int fd, const void *buf, size_t count);
 extern void _read(int fd, void *buf, size_t count);
 
+//typedef enum {STDIN, STDOUT, STDERR} stream;
 //typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
-#define SYS_READ 3
-#define SYS_WRITE 4
+
 
 /***************************************************************
 *k_clear_screen
@@ -128,6 +128,28 @@ char * to_string(char* str, long number)
     return str;
 }
 
+char * tostring(char* str, int number)
+{
+    int i=0;
+    if(number==0){
+        return "0";
+    }
+    while(number!=0){
+        char n= (number%10)+'0';
+        str[i++]=n;
+        number /= 10;
+    }
+    str[i]=0;
+    int stop=i--;
+    int k=0;
+    while(i >= stop/2){
+        char aux= str[k];
+        str[k++]=str[i];
+        str[i--]=aux;
+    }
+    return str;
+}
+
 /***************************************************************
 * putc
 *
@@ -155,8 +177,6 @@ int getc(FILE *stream){
 
 void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-	char holi[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
     switch(sysCallNumber){
         case SYS_WRITE:
           write((int)arg1, (void *)arg2, (size_t)arg3);

@@ -1,10 +1,11 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
+#include "../../include/stdio.h"
 
 extern BUFFER keyboard_buffer;
 
 int tickpos=640;
-int writepos=UPPER_SCREEN_SIZE;
+int writepos=0;
 
 void int_08(){
     char *video = (char *)0xb8000;
@@ -24,17 +25,27 @@ void int_09(unsigned char scancode){
 
 //TODO
 void write(int fd, const void * buf, size_t count){
-    print("en write");
-    char *vidmem = (char *)MAIN_SCREEN_ADDRESS;
-    char *b= (char * )buf;
-    unsigned int i=0;
-    while(i < count && writepos < MAIN_SCREEN_SIZE){
-        vidmem[writepos++]=b[i++];
-        vidmem[writepos++]=WHITE_TXT;
+    char *vidmem;
+    int size;
+    if(fd==STDIN){
+       vidmem= (char *)MAIN_SCREEN_ADDRESS;
+       size= MAIN_SCREEN_SIZE;
+       char *b= (char *)buf;
+       unsigned int i=0;
+       while(i < count && writepos < size){
+          vidmem[writepos++]=b[i++];
+          vidmem[writepos++]=WHITE_TXT;
+       }
+       if(writepos == size){
+          writepos = 0;
+       }
     }
-    if(writepos == MAIN_SCREEN_SIZE){
-        writepos = UPPER_SCREEN_SIZE;
+    else{
+       vidmem= (char *)VIDMEM_ADDRESS;
+       size= UPPER_SCREEN_SIZE;
+       //write_registers(vidmem,size);
     }
+    
 }
 
 ssize_t read(int fd, const void *buf, size_t count){

@@ -1,9 +1,9 @@
 #ifndef _STDIO_H
 #define _STDIO_H
 
-#define STDIN 0
-#define STDOUT 1
-#define STDERR 2
+#define STDIN 1
+#define STDOUT 2
+#define STDERR 3
 
 int printf(const char *fmt, ...);
 

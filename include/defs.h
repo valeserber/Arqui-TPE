@@ -19,9 +19,15 @@
 #define UPPER_SCREEN_SIZE   SCREEN_COLS*UPPER_SCREEN_ROWS*CHAR_SIZE
 #define INT_MIN             (-2147483647-1)
 #define BUFFER_SIZE	    256
-#define KEYS		    91
+#define KEYS		    89
 #define NOTHING		    0
-
+#define SYS_READ 	    3
+#define SYS_WRITE 	    4
+#define LEFT_SHIFT_MAKE     257
+#define RIGHT_SHIFT_MAKE    258
+#define CAPS_LOCK           259
+#define LEFT_SHIFT_BREAK    0xAA
+#define RIGHT_SHIFT_BREAK   0xB6
 /*
  * Type definitions
  */
