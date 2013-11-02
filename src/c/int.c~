@@ -4,7 +4,7 @@
 extern BUFFER keyboard_buffer;
 
 int tickpos=640;
-int writepos=0;
+int writepos=UPPER_SCREEN_SIZE;
 
 void int_08(){
     char *video = (char *)0xb8000;
@@ -12,35 +12,26 @@ void int_08(){
 }
 
 void int_09(unsigned char scancode){
-<<<<<<< HEAD
-    
-=======
->>>>>>> eb6cb1225ec29265d6e6c7eb8a9eecc80ffd9db7
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
     
     if(ascii_c !=0){
-<<<<<<< HEAD
        putc(ascii_c,1);
        addToKeyboardBuffer(ascii_c);
     }
-=======
-       addToKeyboardBuffer(ascii_c);
-	}	
-  }
->>>>>>> eb6cb1225ec29265d6e6c7eb8a9eecc80ffd9db7
     _Sti();
 }
 
 //TODO
 void write(int fd, const void * buf, size_t count){
     char *vidmem = (char *)MAIN_SCREEN_ADDRESS;
+    char *b= (char * )buf;
     unsigned int i=0;
     while(i < count && writepos < MAIN_SCREEN_SIZE){
-        vidmem[writepos++]=((char *)buf)[i++];
+        vidmem[writepos++]=b[i++];
         vidmem[writepos++]=WHITE_TXT;
     }
     if(writepos == MAIN_SCREEN_SIZE){
-        writepos = 0;
+        writepos = UPPER_SCREEN_SIZE;
     }
 }

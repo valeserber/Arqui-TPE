@@ -4,7 +4,7 @@
 extern BUFFER keyboard_buffer;
 
 int tickpos=640;
-int writepos=0;
+int writepos=UPPER_SCREEN_SIZE;
 
 void int_08(){
     char *video = (char *)0xb8000;
@@ -24,13 +24,15 @@ void int_09(unsigned char scancode){
 
 //TODO
 void write(int fd, const void * buf, size_t count){
+    print("en write");
     char *vidmem = (char *)MAIN_SCREEN_ADDRESS;
+    char *b= (char * )buf;
     unsigned int i=0;
     while(i < count && writepos < MAIN_SCREEN_SIZE){
-        vidmem[writepos++]=((char *)buf)[i++];
+        vidmem[writepos++]=b[i++];
         vidmem[writepos++]=WHITE_TXT;
     }
     if(writepos == MAIN_SCREEN_SIZE){
-        writepos = 0;
+        writepos = UPPER_SCREEN_SIZE;
     }
 }
