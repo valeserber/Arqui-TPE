@@ -65,10 +65,10 @@ _read:
 _write:
     push    ebp
     mov     ebp, esp
-    mov     eax, 4              ;sys_write number
     mov     ebx, [ebp+8]        ;ebx = fd
     mov     ecx, [ebp+12]       ;ecx = *buf
     mov     edx, [ebp+16]       ;edx = count
+    mov     eax, 4              ;sys_write number
     int     80h
     leave
     ret
@@ -109,12 +109,12 @@ _int_09_hand:                   ;Keyboard Handler
 _int_80h_hand:
     push    ebp
     mov     ebp, esp
-    push    eax
-    push    ebx
-    push    ecx
-    push    edx
-    push    esi
     push    edi
+    push    esi
+    push    edx
+    push    ecx
+    push    ebx
+    push    eax
     call    int_80h
     add     esp, 24
     mov     esp, ebp
