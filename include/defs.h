@@ -28,6 +28,9 @@
 #define CAPS_LOCK           259
 #define LEFT_SHIFT_BREAK    0xAA
 #define RIGHT_SHIFT_BREAK   0xB6
+#define CONTROL_MAKE	    260
+#define CONTROL_R     	    0x13
+#define CONTROL_BREAK	    0x9D
 /*
  * Type definitions
  */

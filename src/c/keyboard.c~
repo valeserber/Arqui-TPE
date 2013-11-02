@@ -2,12 +2,11 @@
 #include "../../include/defs.h"
 
 extern BUFFER keyboard_buffer;
-<<<<<<< HEAD
-int capsLockOn=0;
-=======
+extern void _registerInfo();
+
 bool capsLockOn = false;
->>>>>>> dfcdefd42086c1206ff920835ee04194f0bc5956
 bool shiftOn=false;
+bool controlOn=false;
 
 int normal_keyboard[KEYS] = {
         //MAKECODE
@@ -40,7 +39,7 @@ int normal_keyboard[KEYS] = {
         /*0x1A*/                '[',        
         /*0x1B*/                ']',        
         /*0x1C*/ /*Enter*/      '\n',
-        /*0x1D*/ /*Left ctrl*/  NOTHING,
+        /*0x1D*/ /*Ctrl*/       CONTROL_MAKE,
         /*0x1E*/                'a',        
         /*0x1F*/                's',        
         /*0x20*/                'd',        
@@ -133,7 +132,7 @@ int special_keyboard[KEYS] = {
         /*0x1A*/                '{',        
         /*0x1B*/                '}',        
         /*0x1C*/ /*Enter*/      '\n',
-        /*0x1D*/ /*Left ctrl*/  NOTHING,
+        /*0x1D*/ /*Ctrl*/       CONTROL_MAKE,
         /*0x1E*/                'A',        
         /*0x1F*/                'S',        
         /*0x20*/                'D',        
@@ -195,32 +194,32 @@ int special_keyboard[KEYS] = {
         /*0x58*/ /*F12*/        NOTHING};
 
 int scancodeToAscii(unsigned char scancode){
-    /*si es un caracter especial hacer cosas*/
-    if(scancode >=128 && scancode <= 216){ //si es break code
-<<<<<<< HEAD
-	print("break");
-=======
->>>>>>> dfcdefd42086c1206ff920835ee04194f0bc5956
+    
+    if(scancode >=128 && scancode <= 216){ 
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		shiftOn=false;
 	}
+	else if(scancode==CONTROL_BREAK){
+		controlOn=false;
+	}
 	return 0;
+    }
+    if(scancode==CONTROL_R){
+	if(controlOn==true){
+		print("control r");
+		//_registerInfo();
+		return 0;
+	}
     }
 	
     int key= normal_keyboard[scancode];
     switch(key){
+	case CONTROL_MAKE:
+		controlOn=true;
+		return 0;
+		break;
 	case CAPS_LOCK:
-<<<<<<< HEAD
-		
-		if(capsLockOn==1){
-			capsLockOn=0;
-		}
-		else if(capsLockOn==0){
-			capsLockOn=1;
-		}
-=======
 	        capsLockOn = !capsLockOn;
->>>>>>> dfcdefd42086c1206ff920835ee04194f0bc5956
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
@@ -229,7 +228,7 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	default:
-		if((capsLockOn==1) || (shiftOn==true)){
+		if((capsLockOn==true) || (shiftOn==true)){
 			key=special_keyboard[scancode];
 		}
 		break;	

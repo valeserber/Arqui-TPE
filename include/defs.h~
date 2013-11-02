@@ -23,14 +23,14 @@
 #define NOTHING		    0
 #define SYS_READ 	    3
 #define SYS_WRITE 	    4
-#define STDIN	 	    1
-#define STDOUT		    2
-#define STDERR		    3
 #define LEFT_SHIFT_MAKE     257
 #define RIGHT_SHIFT_MAKE    258
 #define CAPS_LOCK           259
-#define LEFT_SHIFT_BREAK    260
-#define RIGHT_SHIFT_BREAK   261
+#define LEFT_SHIFT_BREAK    0xAA
+#define RIGHT_SHIFT_BREAK   0xB6
+#define CONTROL_MAKE	    260
+#define CONTROL_R     	    114
+#define CONTROL_BREAK	    0x9D
 /*
  * Type definitions
  */
