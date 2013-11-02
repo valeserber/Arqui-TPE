@@ -24,7 +24,7 @@ void int_09(unsigned char scancode){
       //esto es para imprimir, dsp hay que borrarlo
         int j;
 	char i=0;
-	for(j=0; j< BUFFER_SIZE; j++,i++){
+	for(j=0; j< BUFFER_SIZE; j++){
  	vidmem[j++]=keyboard_buffer.buffer[i++];
         vidmem[j]=WHITE_TXT;
        //hasta aca
