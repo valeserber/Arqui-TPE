@@ -109,12 +109,12 @@ _int_09_hand:                   ;Keyboard Handler
 _int_80h_hand:
     push    ebp
     mov     ebp, esp
-    push    eax
-    push    ebx
-    push    ecx
-    push    edx
-    push    esi
     push    edi
+    push    esi
+    push    edx
+    push    ecx
+    push    ebx
+    push    eax
     call    int_80h
     add     esp, 24
     mov     esp, ebp

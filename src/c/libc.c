@@ -4,7 +4,9 @@
 extern  void _write(int fd, const void *buf, size_t count);
 
 typedef enum {STDIN, STDOUT, STDERR} stream;
-typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
+//typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
+#define SYS_READ 3
+#define SYS_WRITE 4
 
 /***************************************************************
 *k_clear_screen
@@ -46,15 +48,15 @@ void print_hello()
 * Imprime en pantalla en modo texto color.
 ****************************************************************/
 
-void print(char * string)
+void print(char * str)
 {
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
     unsigned int j=UPPER_SCREEN_SIZE;
-    size_t length= strlen(string);
+    size_t length= strlen(str);
     while(i < length && j < MAIN_SCREEN_SIZE)
     {
-        vidmem[j++]=string[i++];
+        vidmem[j++]=str[i++];
         vidmem[j++]=WHITE_TXT;
     }
 }
@@ -68,7 +70,9 @@ void print(char * string)
 size_t strlen(char * string)
 {
     size_t len = 0;
-    while(string[len++]);
+    while(string[len] != 0){
+    	len++;
+    }
     return len;
 }
 
@@ -142,11 +146,12 @@ int putc(int c, int fd)
     return c;
 }
 
-void int_80h(int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
+void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-	char holi[10];
-	long n=(long)sysCallNumber+48;
+	char holi[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	long n = sysCallNumber;
 	print(to_string(holi,n));
+	// print(to_string(holi,4));
 
     switch(sysCallNumber){
         case SYS_WRITE:
@@ -154,7 +159,7 @@ void int_80h(int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4,
           write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:
-//          read(arg1,arg2, arg3);
+//          read((int)arg1, (void *)arg2,(size_t)arg3);
 	    break;
     }
 }
