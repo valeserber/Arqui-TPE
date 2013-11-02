@@ -190,9 +190,13 @@ unsigned char special_keyboard[KEYS] = {
 
 int scancodeToAscii(unsigned char scancode){
     /*si es un caracter especial hacer cosas*/
+    if(scancode >=81 && scancode <= 216){ //si es break code
+	return 0;
+    }
     int key= normal_keyboard[scancode];
     return key;
 }
+
 
 void buffer_initialize(BUFFER buf){
     buf.buffer_pos=0;

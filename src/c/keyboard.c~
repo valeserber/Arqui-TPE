@@ -62,7 +62,7 @@ int normal_keyboard[KEYS] = {
         /*0x36*/ /*Right shift*/NOTHING,
         /*0x37*/ /*Keypad*/     '*',            
         /*0x38*/ /*Left alt*/   NOTHING,
-        /*0x39*/                {' ',' '},
+        /*0x39*/                ' ',
         /*0x3A*/ /*Caps Lock*/  NOTHING,
         /*0x3B*/ /*F1*/         NOTHING, 
         /*0x3C*/ /*F2*/         NOTHING,
@@ -190,6 +190,9 @@ unsigned char special_keyboard[KEYS] = {
 
 int scancodeToAscii(unsigned char scancode){
     /*si es un caracter especial hacer cosas*/
+    if(isRelease(scancode)){
+	return 0;
+    }
     int key= normal_keyboard[scancode];
     return key;
 }

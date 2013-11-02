@@ -1,6 +1,8 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
+extern BUFFER keyboard_buffer;
+
 int tickpos=640;
 int writepos=0;
 
@@ -10,15 +12,22 @@ void int_08(){
 }
 
 void int_09(unsigned char scancode){
+
+    char *vidmem = (char *) VIDMEM_ADDRESS;
+    
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
+    
     if(ascii_c !=0){
-	FILE file;
-	file->fd=1;
-   	file->size=1;
-    	file->buffer=&((char)ascii_c);
-    	putc(ascii_c,&file);
-        addToKeyboardBuffer(ascii_c);
+      // putc(ascii_c,1);
+       addToKeyboardBuffer(ascii_c);
+       int j;
+	char i=0;
+	for(j=0; j< BUFFER_SIZE; j++,i++){
+ 	vidmem[j++]=keyboard_buffer.buffer[i++];
+        vidmem[j]=WHITE_TXT;
+	}
+	
     }
     _Sti();
 }
