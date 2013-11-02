@@ -23,9 +23,6 @@
 #define NOTHING		    0
 #define SYS_READ 	    3
 #define SYS_WRITE 	    4
-#define STDIN	 	    1
-#define STDOUT		    2
-#define STDERR		    3
 #define LEFT_SHIFT_MAKE     257
 #define RIGHT_SHIFT_MAKE    258
 #define CAPS_LOCK           259

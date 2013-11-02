@@ -1,5 +1,6 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
+#include "../../include/stdio.h"
 
 extern BUFFER keyboard_buffer;
 
@@ -45,4 +46,8 @@ void write(int fd, const void * buf, size_t count){
        //write_registers(vidmem,size);
     }
     
+}
+
+ssize_t read(int fd, const void *buf, size_t count){
+    return 0; //TODO stub
 }

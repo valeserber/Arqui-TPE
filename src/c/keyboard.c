@@ -2,7 +2,8 @@
 #include "../../include/defs.h"
 
 extern BUFFER keyboard_buffer;
-int capsLockOn=0;
+
+bool capsLockOn = false;
 bool shiftOn=false;
 
 int normal_keyboard[KEYS] = {
@@ -193,7 +194,6 @@ int special_keyboard[KEYS] = {
 int scancodeToAscii(unsigned char scancode){
     /*si es un caracter especial hacer cosas*/
     if(scancode >=128 && scancode <= 216){ //si es break code
-	print("break");
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		shiftOn=false;
 	}
@@ -203,13 +203,7 @@ int scancodeToAscii(unsigned char scancode){
     int key= normal_keyboard[scancode];
     switch(key){
 	case CAPS_LOCK:
-		
-		if(capsLockOn==1){
-			capsLockOn=0;
-		}
-		else if(capsLockOn==0){
-			capsLockOn=1;
-		}
+	        capsLockOn = !capsLockOn;
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:

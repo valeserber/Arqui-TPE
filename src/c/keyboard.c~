@@ -2,7 +2,11 @@
 #include "../../include/defs.h"
 
 extern BUFFER keyboard_buffer;
+<<<<<<< HEAD
 int capsLockOn=0;
+=======
+bool capsLockOn = false;
+>>>>>>> dfcdefd42086c1206ff920835ee04194f0bc5956
 bool shiftOn=false;
 
 int normal_keyboard[KEYS] = {
@@ -193,24 +197,30 @@ int special_keyboard[KEYS] = {
 int scancodeToAscii(unsigned char scancode){
     /*si es un caracter especial hacer cosas*/
     if(scancode >=128 && scancode <= 216){ //si es break code
+<<<<<<< HEAD
 	print("break");
+=======
+>>>>>>> dfcdefd42086c1206ff920835ee04194f0bc5956
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		shiftOn=false;
 	}
 	return 0;
     }
-	char holi[10];
+	
     int key= normal_keyboard[scancode];
     switch(key){
 	case CAPS_LOCK:
+<<<<<<< HEAD
 		
-		print(tostring(holi,capsLockOn));
 		if(capsLockOn==1){
 			capsLockOn=0;
 		}
 		else if(capsLockOn==0){
 			capsLockOn=1;
 		}
+=======
+	        capsLockOn = !capsLockOn;
+>>>>>>> dfcdefd42086c1206ff920835ee04194f0bc5956
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:

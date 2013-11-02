@@ -1,7 +1,9 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
+#include "../../include/stdio.h"
 
-extern  void _write(int fd, const void *buf, size_t count);
+extern void _write(int fd, const void *buf, size_t count);
+extern void _read(int fd, void *buf, size_t count);
 
 //typedef enum {STDIN, STDOUT, STDERR} stream;
 //typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
@@ -167,6 +169,12 @@ int putc(int c, int fd)
     return c;
 }
 
+int getc(FILE *stream){
+    char c;
+    _read(stream->fd, &c, 1);
+    return c;
+}
+
 void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
     switch(sysCallNumber){
@@ -174,7 +182,7 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
           write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:
-//          read((int)arg1, (void *)arg2,(size_t)arg3);
+          read((int)arg1, (void *)arg2,(size_t)arg3);
 	    break;
     }
 }
