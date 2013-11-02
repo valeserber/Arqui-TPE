@@ -47,4 +47,6 @@ void addToKeyboardBuffer(char ascii_c);
 
 char * tostring(char* str, int number);
 
+void write_registers(char * vidmem,int size);
+
 #endif

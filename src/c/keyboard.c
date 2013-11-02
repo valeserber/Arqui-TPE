@@ -2,6 +2,8 @@
 #include "../../include/defs.h"
 
 extern BUFFER keyboard_buffer;
+bool capsLockOn=false;
+bool shiftOn=false;
 
 int normal_keyboard[KEYS] = {
         //MAKECODE
@@ -47,7 +49,7 @@ int normal_keyboard[KEYS] = {
         /*0x27*/                ';',              
         /*0x28*/                '\'',        
         /*0x29*/                '`',        
-        /*0x2A*/ /*Left shift*/ NOTHING,
+        /*0x2A*/ /*Left shift*/ LEFT_SHIFT_MAKE,
         /*0x2B*/                '\\',    
         /*0x2C*/                'z',        
         /*0x2D*/                'x',        
@@ -59,8 +61,101 @@ int normal_keyboard[KEYS] = {
         /*0x33*/                ',',      
         /*0x34*/                '.',        
         /*0x35*/                '/',        
-        /*0x36*/ /*Right shift*/NOTHING,
+        /*0x36*/ /*Right shift*/RIGHT_SHIFT_MAKE,
         /*0x37*/ /*Keypad*/     '*',            
+        /*0x38*/ /*Left alt*/   NOTHING,
+        /*0x39*/                ' ',
+        /*0x3A*/ /*Caps Lock*/  CAPS_LOCK,
+        /*0x3B*/ /*F1*/         NOTHING, 
+        /*0x3C*/ /*F2*/         NOTHING,
+        /*0x3D*/ /*F3*/         NOTHING,
+        /*0x3E*/ /*F4*/         NOTHING,
+        /*0x3F*/ /*F5*/         NOTHING,
+        /*0x40*/ /*F6*/         NOTHING,
+        /*0x41*/ /*F7*/         NOTHING,
+        /*0x42*/ /*F8*/         NOTHING,
+        /*0x43*/ /*F9*/         NOTHING,
+        /*0x44*/ /*F10*/        NOTHING,
+        /*0x45*/ /*Num lock*/   NOTHING,
+        /*0x46*/ /*Scroll lock*/NOTHING,
+        /*0x47*/ /*Up arrow*/   NOTHING,
+        /*0x48*/                NOTHING,
+        /*0x49*/                NOTHING,
+        /*0x4A*/                NOTHING,
+        /*0x4B*/ /*Left arrow*/ 0x4b * 2,
+        /*0x4C*/                NOTHING,
+        /*0x4D*/ /*Right arrow*/0x4d * 2,
+        /*0x4E*/                NOTHING,
+        /*0x4F*/                NOTHING,
+        /*0x50*/ /*Down arrow*/ NOTHING,
+        /*0x51*/                NOTHING,
+        /*0x52*/                NOTHING,
+        /*0x53*/ /*Delete*/     NOTHING,
+        /*0x54*/                NOTHING,
+        /*0x55*/                '+',        
+        /*0x56*/                '+',
+        /*0x57*/ /*F11*/        NOTHING,
+        /*0x58*/ /*F12*/        NOTHING};
+
+
+int special_keyboard[KEYS] = {
+        //MAKECODE
+	/*0x00*/                NOTHING,
+        /*0x01*/ /*Esc*/        NOTHING,
+        /*0x02*/                '!',        
+        /*0x03*/                '@',        
+        /*0x04*/                '#',        
+        /*0x05*/                '$',        
+        /*0x06*/                '%',        
+        /*0x07*/                '^',        
+        /*0x08*/                '&',        
+        /*0x09*/                '*',        
+        /*0x0A*/                '(',        
+        /*0x0B*/                ')',        
+        /*0x0C*/                '_',        
+        /*0x0D*/                '+',        
+        /*0x0E*/ /*Backspace*/  '\b',
+        /*0x0F*/ /*Tab*/        NOTHING,
+        /*0x10*/                'Q',        
+        /*0x11*/                'W',        
+        /*0x12*/                'E',        
+        /*0x13*/                'R',        
+        /*0x14*/                'T',        
+        /*0x15*/                'Y',        
+        /*0x16*/                'U',        
+        /*0x17*/                'I',        
+        /*0x18*/                'O',        
+        /*0x19*/                'P',        
+        /*0x1A*/                '{',        
+        /*0x1B*/                '}',        
+        /*0x1C*/ /*Enter*/      '\n',
+        /*0x1D*/ /*Left ctrl*/  NOTHING,
+        /*0x1E*/                'A',        
+        /*0x1F*/                'S',        
+        /*0x20*/                'D',        
+        /*0x21*/                'F',        
+        /*0x22*/                'G',        
+        /*0x23*/                'H',        
+        /*0x24*/                'J',        
+        /*0x25*/                'K',        
+        /*0x26*/                'L',        
+        /*0x27*/                ':',                
+        /*0x28*/                '"',        
+        /*0x29*/                '~',        
+        /*0x2A*/ /*Left shift*/ NOTHING,
+        /*0x2B*/                '|',        
+        /*0x2C*/                'Z',        
+        /*0x2D*/                'X',        
+        /*0x2E*/                'C',        
+        /*0x2F*/                'V',        
+        /*0x30*/                'B',        
+        /*0x31*/                'N',        
+        /*0x32*/                'M',        
+        /*0x33*/                '<',        
+        /*0x34*/                '>',        
+        /*0x35*/                '?',        
+        /*0x36*/ /*Right shift*/NOTHING,
+        /*0x37*/                '*',            
         /*0x38*/ /*Left alt*/   NOTHING,
         /*0x39*/                ' ',
         /*0x3A*/ /*Caps Lock*/  NOTHING,
@@ -78,11 +173,11 @@ int normal_keyboard[KEYS] = {
         /*0x46*/ /*Scroll lock*/NOTHING,
         /*0x47*/ /*Up arrow*/   NOTHING,
         /*0x48*/                NOTHING,
-        /*0x49*/                NOTHING,
+        /*0x49*/   	        NOTHING,
         /*0x4A*/                NOTHING,
-        /*0x4B*/ /*Left arrow*/ 0x4b * 2,0x4b * 2,
+        /*0x4B*/ /*Left arrow*/ 0x4b * 2,
         /*0x4C*/                NOTHING,
-        /*0x4D*/ /*Right arrow*/0x4d * 2,0x4d * 2,
+        /*0x4D*/ /*Right arrow*/0x4d * 2,
         /*0x4E*/                NOTHING,
         /*0x4F*/                NOTHING,
         /*0x50*/ /*Down arrow*/ NOTHING,
@@ -90,110 +185,41 @@ int normal_keyboard[KEYS] = {
         /*0x52*/                NOTHING,
         /*0x53*/ /*Delete*/     NOTHING,
         /*0x54*/                NOTHING,
-        /*0x55*/                '+',        
-        /*0x56*/                '+',
+        /*0x55*/                '*',        
+        /*0x56*/                '*',        
         /*0x57*/ /*F11*/        NOTHING,
         /*0x58*/ /*F12*/        NOTHING};
 
-/*
-unsigned char special_keyboard[KEYS] = {
-        //MAKECODE
-	/*0x00*/           //     NOTHING,
-        /*0x01*/ /*Esc*/     //   NOTHING,
-        /*0x02*/              //  {'1','!'},        
-        /*0x03*/               // {'2','@'},        
-        /*0x04*/              //  {'3','#'},        
-        /*0x05*///                {'4','$'},        
-        /*0x06*/  //              {'5','%'},        
-        /*0x07*/    //            {'6','^'},        
-        /*0x08*/      //          {'7','&'},        
-        /*0x09*/        //        {'8','*'},        
-        /*0x0A*/          //      {'9','('},        
-        /*0x0B*/            //    {'0',')'},        
-        /*0C*///                {'-','_'},        
-        /*0D*/  //              {'=','+'},        
-        /*0E*/ /*Backspace*///  {'\b','\b'},
-        /*0F*/ /*Tab*/       // {NON_PRINT,NON_PRINT},
-        /*10*/     //           {'q','Q'},        
-        /*11*/       //         {'w','W'},        
-        /*12*/         //       {'e','E'},        
-        /*13*/           //     {'r','R'},        
-        /*14*/             //   {'t','T'},        
-        /*15*/ //               {'y','Y'},        
-        /*16*/   //             {'u','U'},        
-        /*17*/     //           {'i','I'},        
-        /*18*/       //         {'o','O'},        
-        /*19*/         //       {'p','P'},        
-        /*1A*/           //     {'[','{'},        
-        /*1B*/             //   {']','}'},        
-        /*1C*/ /*Enter*/     // {'\n','\n'},
-        /*1D*/ /*Left ctrl*/  //{NON_PRINT,NON_PRINT},
-        /*1E*///                {'a','A'},        
-        /*1F*/  //              {'s','S'},        
-        /*20*/    //            {'d','D'},        
-        /*21*/      //          {'f','F'},        
-        /*22*/        //        {'g','G'},        
-        /*23*/          //      {'h','H'},        
-        /*24*/            //    {'j','J'},        
-        /*25*/              //  {'k','K'},        
-        /*26*/                //{'l','L'},        
-        /*27*///                {';',':'},                
-        /*28*/  //              {'\'','"'},        
-        /*29*/    //            {'`','~'},        
-        /*2A*/ /*Left shift*/// {NON_PRINT,NON_PRINT},
-        /*2B*///                {'\\','|'},        
-        /*2C*/  //              {'z','Z'},        
-        /*2D*/    //            {'x','X'},        
-        /*2E*/      //          {'c','C'},        
-        /*2F*/        //        {'v','V'},        
-        /*30*/          //      {'b','B'},        
-        /*31*/            //    {'n','N'},        
-        /*32*/              //  {'m','M'},        
-        /*33*/                //{',','<'},        
-        /*34*/   //             {'.','>'},        
-        /*35*/     //           {'/','?'},        
-        /*36*/ /*Right shift*///{NON_PRINT,NON_PRINT},
-        /*37*/               // {'*','*'},            
-        /*38*/ /*Left alt*/  // {NON_PRINT,NON_PRINT},
-        /*39*/               // {' ',' '},
-        /*3A*/ /*Caps Lock*/  //{NON_PRINT,NON_PRINT},
-        /*3B*/ /*F1*/         //{NON_PRINT,NON_PRINT}, 
-        /*3C*/ /*F2*/        // {NON_PRINT,NON_PRINT},
-        /*3D*/ /*F3*/        // {NON_PRINT,NON_PRINT},
-        /*3E*/ /*F4*/        // {NON_PRINT,NON_PRINT},
-        /*3F*/ /*F5*/         //{NON_PRINT,NON_PRINT},
-        /*40*/ /*F6*/         //{NON_PRINT,NON_PRINT},
-        /*41*/ /*F7*///         {NON_PRINT,NON_PRINT},
-        /*42*/ /*F8*/  //       {NON_PRINT,NON_PRINT},
-        /*43*/ /*F9*/    //     {NON_PRINT,NON_PRINT},
-        /*44*/ /*F10*/     //   {NON_PRINT,NON_PRINT},
-        /*45*/ /*Num lock*/  // {NON_PRINT,NON_PRINT},
-        /*46*/ /*Scroll lock*///{NON_PRINT,NON_PRINT},
-        /*47*/ /*Up arrow*/   //{NON_PRINT,NON_PRINT},
-        /*48*/ //               {NON_PRINT,NON_PRINT},
-        /*49*/   //             {NON_PRINT,NON_PRINT},
-        /*4A*/     //           {NON_PRINT,NON_PRINT},
-        /*4B*/ /*Left arrow*/// {0x4b * 2,0x4b * 2},
-        /*4C*/  //              {NON_PRINT,NON_PRINT},
-        /*4D*/ /*Right arrow*///{0x4d * 2,0x4d * 2},
-        /*4E*/                //{NON_PRINT,NON_PRINT},
-        /*4F*/ //               {NON_PRINT,NON_PRINT},
-        /*50*/ /*Down arrow*/ //{NON_PRINT,NON_PRINT},
-        /*51*/                //{NON_PRINT,NON_PRINT},
-        /*52*/              ///  {NON_PRINT,NON_PRINT},
-        /*53*/ /*Delete*/    // {NON_PRINT,NON_PRINT},
-        /*54*/               // {NON_PRINT,NON_PRINT},
-        /*55*/                //{'+','*'},        
-        /*56*/                //{'+','*'},        
-        /*57*/ /*F11*/    //    {NON_PRINT,NON_PRINT},
-        /*58*/ /*F12*/      //  {NON_PRINT,NON_PRINT}};
-
 int scancodeToAscii(unsigned char scancode){
     /*si es un caracter especial hacer cosas*/
-    if(scancode >=81 && scancode <= 216){ //si es break code
+    if(scancode >=0x59 && scancode <= 0xB8){ //si es break code
+	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
+		shiftOn=false;
+	}
 	return 0;
     }
     int key= normal_keyboard[scancode];
+    switch(key){
+	case CAPS_LOCK:
+		if(capsLockOn==true){
+			capsLockOn=false;
+		}
+		else{
+			capsLockOn=true;
+		}
+                return 0;
+		break;
+	case LEFT_SHIFT_MAKE:
+	case RIGHT_SHIFT_MAKE:
+		shiftOn=true;
+		return 0;
+		break;
+	default:
+		if((capsLockOn==true) || (shiftOn==true)){
+			key=special_keyboard[scancode];
+		}
+		break;	
+    }	
     return key;
 }
 

@@ -3,10 +3,9 @@
 
 extern  void _write(int fd, const void *buf, size_t count);
 
-typedef enum {STDIN, STDOUT, STDERR} stream;
+//typedef enum {STDIN, STDOUT, STDERR} stream;
 //typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
-#define SYS_READ 3
-#define SYS_WRITE 4
+
 
 /***************************************************************
 *k_clear_screen
