@@ -1,3 +1,4 @@
+ mkdir bin
  cd ./bin
 rm -rf *
 nasm -f aout ../src/asm/libasm.asm -o libasm.o
