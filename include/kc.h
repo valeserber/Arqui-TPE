@@ -45,4 +45,6 @@ void buffer_initialize(BUFFER * buf);
 /*Agrega al buffer lo ingresado por teclado*/
 void addToKeyboardBuffer(char ascii_c);
 
+char * tostring(char* str, int number);
+
 #endif

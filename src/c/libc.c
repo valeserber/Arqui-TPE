@@ -2,6 +2,7 @@
 #include "../../include/defs.h"
 
 extern  void _write(int fd, const void *buf, size_t count);
+extern char holi[20];
 
 typedef enum {STDIN, STDOUT, STDERR} stream;
 typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
@@ -123,6 +124,28 @@ char * to_string(char* str, long number)
     return str;
 }
 
+char * tostring(char* str, int number)
+{
+    int i=0;
+    if(number==0){
+        return "0";
+    }
+    while(number!=0){
+        char n= (number%10)+'0';
+        str[i++]=n;
+        number /= 10;
+    }
+    str[i]=0;
+    int stop=i--;
+    int k=0;
+    while(i >= stop/2){
+        char aux= str[k];
+        str[k++]=str[i];
+        str[i--]=aux;
+    }
+    return str;
+}
+
 /***************************************************************
 * putc
 *
@@ -144,9 +167,8 @@ int putc(int c, int fd)
 
 void int_80h(int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
 {
-	char holi[10];
-	long n=(long)sysCallNumber+48;
-	print(to_string(holi,n));
+	int n=sysCallNumber+48;
+	print(tostring(holi,n));
 
     switch(sysCallNumber){
         case SYS_WRITE:

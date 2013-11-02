@@ -6,7 +6,7 @@ IDTR idtr;              /* IDTR */
 BUFFER keyboard_buffer; /* keyboard buffer*/
 
 //int tickpos=640;
-char holi[20];
+
 
 /**********************************************
 kmain()
@@ -32,8 +32,8 @@ kmain()
     print(to_string(buffer,prueba));
     */
 /*Calcula cantidad de memoria*/
-    //char buffer[20];
-    //print(to_string(buffer,get_memory()));
+    char buffer[20];
+    print(to_string(buffer,get_memory()));
 
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */

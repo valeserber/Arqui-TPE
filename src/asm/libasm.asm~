@@ -65,10 +65,10 @@ _read:
 _write:
     push    ebp
     mov     ebp, esp
+    mov     eax, 4              ;sys_write number
     mov     ebx, [ebp+8]        ;ebx = fd
     mov     ecx, [ebp+12]       ;ecx = *buf
     mov     edx, [ebp+16]       ;edx = count
-    mov     eax, 4              ;sys_write number
     int     80h
     leave
     ret
