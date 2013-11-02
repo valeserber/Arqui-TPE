@@ -12,14 +12,23 @@ void int_08(){
 }
 
 void int_09(unsigned char scancode){
+<<<<<<< HEAD
     
+=======
+>>>>>>> eb6cb1225ec29265d6e6c7eb8a9eecc80ffd9db7
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
     
     if(ascii_c !=0){
-      // putc(ascii_c,1);
+<<<<<<< HEAD
+       putc(ascii_c,1);
        addToKeyboardBuffer(ascii_c);
     }
+=======
+       addToKeyboardBuffer(ascii_c);
+	}	
+  }
+>>>>>>> eb6cb1225ec29265d6e6c7eb8a9eecc80ffd9db7
     _Sti();
 }
 

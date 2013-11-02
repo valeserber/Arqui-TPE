@@ -12,7 +12,6 @@ void int_08(){
 }
 
 void int_09(unsigned char scancode){
-    
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
     

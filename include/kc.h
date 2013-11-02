@@ -43,6 +43,6 @@ int scancodeToAscii(unsigned char scancode);
 void buffer_initialize(BUFFER * buf);
 
 /*Agrega al buffer lo ingresado por teclado*/
-void addToKeyboardBuffer(int ascii_c);
+void addToKeyboardBuffer(char ascii_c);
 
 #endif

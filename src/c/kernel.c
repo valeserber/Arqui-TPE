@@ -59,7 +59,6 @@ kmain()
     _Sti();
 
     buffer_initialize(&keyboard_buffer);
-
     while(1){}
 }
 

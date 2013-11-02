@@ -206,7 +206,7 @@ void buffer_initialize(BUFFER * buf){
     }
 }
 
-void addToKeyboardBuffer(int ascii_c){
+void addToKeyboardBuffer(char ascii_c){
    if(keyboard_buffer.buffer_pos == BUFFER_SIZE){
 	keyboard_buffer.buffer_pos=0;
    }
