@@ -1,6 +1,6 @@
 GLOBAL  _read_msw,_lidt
 GLOBAL  _int_08_hand, _int_09_hand, _int_80h_hand
-GLOBAL  _read, _write
+GLOBAL  _read, _write, _registerInfo
 GLOBAL  _mascaraPIC1, _mascaraPIC2, _Cli, _Sti
 GLOBAL  _debug
 
@@ -65,14 +65,25 @@ _read:
 _write:
     push    ebp
     mov     ebp, esp
-    mov     ebx, [ebp+8]        ;ebx = fd
-    mov     ecx, [ebp+12]       ;ecx = *buf
-    mov     edx, [ebp+16]       ;edx = count
+    mov     ebx, [ebp+8]        ;fd
+    mov     ecx, [ebp+12]       ;*buf
+    mov     edx, [ebp+16]       ;count
     mov     eax, 4              ;sys_write number
     int     80h
     leave
     ret
 
+_registerInfo:
+    push    ebp
+    mov     ebp, esp
+    pusha
+    mov     edi, 4
+    mov     eax, 4
+    mov     ebx, 0              ; fd = REGOUT
+    mov     ecx,   
+    int     80h
+
+    
 _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
     push    ds
     push    es                  ;Se salvan los registros
@@ -135,3 +146,13 @@ vuelve:
     pop     ax
     pop     bp
     retn
+
+section .data
+    eaxstr db "eax    ",0
+    ecxstr db "ecx    ",0
+    edxstr db "edx    ",0
+    ebxstr db "ebx    ",0
+    espstr db "esp    ",0
+    ebpstr db "ebp    ",0
+    esistr db "esi    ",0
+    edistr db "edi    ",0
