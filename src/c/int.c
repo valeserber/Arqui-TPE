@@ -23,6 +23,18 @@ void int_09(unsigned char scancode){
     _Sti();
 }
 
+void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
+{
+    switch(sysCallNumber){
+        case SYS_WRITE:
+          write((int)arg1, (void *)arg2, (size_t)arg3);
+            break;
+        case SYS_READ:
+          read((int)arg1, (void *)arg2,(size_t)arg3);
+	    break;
+    }
+}
+
 //TODO
 void write(int fd, const void * buf, size_t count){
     char *vidmem;
