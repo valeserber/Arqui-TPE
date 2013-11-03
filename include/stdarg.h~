@@ -1,10 +1,14 @@
+/*
+* stdarg.h
+*
+* Provides facilities for stepping through a list of function arguments of
+* an unknown number and type.
+*
+*/
+
 #ifndef _STDARG_H_
 #define _STDARG_H_
-
-#ifndef _VA_LIST
-#define _VA_LIST
 typedef char* va_list;
-#endif
 
 
 /*
@@ -16,15 +20,11 @@ typedef char* va_list;
 
 
 /*
-* Start variable argument list processing by setting AP to point to the
-* argument after pN.
-*/
-
-/*
 * For a simple minded compiler this should work (it works in GNU too for
 * vararg lists that don't follow shorts and such).
 */
-#define va_start(ap, pN) ((ap) = ((va_list)(&pN) + __va_argsiz(pN)))
+#define va_start(ap, pN)        \
+        ((ap) = ((va_list) (&pN) + __va_argsiz(pN)))
 
 /*
 * End processing of variable argument list. In this case we do nothing.

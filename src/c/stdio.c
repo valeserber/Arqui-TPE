@@ -1,5 +1,6 @@
 #include "../../include/defs.h"
-#include "../../include/stdarg.h"
+#include <stdarg.h>
+//#include "../../include/stdarg.h"
 #include "../../include/stdio.h"
 #define putchar(x) putc((x), STDOUT)
 
@@ -31,12 +32,13 @@ int getc(FILE *stream){
 /* TODO averiguar como usar typedefs a FILE* para stdin, stdout, stderr
  * y la buscar las macros va_end, va_start, va_args
  */
- /*
-int printf(const char * fmt, ...){
-    va_list ap;
+
+int printf(char * fmt, ...){
+    va_list vap;
     char *p;
     int i = 0
-    va_start(ap, fmt);
+
+    va_start(vap, fmt) ;
     for(p = fmt; *p; p++){
         if(*p != '%'){
             putchar(*p);
@@ -44,6 +46,7 @@ int printf(const char * fmt, ...){
      //   else switch(*++p){
      //       case ´d´:
     }           
-    va_end(ap);
+    va_end(vap);
+    return 0;
 }
-*/
+
