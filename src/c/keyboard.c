@@ -207,7 +207,7 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 	}
     }
-	
+ 
     int key= normal_keyboard[scancode];
     switch(key){
 	case CONTROL_MAKE:
@@ -215,7 +215,7 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	case CAPS_LOCK:
-	    keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
+	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
@@ -240,6 +240,9 @@ void buffer_initialize(BUFFER * buf){
     for(i=0;i<BUFFER_SIZE;i++){
 	buf->buffer[i]=0;
     }
+    buf->flag.shiftOn=false;
+    buf->flag.controlOn=false;
+    buf->flag.capsLockOn=false;
 }
 
 void addToKeyboardBuffer(char ascii_c){
