@@ -2,7 +2,6 @@
 #include "../../include/string.h"
 
 
-char* ltoa(long value, char *buffer, int radix);
 /***************************************************************
 *strlen
 *
