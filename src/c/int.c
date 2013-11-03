@@ -7,6 +7,7 @@ void write(int fd, const void * buf, size_t count);
 
 int tickpos=640;
 int writepos=0;
+int upperWritepos = 0;
 
 void int_08(){
     char *video = (char *)0xb8000;
@@ -39,24 +40,30 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 void write(int fd, const void * buf, size_t count){
     char *vidmem;
     int size;
+    char *b= (char *)buf;
     if(fd==STDIN){
-       vidmem= (char *)MAIN_SCREEN_ADDRESS;
-       size= MAIN_SCREEN_SIZE;
-       char *b= (char *)buf;
-       unsigned int i=0;
-       while(i < count && writepos < size){
-          vidmem[writepos++]=b[i++];
-          vidmem[writepos++]=WHITE_TXT;
-       }
-       if(writepos == size){
+        vidmem= (char *)MAIN_SCREEN_ADDRESS;
+        size= MAIN_SCREEN_SIZE;
+        unsigned int i=0;
+        while(i < count && writepos < size){
+            vidmem[writepos++]=b[i++];
+            vidmem[writepos++]=WHITE_TXT;
+        }
+        if(writepos == size){
           writepos = 0;
-       }
-    }else{
-       vidmem= (char *)VIDMEM_ADDRESS;
-       size= UPPER_SCREEN_SIZE;
-       //write_registers(vidmem,size);
+        }
+    }else if(fd == 0){ //TODO 0 es la pantalla superior, ponerle alias
+        vidmem= (char *)VIDMEM_ADDRESS;
+        size= UPPER_SCREEN_SIZE;
+        unsigned int i=0;
+        while(i < count && upperWritepos < size){
+            vidmem[upperWritepos++]=b[i++];
+            vidmem[upperWritepos++]=WHITE_TXT;
+        }
+        if(upperWritepos == size){
+           upperWritepos = 0;
+        }
     }
-    
 }
 
 ssize_t read(int fd, const void *buf, size_t count){

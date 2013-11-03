@@ -7,6 +7,7 @@ GLOBAL  _debug
 EXTERN  int_08
 EXTERN  int_09
 EXTERN  int_80h
+EXTERN  ltoa
 
 
 SECTION .text
@@ -38,7 +39,6 @@ _mascaraPIC2:                   ;Escribe mascara del PIC 2
 _read_msw:
     smsw    ax                  ;Obtiene la Machine Status Word
     retn
-
 
 _lidt:                          ;Carga el IDTR
     push    ebp
@@ -74,15 +74,26 @@ _write:
     ret
 
 _registerInfo:
-    push    ebp
-    mov     ebp, esp
-    pusha
-    mov     edi, 4
-    mov     eax, 4
-    mov     ebx, 0              ; fd = REGOUT
-  ;  mov     ecx,  
-    int     80h
-
+        push    ebp
+        mov     ebp, esp
+        push    eax	
+        mov     eax, 4              ; sys_write
+        mov     ebx, 0              ; fd = REGOUT
+	mov     edi, 4              ; counter
+ cycle:      
+ 	mov     ecx, eaxstr 
+	mov 	edx, regstrlen
+        int     80h
+	mov     esi, [ebp-4]
+	push    16
+	push    regBuffer    
+	push    esi
+	call    ltoa
+	add     esp, 12
+	mov     ecx, eax            ; eax has the pointer to the string
+	int     80h
+        leave
+        ret
     
 _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
     push    ds
@@ -148,11 +159,14 @@ vuelve:
     retn
 
 section .data
-    eaxstr db "eax    ",0
-    ecxstr db "ecx    ",0
-    edxstr db "edx    ",0
-    ebxstr db "ebx    ",0
-    espstr db "esp    ",0
-    ebpstr db "ebp    ",0
-    esistr db "esi    ",0
-    edistr db "edi    ",0
+    eaxstr db "eax    "
+    regstrlen equ $-eaxstr
+    ecxstr db "ecx    "
+    edxstr db "edx    "
+    ebxstr db "ebx    "
+    espstr db "esp    "
+    ebpstr db "ebp    "
+    esistr db "esi    "
+    edistr db "edi    "
+section .bss
+    regBuffer resb 32
