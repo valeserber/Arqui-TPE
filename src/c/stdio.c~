@@ -36,7 +36,7 @@ int getc(FILE *stream){
 int printf(char * fmt, ...){
     va_list vap;
     char *p;
-    int i = 0;
+    int i = 0
 
     va_start(vap, fmt) ;
     for(p = fmt; *p; p++){

@@ -59,7 +59,7 @@ void write(int fd, const void * buf, size_t count){
     
 }
 
-ssize_t read(int fd, const void *buf, size_t count){
+ssize_t read(int fd, void *buf, size_t count){
 //   char * b=(char *) buf;
 //   int i;
 //   int j=0; 

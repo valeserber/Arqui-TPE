@@ -39,7 +39,7 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 void write(int fd, const void * buf, size_t count){
     char *vidmem;
     int size;
-    if(fd==STDIN){
+    if(fd==STDOUT){
        vidmem= (char *)MAIN_SCREEN_ADDRESS;
        size= MAIN_SCREEN_SIZE;
        char *b= (char *)buf;

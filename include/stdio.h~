@@ -2,8 +2,8 @@
 #define _STDIO_H
 
 #define REGOUT 0
-#define STDOUT 1
-#define STDIN  2
+#define STDOUT 2
+#define STDIN  1
 #define STDERR 3
 
 int printf(char *fmt, ...);

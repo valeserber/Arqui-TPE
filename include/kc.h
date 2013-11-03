@@ -46,4 +46,6 @@ char * tostring(char* str, int number);
 
 void write_registers(char * vidmem,int size);
 
+void shell_run();
+
 #endif
