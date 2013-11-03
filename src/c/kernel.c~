@@ -24,8 +24,6 @@ kmain()
 
     //print_hello();
 
-    char buffer[20];
-    print(ltoa(256, buffer,16));
     /*
     print("Hello");
     char buffer[20];
@@ -33,7 +31,6 @@ kmain()
     print(to_string(buffer,prueba));
     */
 /*Calcula cantidad de memoria*/
-    //char buffer[20];
     //print(to_string(buffer,get_memory()));
 
 
@@ -58,12 +55,19 @@ kmain()
     _mascaraPIC1(0xFD);      //1111 1101  habilito el teclado
     _mascaraPIC2(0xFF); //1111 1111 slave PIC
     _Sti();
-
-    buffer_initialize(&keyboard_buffer); 
     printf("hola");
+    buffer_initialize(&keyboard_buffer); 
+<<<<<<< HEAD
+    
 //    _registerInfo();
     while(1){
 	//shell_run();
+=======
+    printf("testeando %d %s %x", 20, "string", 256);
+//    _registerInfo();
+    while(1){
+//	shell_run();
+>>>>>>> ab6f6e63da8e9864ba02c36279af86c2c7699abc
     }
 }
 

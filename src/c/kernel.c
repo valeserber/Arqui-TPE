@@ -24,8 +24,6 @@ kmain()
 
     //print_hello();
 
-    char buffer[20];
-    print(ltoa(256, buffer,16));
     /*
     print("Hello");
     char buffer[20];
@@ -33,7 +31,6 @@ kmain()
     print(to_string(buffer,prueba));
     */
 /*Calcula cantidad de memoria*/
-    //char buffer[20];
     //print(to_string(buffer,get_memory()));
 
 
@@ -60,10 +57,11 @@ kmain()
     _Sti();
     printf("hola");
     buffer_initialize(&keyboard_buffer); 
-    
+
+    printf("testeando %d %s %x", 20, "string", 256);
 //    _registerInfo();
     while(1){
-	//shell_run();
+//	shell_run();
     }
 }
 
