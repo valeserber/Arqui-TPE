@@ -6,6 +6,6 @@
 #define STDOUT 2
 #define STDERR 3
 
-int printf(const char *fmt, ...);
+int printf(char *fmt, ...);
 
 #endif
