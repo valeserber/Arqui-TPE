@@ -24,6 +24,8 @@ kmain()
 
     //print_hello();
 
+    char buffer[20];
+    print(ltoa(256, buffer,16));
     /*
     print("Hello");
     char buffer[20];
@@ -59,6 +61,7 @@ kmain()
 
     buffer_initialize(&keyboard_buffer); 
     printf("hola");
+//    _registerInfo();
     while(1){
 	//shell_run();
     }
