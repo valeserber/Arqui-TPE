@@ -80,7 +80,7 @@ _registerInfo:
     mov     edi, 4
     mov     eax, 4
     mov     ebx, 0              ; fd = REGOUT
-    mov     ecx,   
+  ;  mov     ecx,  
     int     80h
 
     

@@ -90,8 +90,15 @@ typedef struct{
 } FILE;
 
 typedef struct{
+    unsigned int shiftOn    : 1;
+    unsigned int controlOn  : 1;
+    unsigned int capsLockOn : 1;
+} flags;
+
+typedef struct{
   unsigned char buffer[BUFFER_SIZE];
   int buffer_pos;
+  flags flag;
 } BUFFER;
 
 #endif

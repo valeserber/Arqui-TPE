@@ -4,10 +4,6 @@
 extern BUFFER keyboard_buffer;
 extern void _registerInfo();
 
-bool capsLockOn = false;
-bool shiftOn=false;
-bool controlOn=false;
-
 int normal_keyboard[KEYS] = {
         //MAKECODE
 	/*0x00*/                NOTHING,
@@ -197,15 +193,15 @@ int scancodeToAscii(unsigned char scancode){
     
     if(scancode >=128 && scancode <= 216){ 
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
-		shiftOn=false;
+		keyboard_buffer.flag.shiftOn=false;
 	}
 	else if(scancode==CONTROL_BREAK){
-		controlOn=false;
+		keyboard_buffer.flag.controlOn=false;
 	}
 	return 0;
     }
     if(scancode==CONTROL_R){
-	if(controlOn==true){
+	if(keyboard_buffer.flag.controlOn==true){
 		print("control r");
 		//_registerInfo();
 		return 0;
@@ -215,20 +211,21 @@ int scancodeToAscii(unsigned char scancode){
     int key= normal_keyboard[scancode];
     switch(key){
 	case CONTROL_MAKE:
-		controlOn=true;
+	    keyboard_buffer.flag.controlOn = true;
 		return 0;
 		break;
 	case CAPS_LOCK:
-	        capsLockOn = !capsLockOn;
+	    keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
 	case RIGHT_SHIFT_MAKE:
-		shiftOn=true;
+	    keyboard_buffer.flag.shiftOn= true;
 		return 0;
 		break;
 	default:
-		if((capsLockOn==true) || (shiftOn==true)){
+		if((keyboard_buffer.flag.capsLockOn==true) ||
+		   (keyboard_buffer.flag.shiftOn==true)){
 			key=special_keyboard[scancode];
 		}
 		break;	
