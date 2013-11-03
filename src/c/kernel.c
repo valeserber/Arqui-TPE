@@ -59,8 +59,11 @@ kmain()
     _mascaraPIC2(0xFF); //1111 1111 slave PIC
     _Sti();
 
-    buffer_initialize(&keyboard_buffer);
+    buffer_initialize(&keyboard_buffer); 
+    //printf("hola");
 //    _registerInfo();
-    while(1){}
+    while(1){
+	shell_run();
+    }
 }
 

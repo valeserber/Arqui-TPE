@@ -41,15 +41,15 @@ void write(int fd, const void * buf, size_t count){
     char *vidmem;
     int size;
     char *b= (char *)buf;
-    if(fd==STDIN){
-        vidmem= (char *)MAIN_SCREEN_ADDRESS;
-        size= MAIN_SCREEN_SIZE;
-        unsigned int i=0;
-        while(i < count && writepos < size){
-            vidmem[writepos++]=b[i++];
-            vidmem[writepos++]=WHITE_TXT;
-        }
-        if(writepos == size){
+    if(fd==STDOUT){
+       vidmem= (char *)MAIN_SCREEN_ADDRESS;
+       size= MAIN_SCREEN_SIZE;
+       unsigned int i=0;
+       while(i < count && writepos < size){
+          vidmem[writepos++]=b[i++];
+          vidmem[writepos++]=WHITE_TXT;
+       }
+       if(writepos == size){
           writepos = 0;
         }
     }else if(fd == 0){ //TODO 0 es la pantalla superior, ponerle alias
@@ -66,7 +66,7 @@ void write(int fd, const void * buf, size_t count){
     }
 }
 
-ssize_t read(int fd, const void *buf, size_t count){
+ssize_t read(int fd, void *buf, size_t count){
 //   char * b=(char *) buf;
 //   int i;
 //   int j=0; 

@@ -3,6 +3,7 @@
 #include "../../include/stdio.h"
 
 extern BUFFER keyboard_buffer;
+void write(int fd, const void * buf, size_t count);
 
 int tickpos=640;
 int writepos=0;
@@ -23,6 +24,17 @@ void int_09(unsigned char scancode){
     _Sti();
 }
 
+void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5){
+    switch(sysCallNumber){
+        case SYS_WRITE:
+            write((int)arg1, (void *)arg2, (size_t)arg3);
+            break;
+        case SYS_READ:
+            read((int)arg1, (void *)arg2,(size_t)arg3);
+	    break;
+    }
+}
+
 //TODO
 void write(int fd, const void * buf, size_t count){
     char *vidmem;
@@ -39,8 +51,7 @@ void write(int fd, const void * buf, size_t count){
        if(writepos == size){
           writepos = 0;
        }
-    }
-    else{
+    }else{
        vidmem= (char *)VIDMEM_ADDRESS;
        size= UPPER_SCREEN_SIZE;
        //write_registers(vidmem,size);
@@ -48,6 +59,16 @@ void write(int fd, const void * buf, size_t count){
     
 }
 
-ssize_t read(int fd, const void *buf, size_t count){
-    return 0; //TODO stub
+ssize_t read(int fd, void *buf, size_t count){
+//   char * b=(char *) buf;
+//   int i;
+//   int j=0; 
+//   for(i=0; i<count;i++){
+//	b[i]=keyboard_buffer[j++];	
+//	if(j==BUFFER_SIZE){
+//		j=0;
+//	}
+//   }
+  
+   return 0; //TODO stub
 }

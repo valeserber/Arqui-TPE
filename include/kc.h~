@@ -23,9 +23,6 @@ void print_hello();
 /*Imprime en pantalla*/
 void print(char * str);
 
-/*Longitud del string*/
-size_t strlen(char * str);
-
 /*Calcula cantidad de memoria*/
 size_t get_memory();
 
