@@ -4,7 +4,7 @@
 #include "../../include/stdio.h"
 #include "../../include/string.h"
 #define putchar(x) putc((x), STDOUT)
-
+int vfprintf(int fd, const char * fmt, va_list ap);
 /***************************************************************
 * putc
 *
@@ -31,33 +31,30 @@ int getc(FILE *stream){
 }
 
 /* TODO averiguar como usar typedefs a FILE* para stdin, stdout, stderr
- * y la buscar las macros va_end, va_start, va_args
  */
 
-int printf(char * fmt, ...){
-    va_list ap;
+int vfprintf(int fd, const char * fmt, va_list ap){
     char *p, *sval;
     int ival;
     char auxBuf[32];
     int printedChars = 0;
 
-    va_start(ap, fmt);
     for(p = fmt; *p; p++){
         if(*p != '%'){
-            putchar(*p);
+            putc(*p, fd);
 	    printedChars++;
         }else{
 	    switch(*++p){
 	    case 'i':
             case 'd':
-	        printedChars += printf(ltoa(va_arg(ap, int), auxBuf,10));
+	        printedChars += vfprintf(fd, ltoa(va_arg(ap, int), auxBuf,10), ap);
 	        break;
 	    case 'x':
-	        printedChars += printf(ltoa(va_arg(ap, int),auxBuf, 16));
+	        printedChars += vfprintf(fd, ltoa(va_arg(ap, int),auxBuf, 16), ap);
 		break;
             case 's':
 	        for(sval = va_arg(ap, char*); *sval; sval++){
-		    putchar(*sval);
+		    putc(*sval, fd);
 		    printedChars++;
 		}
 		break;
@@ -66,6 +63,20 @@ int printf(char * fmt, ...){
             } 
 	}
     }           
-    va_end(ap);
     return printedChars;
+}
+
+int printf(char *fmt, ...){
+    va_list ap;
+    va_start(ap, fmt);
+    int ret = vfprintf(STDOUT, fmt, ap);
+    va_end(ap);
+    return ret;
+}
+int uprintf(char *fmt, ...){
+    va_list ap;
+    va_start(ap, fmt);
+    int ret = vfprintf(REGOUT, fmt, ap);
+    va_end(ap);
+    return ret;
 }
