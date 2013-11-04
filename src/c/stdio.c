@@ -67,5 +67,6 @@ int printf(char * fmt, ...){
 	}
     }           
     va_end(ap);
+    _Sti();
     return printedChars;
 }

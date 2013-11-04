@@ -55,13 +55,14 @@ kmain()
     _mascaraPIC1(0xFD);      //1111 1101  habilito el teclado
     _mascaraPIC2(0xFF); //1111 1111 slave PIC
     _Sti();
-    printf("hola");
+   // printf("hola");
     buffer_initialize(&keyboard_buffer); 
-
+    
     printf("testeando %d %s %x", 20, "string", 256);
+    
 //    _registerInfo();
     while(1){
-//	shell_run();
+	shell_run();
     }
 }
 

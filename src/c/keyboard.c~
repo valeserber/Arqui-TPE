@@ -192,6 +192,7 @@ int special_keyboard[KEYS] = {
 int scancodeToAscii(unsigned char scancode){
     
     if(scancode >=128 && scancode <= 216){ 
+        print("break");
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
 	}
@@ -207,7 +208,7 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 	}
     }
-    char holi[20];
+ 
     int key= normal_keyboard[scancode];
     switch(key){
 	case CONTROL_MAKE:
@@ -215,15 +216,9 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	case CAPS_LOCK:
-	    if((keyboard_buffer.flag.capsLockOn)==true){
-		(keyboard_buffer.flag.capsLockOn)=false;
-	    }
-            else{
-		print("holaaaaaaaa");
-		(keyboard_buffer.flag.capsLockOn)=true;
-	    }
-
-	    //keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
+            print("make");
+	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
+	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
@@ -232,7 +227,6 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	default:
-	        print(tostring(holi,keyboard_buffer.flag.capsLockOn));
 		if((keyboard_buffer.flag.capsLockOn==true) ||
 		   (keyboard_buffer.flag.shiftOn==true)){
 			key=special_keyboard[scancode];

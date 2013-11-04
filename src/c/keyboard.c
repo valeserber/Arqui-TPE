@@ -192,6 +192,7 @@ int special_keyboard[KEYS] = {
 int scancodeToAscii(unsigned char scancode){
     
     if(scancode >=128 && scancode <= 216){ 
+        print("break");
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
 	}
@@ -215,6 +216,7 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	case CAPS_LOCK:
+            print("make");
 	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
                 return 0;
 		break;

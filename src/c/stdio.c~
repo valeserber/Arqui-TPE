@@ -2,6 +2,7 @@
 #include <stdarg.h>
 //#include "../../include/stdarg.h"
 #include "../../include/stdio.h"
+#include "../../include/string.h"
 #define putchar(x) putc((x), STDOUT)
 
 /***************************************************************
@@ -34,19 +35,38 @@ int getc(FILE *stream){
  */
 
 int printf(char * fmt, ...){
-    va_list vap;
-    char *p;
-    int i = 0
+    va_list ap;
+    char *p, *sval;
+    int ival;
+    char auxBuf[32];
+    int printedChars = 0;
 
-    va_start(vap, fmt) ;
+    va_start(ap, fmt);
     for(p = fmt; *p; p++){
         if(*p != '%'){
             putchar(*p);
-        }
-     //   else switch(*++p){
-     //       case ´d´:
+	    printedChars++;
+        }else{
+	    switch(*++p){
+	    case 'i':
+            case 'd':
+	        printedChars += printf(ltoa(va_arg(ap, int), auxBuf,10));
+	        break;
+	    case 'x':
+	        printedChars += printf(ltoa(va_arg(ap, int),auxBuf, 16));
+		break;
+            case 's':
+	        for(sval = va_arg(ap, char*); *sval; sval++){
+		    putchar(*sval);
+		    printedChars++;
+		}
+		break;
+            case 'f':
+	    	break;
+            } 
+	}
     }           
-    va_end(vap);
-    return 0;
+    va_end(ap);
+    //_Sti();
+    return printedChars;
 }
-
