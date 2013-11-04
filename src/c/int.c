@@ -4,10 +4,10 @@
 
 extern BUFFER keyboard_buffer;
 void write(int fd, const void * buf, size_t count);
+extern void writeToMainScreen(const void * buf,size_t count);
+extern void scrollMainScreen();
 
 int tickpos=640;
-int writepos=0;
-int upperWritepos = 0;
 
 void int_08(){
     char *video = (char *)0xb8000;
@@ -15,10 +15,8 @@ void int_08(){
 }
 
 void int_09(unsigned char scancode){
-	print("int 9");
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
-    
     if(ascii_c !=0){
        putc(ascii_c,1);
        addToKeyboardBuffer(ascii_c);
@@ -39,22 +37,10 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 
 //TODO
 void write(int fd, const void * buf, size_t count){
-    char *vidmem;
-    int size;
-    char *b= (char *)buf;
     if(fd==STDOUT){
-       vidmem= (char *)MAIN_SCREEN_ADDRESS;
-       size= MAIN_SCREEN_SIZE;
-       unsigned int i=0;
-       while(i < count && writepos < size){
-          vidmem[writepos++]=b[i++];
-          vidmem[writepos++]=WHITE_TXT;
-       }
-       if(writepos == size){
-          writepos = 0;
-        }
+       writeToMainScreen(buf,count);
     }else if(fd == 0){ //TODO 0 es la pantalla superior, ponerle alias
-        vidmem= (char *)VIDMEM_ADDRESS;
+     /*   vidmem= (char *)VIDMEM_ADDRESS;
         size= UPPER_SCREEN_SIZE;
         unsigned int i=0;
         while(i < count && upperWritepos < size){
@@ -63,7 +49,7 @@ void write(int fd, const void * buf, size_t count){
         }
         if(upperWritepos == size){
            upperWritepos = 0;
-        }
+        }*/
     }
 }
 

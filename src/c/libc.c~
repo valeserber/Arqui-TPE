@@ -1,12 +1,14 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
+#include "../../include/stdio.h"
+#include "../../include/string.h"
 
-extern  void _write(int fd, const void *buf, size_t count);
+extern void _write(int fd, const void *buf, size_t count);
+extern void _read(int fd, void *buf, size_t count);
 
-typedef enum {STDIN, STDOUT, STDERR} stream;
+//typedef enum {STDIN, STDOUT, STDERR} stream;
 //typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
-#define SYS_READ 3
-#define SYS_WRITE 4
+
 
 /***************************************************************
 *k_clear_screen
@@ -59,21 +61,6 @@ void print(char * str)
         vidmem[j++]=str[i++];
         vidmem[j++]=WHITE_TXT;
     }
-}
-
-/***************************************************************
-*strlen
-*
-* Devuelve la longitud del string.
-****************************************************************/
-
-size_t strlen(char * string)
-{
-    size_t len = 0;
-    while(string[len] != 0){
-    	len++;
-    }
-    return len;
 }
 
 /***************************************************************
@@ -147,37 +134,6 @@ char * tostring(char* str, int number)
         str[i--]=aux;
     }
     return str;
-}
-
-/***************************************************************
-* putc
-*
-***************************************************************/
-// TODO ver el return
-/*int putc(int c, FILE *stream)
-{
-    unsigned char ch = c;
-    _write(stream->fd, &ch, 1);
-    return c;
-}*/
-
-int putc(int c, int fd)
-{
-    unsigned char ch = c;
-    _write(fd, &ch, 1);
-    return c;
-}
-
-void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5)
-{
-    switch(sysCallNumber){
-        case SYS_WRITE:
-          write((int)arg1, (void *)arg2, (size_t)arg3);
-            break;
-        case SYS_READ:
-//          read((int)arg1, (void *)arg2,(size_t)arg3);
-	    break;
-    }
 }
 
 /***************************************************************

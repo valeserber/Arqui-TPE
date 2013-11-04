@@ -11,22 +11,6 @@ extern void _read(int fd, void *buf, size_t count);
 
 
 /***************************************************************
-*k_clear_screen
-*
-* Borra la pantalla en modo texto color.
-****************************************************************/
-
-void k_clear_screen()
-{
-    char *vidmem = (char *) VIDMEM_ADDRESS;
-    unsigned int i=0;
-    while(i < UPPER_SCREEN_SIZE){
-        vidmem[i++]='-';
-        vidmem[i++]=WHITE_TXT;
-    };
-}
-
-/***************************************************************
 *print_hello
 *
 * Imprime hola mundo en pantalla en modo texto color.

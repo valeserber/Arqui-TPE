@@ -7,9 +7,7 @@ extern BUFFER keyboard_buffer;
 
 void shell_run(){
 
-  // char holi[10];
    int linepos=(keyboard_buffer.buffer_pos);
-   //print((tostring(holi,linepos)));
    printf("***>");
    while(linepos==(keyboard_buffer.buffer_pos)){
    }

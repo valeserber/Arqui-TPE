@@ -7,7 +7,7 @@ GLOBAL  _debug
 EXTERN  int_08
 EXTERN  int_09
 EXTERN  int_80h
-EXTERN  ltoa
+EXTERN  uprintf
 
 
 SECTION .text
@@ -76,22 +76,23 @@ _write:
 _registerInfo:
         push    ebp
         mov     ebp, esp
-        push    eax	
+	pushad
         mov     eax, 4              ; sys_write
         mov     ebx, 0              ; fd = REGOUT
-	mov     edi, 4              ; counter
- cycle:      
  	mov     ecx, eaxstr 
 	mov 	edx, regstrlen
-        int     80h
-	mov     esi, [ebp-4]
-	push    16
-	push    regBuffer    
-	push    esi
-	call    ltoa
-	add     esp, 12
-	mov     ecx, eax            ; eax has the pointer to the string
-	int     80h
+	mov     eax, [esp+4]
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+8]
+	mov     ecx, ecxstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	popad
         leave
         ret
     
@@ -159,14 +160,14 @@ vuelve:
     retn
 
 section .data
-    eaxstr db "eax    "
+    eaxstr db "eax 0x%x",0
     regstrlen equ $-eaxstr
-    ecxstr db "ecx    "
-    edxstr db "edx    "
-    ebxstr db "ebx    "
-    espstr db "esp    "
-    ebpstr db "ebp    "
-    esistr db "esi    "
-    edistr db "edi    "
+    ecxstr db "ecx 0x%x",0
+    edxstr db "edx 0x%x",0
+    ebxstr db "ebx 0x%x",0
+    espstr db "esp 0x%x",0
+    ebpstr db "ebp 0x%x",0
+    esistr db "esi 0x%x",0
+    edistr db "edi 0x%x",0
 section .bss
     regBuffer resb 32

@@ -1,7 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 
-extern BUFFER keyboard_buffer;
+BUFFER keyboard_buffer;
 extern void _registerInfo();
 
 int normal_keyboard[KEYS] = {
@@ -192,7 +192,6 @@ int special_keyboard[KEYS] = {
 int scancodeToAscii(unsigned char scancode){
     
     if(scancode >=128 && scancode <= 216){ 
-        print("break");
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
 	}
@@ -203,8 +202,7 @@ int scancodeToAscii(unsigned char scancode){
     }
     if(scancode==CONTROL_R){
 	if(keyboard_buffer.flag.controlOn==true){
-		print("control r");
-		//_registerInfo();
+		_registerInfo();
 		return 0;
 	}
     }
@@ -216,8 +214,6 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	case CAPS_LOCK:
-            print("make");
-	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
 	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
                 return 0;
 		break;
@@ -237,15 +233,15 @@ int scancodeToAscii(unsigned char scancode){
 }
 
 
-void buffer_initialize(BUFFER * buf){
-    buf->buffer_pos=0;
+void buffer_initialize(){
+    keyboard_buffer.buffer_pos=0;
     int i;
     for(i=0;i<BUFFER_SIZE;i++){
-	buf->buffer[i]=0;
+	keyboard_buffer.buffer[i]=0;
     }
-    buf->flag.shiftOn=false;
-    buf->flag.controlOn=false;
-    buf->flag.capsLockOn=false;
+    keyboard_buffer.flag.shiftOn=false;
+    keyboard_buffer.flag.controlOn=false;
+    keyboard_buffer.flag.capsLockOn=false;
 }
 
 void addToKeyboardBuffer(char ascii_c){

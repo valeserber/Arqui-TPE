@@ -23,3 +23,17 @@ void shell_run(){
   // }
    
 }
+
+/* solo se admite un comando en una linea
+void searchCommand(int linepos){
+   while(keyboard_buffer[linepos]!='\n'){
+	
+        while(keyboard_buffer[linepos]!=' '){
+        //armar un string
+        }
+        //checkear comando
+        //despues vienen los argumentos
+
+
+   }
+}*/
