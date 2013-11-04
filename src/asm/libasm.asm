@@ -77,10 +77,7 @@ _registerInfo:
         push    ebp
         mov     ebp, esp
 	pushad
-        mov     eax, 4              ; sys_write
-        mov     ebx, 0              ; fd = REGOUT
  	mov     ecx, eaxstr 
-	mov 	edx, regstrlen
 	mov     eax, [esp+4]
 	push    eax
 	push    ecx
@@ -88,6 +85,42 @@ _registerInfo:
 	add     esp, 8
 	mov     eax, [esp+8]
 	mov     ecx, ecxstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+12]
+	mov     ecx, edxstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+16]
+	mov     ecx, ebxstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+20]
+	mov     ecx, espstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+24]
+	mov     ecx, ebpstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+28]
+	mov     ecx, esistr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+	mov     eax, [esp+32]
+	mov     ecx, edistr
 	push    eax
 	push    ecx
 	call    uprintf
@@ -160,14 +193,14 @@ vuelve:
     retn
 
 section .data
-    eaxstr db "eax 0x%x",0
+    eaxstr db "eax 0x%x",10, 0 ; 10 = \n in ascii, 0 to null terminate the string
     regstrlen equ $-eaxstr
-    ecxstr db "ecx 0x%x",0
-    edxstr db "edx 0x%x",0
-    ebxstr db "ebx 0x%x",0
-    espstr db "esp 0x%x",0
-    ebpstr db "ebp 0x%x",0
-    esistr db "esi 0x%x",0
-    edistr db "edi 0x%x",0
+    ecxstr db "ecx 0x%x",10,0
+    edxstr db "edx 0x%x",10,0
+    ebxstr db "ebx 0x%x",10,0
+    espstr db "esp 0x%x",10,0
+    ebpstr db "ebp 0x%x",10,0
+    esistr db "esi 0x%x",10,0
+    edistr db "edi 0x%x",10,0
 section .bss
     regBuffer resb 32

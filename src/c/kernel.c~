@@ -22,7 +22,7 @@ kmain()
 
 /*Imprime hola mundo. */
 
-    print_hello();
+   // print_hello();
 
     /*
     print("Hello");
@@ -54,11 +54,18 @@ kmain()
   //  _mascaraPIC1(0xFE); //1111 1110 master PIC habilitado el timer tick
     _mascaraPIC1(0xFD);      //1111 1101  habilito el teclado
     _mascaraPIC2(0xFF); //1111 1111 slave PIC
+<<<<<<< HEAD
     _Sti();
 
     buffer_initialize(); 
     
 //    printf("%di", printf("cinco"));
+=======
+//    printf("%di", printf("cinco"));
+    _Sti();
+    _registerInfo();
+    buffer_initialize(&keyboard_buffer); 
+>>>>>>> 588e863085fefe049b3fb9b96ae732552db3d1da
 //    printf("testeando %d %s %x", 20, "string", 256);
     while(1){
 	shell_run();
