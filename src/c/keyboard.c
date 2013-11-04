@@ -202,6 +202,7 @@ int scancodeToAscii(unsigned char scancode){
     }
     if(scancode==CONTROL_R){
 	if(keyboard_buffer.flag.controlOn==true){
+		print("control r");		
 		_registerInfo();
 		return 0;
 	}

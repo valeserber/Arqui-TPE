@@ -41,7 +41,7 @@ void clearLine(int initial,int size){
 
 void clear(){
    int line;
-   for(line=0;line<MAIN_SCREEN_ROWS;line++){
+   for(line=10;line<MAIN_SCREEN_ROWS;line++){
 	clearLine(line,LINE_SIZE);
    }
 }
@@ -68,8 +68,8 @@ void k_clear_screen()
         vidmem[i++]=WHITE_TXT;
     };
     while(i<UPPER_SCREEN_SIZE){
-        vidmem[i++]='-';
-        vidmem[i++]=WHITE_TXT;
+        vidmem[i++]=' ';
+        vidmem[i++]=WHITE_SQUARE;
     }
     while(i < MAIN_SCREEN_SIZE){
         vidmem[i++]=' ';

@@ -18,7 +18,7 @@ kmain()
 
 /* Borra la pantalla. */
 
-    k_clear_screen();
+   k_clear_screen();
 
 /*Imprime hola mundo. */
 
@@ -57,7 +57,7 @@ kmain()
     _Sti();
 
     buffer_initialize(); 
-    
+//    _registerInfo();
 //    printf("%di", printf("cinco"));
 //    printf("testeando %d %s %x", 20, "string", 256);
     while(1){

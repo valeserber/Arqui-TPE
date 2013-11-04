@@ -41,7 +41,7 @@ void clearLine(int initial,int size){
 
 void clear(){
    int line;
-   for(line=0;line<MAIN_SCREEN_ROWS;line++){
+   for(line=10;line<MAIN_SCREEN_ROWS;line++){
 	clearLine(line,LINE_SIZE);
    }
 }
