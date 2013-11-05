@@ -44,9 +44,12 @@ void write(int fd, const void * buf, size_t count){
     	switch(key){
  		case '\n':
 			 video_enter(fd);
+			 if(fd==STDOUT && writepos == MAIN_SCREEN_SIZE){  
+				scrollMainScreen();
+    			 }
 			 break;
 		case '\t':
-			 video_tab();
+			 video_tab(fd);
 		         break;	
 		case '\b':
 		  	 video_backspace();

@@ -20,14 +20,14 @@ void writeToScreen(char key,int fd){
     if(fd==STDOUT){
 	vidmem=(char *)MAIN_SCREEN_ADDRESS;
     	size= MAIN_SCREEN_SIZE;
-        insertKey(key,&writepos,vidmem); 
-        if(writepos == size){        
+        if(writepos == size){  
 		scrollMainScreen();
     	}
+	insertKey(key,&writepos,vidmem); 
     }
     else if(fd==REGOUT){
 	vidmem=(char *)VIDMEM_ADDRESS;
-    	size= UPPER_SCREEN_SIZE;
+    	size= UPPER_SCREEN_SIZE-LINE_SIZE;
     	insertKey(key,&upperWritepos,vidmem);
         if(upperWritepos == size){
          //no se que deberia hacer
@@ -79,6 +79,9 @@ void video_enter(int fd){
   	while((writepos%160)!=0){
 		writepos+=2;
    	}
+	if(writepos == MAIN_SCREEN_SIZE){  
+		scrollMainScreen();
+        }
    }
    else if(fd==REGOUT){
 	while((upperWritepos%160)!=0){
