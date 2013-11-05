@@ -20,10 +20,10 @@ void shell_run(){
        ans=addToShellBuffer();
        linepos=keyboardpos();
    }while(ans!=ENTER);
-   int i;
-   for(i=0;i<SHELL_SIZE;i++){
-       writeToScreen(shell_buffer.buffer[i],REGOUT);
-   } 
+   //int i;
+   //for(i=0;i<SHELL_SIZE;i++){
+    //   writeToScreen(shell_buffer.buffer[i],REGOUT);
+   //} 
 }
 
 void initialize_shell(){
