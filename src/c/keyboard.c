@@ -23,7 +23,7 @@ int normal_keyboard[KEYS] = {
         /*0x0C*/                '-',        
         /*0x0D*/                '=',        
         /*0x0E*/ /*Backspace*/  '\b',
-        /*0x0F*/ /*Tab*/      	NOTHING,
+        /*0x0F*/ /*Tab*/      	'\t',
         /*0x10*/                'q',        
         /*0x11*/                'w',        
         /*0x12*/                'e',        
@@ -116,7 +116,7 @@ int special_keyboard[KEYS] = {
         /*0x0C*/                '_',        
         /*0x0D*/                '+',        
         /*0x0E*/ /*Backspace*/  '\b',
-        /*0x0F*/ /*Tab*/        NOTHING,
+        /*0x0F*/ /*Tab*/        '\t',
         /*0x10*/                'Q',        
         /*0x11*/                'W',        
         /*0x12*/                'E',        
@@ -202,8 +202,7 @@ int scancodeToAscii(unsigned char scancode){
 	return 0;
     }
     if(scancode==CONTROL_R){
-	if(keyboard_buffer.flag.controlOn==true){
-		print("control r");		
+	if(keyboard_buffer.flag.controlOn==true){		
 		_registerInfo();
 		return 0;
 	}
@@ -236,30 +235,44 @@ int scancodeToAscii(unsigned char scancode){
 
 
 void buffer_initialize(){
-    keyboard_buffer.buffer_pos=0;
     int i;
-    for(i=0;i<BUFFER_SIZE;i++){
-	keyboard_buffer.buffer[i]=0;
+    keyboard_buffer.enqueuePos = keyboard_buffer.dequeuePos = 0;
+   
+    for( i = 0; i < BUFFER_SIZE; i++){
+        keyboard_buffer.buffer[i] = 0;
     }
     keyboard_buffer.flag.shiftOn=false;
     keyboard_buffer.flag.controlOn=false;
     keyboard_buffer.flag.capsLockOn=false;
 }
 
-void addToKeyboardBuffer(unsigned char ascii_c){
-   if(keyboard_buffer.buffer_pos == BUFFER_SIZE){
-	keyboard_buffer.buffer_pos=0;
-   }
-   keyboard_buffer.buffer[keyboard_buffer.buffer_pos] = ascii_c;
-   keyboard_buffer.buffer_pos+=1;
+bool kbBufferIsEmpty(void){
+    return keyboard_buffer.enqueuePos == keyboard_buffer.dequeuePos;
 }
 
-int keyboardpos(){
-   return keyboard_buffer.buffer_pos;
+bool kbBufferIsFull(void){
+    return keyboard_buffer.enqueuePos == keyboard_buffer.dequeuePos-1;
 }
 
-unsigned char * keyboardbuffer(){
+bool addToKeyboardBuffer(unsigned char ascii_c){
+    if(kbBufferIsFull()) return false; // Se podria agregar un pitido a la motherboard :)
+   keyboard_buffer.buffer[keyboard_buffer.enqueuePos] = ascii_c;
+   keyboard_buffer.enqueuePos = (keyboard_buffer.enqueuePos + 1) % BUFFER_SIZE;
+}
+
+int kbBufferGetNext(){
+    if(kbBufferIsEmpty()) return -1;
+    int dequeuePos = keyboard_buffer.dequeuePos;
+    keyboard_buffer.dequeuePos = (keyboard_buffer.dequeuePos +1) % BUFFER_SIZE;
+    return keyboard_buffer.buffer[dequeuePos];
+
+}
+
+int keyboardpos(void){
+   return keyboard_buffer.enqueuePos;
+}
+
+unsigned char * keyboardbuffer(void){
    return keyboard_buffer.buffer;
 }
-
 

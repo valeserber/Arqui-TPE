@@ -1,45 +1,46 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
-void writeToMainScreen(const void * buf,size_t count);
+void writeToScreen(char key, int fd);
 void scrollMainScreen();
 void clearLine(int initial,int size);
 void clearRegisters();
-void enter(int fd);
-void writeToUpperScreen(const void * buf,size_t count);
-void backspace();
+void video_enter(int fd);
+void video_backspace();
+void video_tab(int fd);
+void insertKey(char key, int * pos, char * vid);
 
 int writepos=0;
 int upperWritepos = 0;
 char *vidmem= (char *)MAIN_SCREEN_ADDRESS;
 
-void writeToMainScreen(const void * buf,size_t count){
-    char *b= (char *)buf;
-    vidmem=(char *)MAIN_SCREEN_ADDRESS;
-    int size= MAIN_SCREEN_SIZE;
-    unsigned int i=0;
-    while(i < count && writepos < size){
-	vidmem[writepos++]=b[i++];
-	vidmem[writepos++]=WHITE_TXT; 
+void writeToScreen(char key,int fd){
+    int size;
+    int * pos;
+    if(fd==STDOUT){
+	vidmem=(char *)MAIN_SCREEN_ADDRESS;
+    	size= MAIN_SCREEN_SIZE;
+        insertKey(key,&writepos,vidmem); 
+        if(writepos == size){        
+		scrollMainScreen();
+    	}
     }
-    if(writepos == size){        
-	scrollMainScreen();
+    else if(fd==REGOUT){
+	vidmem=(char *)VIDMEM_ADDRESS;
+    	size= UPPER_SCREEN_SIZE;
+    	insertKey(key,&upperWritepos,vidmem);
+        if(upperWritepos == size){
+         //no se que deberia hacer
+         upperWritepos = 0;
+    	}
     }
 }
 
-void writeToUpperScreen(const void * buf,size_t count){
-    char *b= (char *)buf;    
-    vidmem=(char *)VIDMEM_ADDRESS;
-    int size= UPPER_SCREEN_SIZE;
-    unsigned int i=0;
-    while(i < count && upperWritepos < size){
-	vidmem[upperWritepos++]=b[i++];
-	vidmem[upperWritepos++]=WHITE_TXT;
-    }
-    if(upperWritepos == size){
-         //no se que deberia hacer
-         upperWritepos = 0;
-    }
+void insertKey(char key, int * pos, char * vid){
+    vid[(*pos)]=key;
+    (*pos)++;
+    vid[(*pos)]=WHITE_TXT; 
+    (*pos)++;
 }
 
 void scrollMainScreen(){
@@ -73,7 +74,7 @@ void clearRegisters(){
    }
 }
 
-void enter(int fd){
+void video_enter(int fd){
    if(fd==STDOUT){
   	while((writepos%160)!=0){
 		writepos+=2;
@@ -86,7 +87,7 @@ void enter(int fd){
    }
 }
 
-void backspace(){
+void video_backspace(){
    vidmem=(char *)MAIN_SCREEN_ADDRESS;
    if(writepos>0){
 	vidmem[--writepos]=WHITE_TXT;
@@ -94,12 +95,23 @@ void backspace(){
    }
 }
 
-void tab(){
-   vidmem=(char *)MAIN_SCREEN_ADDRESS;
-   int i;
-   for(i=0; i<TAB_LENGTH && i<MAIN_SCREEN_SIZE; i++){
-	vidmem[writepos++]=' ';
-	vidmem[writepos++]=WHITE_TXT;
+void video_tab(int fd){
+  
+   int i=0;
+   int size=0;
+   int * pos;
+   if(fd==STDOUT){
+   	 vidmem=(char *)MAIN_SCREEN_ADDRESS;
+         size=MAIN_SCREEN_SIZE;
+         pos=&writepos;
+   }
+   else if(fd==REGOUT){
+         vidmem=(char *)VIDMEM_ADDRESS;
+	 size=UPPER_SCREEN_SIZE;
+	 pos=&upperWritepos;
+   }
+   for(i=0; i<TAB_LENGTH && i<size; i++){
+	insertKey(' ',&pos, vidmem);
    }
 }
 
