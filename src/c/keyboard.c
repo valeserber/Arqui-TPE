@@ -192,6 +192,10 @@ int special_keyboard[KEYS] = {
         /*0x58*/ /*F12*/        NOTHING};
 
 int scancodeToAscii(unsigned char scancode){
+<<<<<<< HEAD
+=======
+    //printf("%d ", scancode);
+>>>>>>> d2816a193a4cd4d6fea2ffd94e967b172086e309
     if(scancode & 0x80){ 
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;

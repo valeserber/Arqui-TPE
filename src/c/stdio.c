@@ -5,38 +5,23 @@
 #include "../../include/string.h"
 #define putchar(x) putc((x), STDOUT)
 int vfprintf(int fd, const char * fmt, va_list ap);
-/***************************************************************
-* putc
-*
-***************************************************************/
-// TODO ver el return
-/*int putc(int c, FILE *stream)
-{
-    unsigned char ch = c;
-    _write(stream->fd, &ch, 1);
-    return c;
-}*/
 
-int putc(int c, int fd)
-{
+int putc(int c, int fd){
     unsigned char ch = c;
-    _write(fd, &ch, 1);
+    write(fd, &ch, 1);
     return c;
 }
 
-int getc(FILE *stream){
-    char c;
-    _read(stream->fd, &c, 1);
+int getc(int fd){
+    int c;
+    read(fd, &c, 1);
     return c;
 }
-
-/* TODO averiguar como usar typedefs a FILE* para stdin, stdout, stderr
- */
 
 int vfprintf(int fd, const char * fmt, va_list ap){
     char *p, *sval;
     int ival;
-    char auxBuf[32];
+    char auxBuf[sizeof(int)*8+1]; // Big enough to contain any possible value
     int printedChars = 0;
 
     for(p = fmt; *p; p++){
@@ -75,6 +60,7 @@ int printf(char *fmt, ...){
     va_end(ap);
     return ret;
 }
+
 int uprintf(char *fmt, ...){
     va_list ap;
     va_start(ap, fmt);
