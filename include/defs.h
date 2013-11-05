@@ -36,6 +36,7 @@
 #define TAB_LENGTH          8
 #define SHELL_SIZE          128
 #define ENTER	            261
+#define PROMPT_LENGTH       4
 /*
  * Type definitions
  */

@@ -9,10 +9,12 @@ void video_enter(int fd);
 void video_backspace();
 void video_tab(int fd);
 void insertKey(char key, int * pos, char * vid);
+void max_pos(int max);
 
 int writepos=0;
 int upperWritepos = 0;
 char *vidmem= (char *)MAIN_SCREEN_ADDRESS;
+int maxpos=0;
 
 void writeToScreen(char key,int fd){
     int size;
@@ -28,11 +30,13 @@ void writeToScreen(char key,int fd){
     else if(fd==REGOUT){
 	vidmem=(char *)VIDMEM_ADDRESS;
     	size= UPPER_SCREEN_SIZE-LINE_SIZE;
-    	insertKey(key,&upperWritepos,vidmem);
+    	
         if(upperWritepos == size){
-         //no se que deberia hacer
+	 // return;         
+	//no se que deberia hacer
          upperWritepos = 0;
     	}
+	insertKey(key,&upperWritepos,vidmem);
     }
 }
 
@@ -92,10 +96,14 @@ void video_enter(int fd){
 
 void video_backspace(){
    vidmem=(char *)MAIN_SCREEN_ADDRESS;
-   if(writepos>0){
+   if(maxpos>0){
 	vidmem[--writepos]=WHITE_TXT;
 	vidmem[--writepos]=' ';
    }
+}
+
+void max_pos(int max){
+   maxpos=max;
 }
 
 void video_tab(int fd){
