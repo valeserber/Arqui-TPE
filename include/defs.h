@@ -102,7 +102,8 @@ typedef struct{
 
 typedef struct{
   unsigned char buffer[BUFFER_SIZE];
-  int buffer_pos;
+  int enqueuePos;//buffer_pos;
+  int dequeuePos;
   flags flag;
 } BUFFER;
 

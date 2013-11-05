@@ -37,10 +37,9 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 
 //TODO
 void write(int fd, const void * buf, size_t count){
-    char *b=(char *)buf;
     unsigned int i=0;    
     while(i<count){
-    	char key= b[i++];
+    	char key= ((char*)buf)[i++];
     	switch(key){
  		case '\n':
 			 video_enter(fd);
@@ -59,15 +58,15 @@ void write(int fd, const void * buf, size_t count){
 }
 
 ssize_t read(int fd, void *buf, size_t count){
-//   char * b=(char *) buf;
-//   int i;
-//   int j=0; 
-//   for(i=0; i<count;i++){
-//	b[i]=keyboard_buffer[j++];	
-//	if(j==BUFFER_SIZE){
-//		j=0;
-//	}
-//   }
-  
-   return 0; //TODO stub
+    int readCharacters = 0;
+    if(fd == STDIN){
+        int aux;
+        while(readCharacters < count){
+	    if((aux = kbBufferGetNext()) != -1){
+                ((char*)buf)[readCharacters] = aux;
+            }
+	    readCharacters++;
+	}
+    }
+    return readCharacters;
 }

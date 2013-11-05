@@ -155,8 +155,8 @@ _int_09_hand:                   ;Keyboard Handler
     push    eax
     call    int_09
     add     esp, 4
-    mov     al, 20h              ;Envio de EOI generico al PIC
-    out     20h, al
+    mov     al, 20h 		;End of Interruption code
+    out     20h, al             ;Master PIC IO base address
     popa
     pop     es
     pop     ds
@@ -193,14 +193,14 @@ vuelve:
     retn
 
 section .data
-    eaxstr db "eax 0x%x",10, 0 ; 10 = \n in ascii, 0 to null terminate the string
+    eaxstr db "eax 0x%x",9, 0 ; 0 to null terminate the string
     regstrlen equ $-eaxstr
-    ecxstr db "ecx 0x%x",10,0
-    edxstr db "edx 0x%x",10,0
-    ebxstr db "ebx 0x%x",10,0
-    espstr db "esp 0x%x",10,0
+    ecxstr db "ecx 0x%x",9,0
+    edxstr db "edx 0x%x",10,0 ; 10 = \n in ascii
+    ebxstr db "ebx 0x%x",9,0
+    espstr db "esp 0x%x",9,0
     ebpstr db "ebp 0x%x",10,0
-    esistr db "esi 0x%x",10,0
-    edistr db "edi 0x%x",10,0
+    esistr db "esi 0x%x",9,0
+    edistr db "edi 0x%x",9,0
 section .bss
     regBuffer resb 32

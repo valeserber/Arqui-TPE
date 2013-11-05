@@ -41,7 +41,7 @@ int scancodeToAscii(unsigned char scancode);
 void buffer_initialize();
 
 /*Agrega al buffer lo ingresado por teclado*/
-void addToKeyboardBuffer(char ascii_c);
+bool addToKeyboardBuffer(unsigned char ascii_c);
 
 char * tostring(char* str, int number);
 
