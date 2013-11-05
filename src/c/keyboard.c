@@ -3,6 +3,8 @@
 
 BUFFER keyboard_buffer;
 extern void _registerInfo();
+int keyboardpos();
+unsigned char * keyboardbuffer();
 
 int normal_keyboard[KEYS] = {
         //MAKECODE
@@ -252,4 +254,13 @@ void addToKeyboardBuffer(char ascii_c){
    keyboard_buffer.buffer[keyboard_buffer.buffer_pos]=(unsigned char)ascii_c;
    keyboard_buffer.buffer_pos+=1;
 }
+
+int keyboardpos(){
+   return keyboard_buffer.buffer_pos;
+}
+
+unsigned char * keyboardbuffer(){
+   return keyboard_buffer.buffer;
+}
+
 

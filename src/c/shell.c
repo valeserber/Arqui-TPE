@@ -2,23 +2,19 @@
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
 
-extern int writepos;
-extern BUFFER keyboard_buffer;
 
 void shell_run(){
 
-   int linepos=(keyboard_buffer.buffer_pos);
+   int linepos=keyboardpos();
    printf("***>");
-   while(linepos==(keyboard_buffer.buffer_pos)){
+   while(linepos==keyboardpos()){
    }
-   while(keyboard_buffer.buffer[(keyboard_buffer.buffer_pos)-1]!='\n'){
+   char * buf= (char *)keyboardbuffer();   
+   while((buf[keyboardpos()-1])!='\n'){
    }
    //searchCommand(linepos);
-   while((writepos%160)!=0){
-	writepos+=2;
-   }
-   //while(writepos%160!=0){
-  // }
+   enter();
+
    
 }
 
