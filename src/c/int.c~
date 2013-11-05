@@ -39,17 +39,8 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 void write(int fd, const void * buf, size_t count){
     if(fd==STDOUT){
        writeToMainScreen(buf,count);
-    }else if(fd == 0){ //TODO 0 es la pantalla superior, ponerle alias
-     /*   vidmem= (char *)VIDMEM_ADDRESS;
-        size= UPPER_SCREEN_SIZE;
-        unsigned int i=0;
-        while(i < count && upperWritepos < size){
-            vidmem[upperWritepos++]=b[i++];
-            vidmem[upperWritepos++]=WHITE_TXT;
-        }
-        if(upperWritepos == size){
-           upperWritepos = 0;
-        }*/
+    }else if(fd == REGOUT){ //TODO 0 es la pantalla superior, ponerle alias
+       writeToUpperScreen(buf,count);
     }
 }
 

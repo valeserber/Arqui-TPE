@@ -33,6 +33,7 @@
 #define CONTROL_BREAK	    0x9D
 #define LAST_LINE	    14*80*2
 #define LINE_SIZE	    80*2
+#define TAB_LENGTH          8
 /*
  * Type definitions
  */

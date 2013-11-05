@@ -39,7 +39,7 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 void write(int fd, const void * buf, size_t count){
     if(fd==STDOUT){
        writeToMainScreen(buf,count);
-    }else if(fd == 0){ //TODO 0 es la pantalla superior, ponerle alias
+    }else if(fd == REGOUT){ 
        writeToUpperScreen(buf,count);
     }
 }

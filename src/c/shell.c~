@@ -10,7 +10,7 @@ void shell_run(){
    while(linepos==keyboardpos()){
    }
    char * buf= (char *)keyboardbuffer();   
-   while((int)(buf[keyboardpos()-1])!='\n'){
+   while((buf[keyboardpos()-1])!='\n'){
    }
    //searchCommand(linepos);
    enter();

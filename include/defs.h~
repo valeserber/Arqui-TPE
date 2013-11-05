@@ -32,6 +32,7 @@
 #define CONTROL_R     	    0x13
 #define CONTROL_BREAK	    0x9D
 #define LAST_LINE	    14*80*2
+#define LINE_SIZE	    80*2
 /*
  * Type definitions
  */

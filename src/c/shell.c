@@ -13,7 +13,7 @@ void shell_run(){
    while((buf[keyboardpos()-1])!='\n'){
    }
    //searchCommand(linepos);
-   enter();
+   enter(STDOUT);
 
    
 }

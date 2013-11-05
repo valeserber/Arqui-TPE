@@ -1,11 +1,13 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
+#include "../../include/stdio.h"
 void writeToMainScreen(const void * buf,size_t count);
 void scrollMainScreen();
 void clearLine(int initial,int size);
 void clearRegisters();
-void enter();
+void enter(int fd);
 void writeToUpperScreen(const void * buf,size_t count);
+void backspace();
 
 int writepos=0;
 int upperWritepos = 0;
@@ -13,11 +15,12 @@ char *vidmem= (char *)MAIN_SCREEN_ADDRESS;
 
 void writeToMainScreen(const void * buf,size_t count){
     char *b= (char *)buf;
+    vidmem=(char *)MAIN_SCREEN_ADDRESS;
     int size= MAIN_SCREEN_SIZE;
     unsigned int i=0;
     while(i < count && writepos < size){
-         vidmem[writepos++]=b[i++];
-         vidmem[writepos++]=WHITE_TXT;
+	vidmem[writepos++]=b[i++];
+	vidmem[writepos++]=WHITE_TXT; 
     }
     if(writepos == size){        
 	scrollMainScreen();
@@ -30,8 +33,8 @@ void writeToUpperScreen(const void * buf,size_t count){
     int size= UPPER_SCREEN_SIZE;
     unsigned int i=0;
     while(i < count && upperWritepos < size){
-         vidmem[upperWritepos++]=b[i++];
-         vidmem[upperWritepos++]=WHITE_TXT;
+	vidmem[upperWritepos++]=b[i++];
+	vidmem[upperWritepos++]=WHITE_TXT;
     }
     if(upperWritepos == size){
          //no se que deberia hacer
@@ -70,9 +73,33 @@ void clearRegisters(){
    }
 }
 
-void enter(){
-   while((writepos%160)!=0){
-	writepos+=2;
+void enter(int fd){
+   if(fd==STDOUT){
+  	while((writepos%160)!=0){
+		writepos+=2;
+   	}
+   }
+   else if(fd==REGOUT){
+	while((upperWritepos%160)!=0){
+		upperWritepos+=2;
+	}
+   }
+}
+
+void backspace(){
+   vidmem=(char *)MAIN_SCREEN_ADDRESS;
+   if(writepos>0){
+	vidmem[--writepos]=WHITE_TXT;
+	vidmem[--writepos]=' ';
+   }
+}
+
+void tab(){
+   vidmem=(char *)MAIN_SCREEN_ADDRESS;
+   int i;
+   for(i=0; i<TAB_LENGTH && i<MAIN_SCREEN_SIZE; i++){
+	vidmem[writepos++]=' ';
+	vidmem[writepos++]=WHITE_TXT;
    }
 }
 
