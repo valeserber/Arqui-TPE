@@ -23,7 +23,7 @@ int normal_keyboard[KEYS] = {
         /*0x0C*/                '-',        
         /*0x0D*/                '=',        
         /*0x0E*/ /*Backspace*/  '\b',
-        /*0x0F*/ /*Tab*/      	NOTHING,
+        /*0x0F*/ /*Tab*/      	'\t',
         /*0x10*/                'q',        
         /*0x11*/                'w',        
         /*0x12*/                'e',        
@@ -116,7 +116,7 @@ int special_keyboard[KEYS] = {
         /*0x0C*/                '_',        
         /*0x0D*/                '+',        
         /*0x0E*/ /*Backspace*/  '\b',
-        /*0x0F*/ /*Tab*/        NOTHING,
+        /*0x0F*/ /*Tab*/        '\t',
         /*0x10*/                'Q',        
         /*0x11*/                'W',        
         /*0x12*/                'E',        
@@ -191,8 +191,7 @@ int special_keyboard[KEYS] = {
         /*0x57*/ /*F11*/        NOTHING,
         /*0x58*/ /*F12*/        NOTHING};
 
-int scancodeToAscii(unsigned char scancode){
-    
+int scancodeToAscii(unsigned char scancode){    
     if(scancode >=128 && scancode <= 216){ 
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
@@ -203,8 +202,7 @@ int scancodeToAscii(unsigned char scancode){
 	return 0;
     }
     if(scancode==CONTROL_R){
-	if(keyboard_buffer.flag.controlOn==true){
-		print("control r");		
+	if(keyboard_buffer.flag.controlOn==true){		
 		_registerInfo();
 		return 0;
 	}

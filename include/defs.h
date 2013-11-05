@@ -34,6 +34,8 @@
 #define LAST_LINE	    14*80*2
 #define LINE_SIZE	    80*2
 #define TAB_LENGTH          8
+#define SHELL_SIZE          128
+#define ENTER	            261
 /*
  * Type definitions
  */
@@ -104,4 +106,8 @@ typedef struct{
   flags flag;
 } BUFFER;
 
+typedef struct{
+  unsigned char buffer[SHELL_SIZE];
+  int shell_pos;
+}SHELL;
 #endif
