@@ -192,12 +192,11 @@ int special_keyboard[KEYS] = {
         /*0x58*/ /*F12*/        NOTHING};
 
 int scancodeToAscii(unsigned char scancode){
-    
-    if(scancode >=128 && scancode <= 216){ 
+    printf("%d ", scancode);
+    if(scancode & 0x80){ 
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
-	}
-	else if(scancode==CONTROL_BREAK){
+	}else if(scancode==CONTROL_BREAK){
 		keyboard_buffer.flag.controlOn=false;
 	}
 	return 0;
@@ -217,7 +216,7 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	case CAPS_LOCK:
-	    keyboard_buffer.flag.capsLockOn = (!keyboard_buffer.flag.capsLockOn);
+	    keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
@@ -226,8 +225,8 @@ int scancodeToAscii(unsigned char scancode){
 		return 0;
 		break;
 	default:
-		if((keyboard_buffer.flag.capsLockOn==true) ||
-		   (keyboard_buffer.flag.shiftOn==true)){
+		if(keyboard_buffer.flag.capsLockOn ||
+		   keyboard_buffer.flag.shiftOn){
 			key=special_keyboard[scancode];
 		}
 		break;	
@@ -247,11 +246,11 @@ void buffer_initialize(){
     keyboard_buffer.flag.capsLockOn=false;
 }
 
-void addToKeyboardBuffer(char ascii_c){
+void addToKeyboardBuffer(unsigned char ascii_c){
    if(keyboard_buffer.buffer_pos == BUFFER_SIZE){
 	keyboard_buffer.buffer_pos=0;
    }
-   keyboard_buffer.buffer[keyboard_buffer.buffer_pos]=(unsigned char)ascii_c;
+   keyboard_buffer.buffer[keyboard_buffer.buffer_pos] = ascii_c;
    keyboard_buffer.buffer_pos+=1;
 }
 

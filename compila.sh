@@ -1,6 +1,6 @@
-#if [ ! -d ./bin ]
-#    then mkdir bin
-#fi
+if [ ! -d ./bin ]
+    then mkdir bin
+fi
 cd ./bin
 rm -rf *
 nasm -f aout ../src/asm/libasm.asm -o libasm.o
