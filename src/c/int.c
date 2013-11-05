@@ -3,7 +3,8 @@
 #include "../../include/stdio.h"
 
 extern BUFFER keyboard_buffer;
-void write(int fd, const void * buf, size_t count);
+ssize_t __write(int fd, const void * buf, size_t count);
+ssize_t __read(int fd, void *buf, size_t count);
 extern void writeToMainScreen(const void * buf,size_t count);
 extern void scrollMainScreen();
 
@@ -27,16 +28,16 @@ void int_09(unsigned char scancode){
 void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5){
     switch(sysCallNumber){
         case SYS_WRITE:
-            write((int)arg1, (void *)arg2, (size_t)arg3);
+            __write((int)arg1, (void *)arg2, (size_t)arg3);
             break;
         case SYS_READ:
-            read((int)arg1, (void *)arg2,(size_t)arg3);
+            __read((int)arg1, (void *)arg2,(size_t)arg3);
 	    break;
     }
 }
 
 //TODO
-void write(int fd, const void * buf, size_t count){
+ssize_t __write(int fd, const void * buf, size_t count){
     unsigned int i=0;    
     while(i<count){
     	char key= ((char*)buf)[i++];
@@ -55,9 +56,10 @@ void write(int fd, const void * buf, size_t count){
 			break;
     	}
     }
+    return i;
 }
 
-ssize_t read(int fd, void *buf, size_t count){
+ssize_t __read(int fd, void *buf, size_t count){
     int readCharacters = 0;
     if(fd == STDIN){
         int aux;
