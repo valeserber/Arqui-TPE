@@ -203,6 +203,7 @@ int scancodeToAscii(unsigned char scancode){
     if(scancode==CONTROL_R){
 	if(keyboard_buffer.flag.controlOn==true){		
 		_registerInfo();
+		reset_upperWritepos();
 		return 0;
 	}
     }

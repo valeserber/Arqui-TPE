@@ -3,7 +3,7 @@
 #include "../../include/stdio.h"
 void writeToScreen(char key, int fd);
 void scrollMainScreen();
-void clearLine(int initial,int size);
+void clearLine(char * vidmem);
 void clearRegisters();
 void video_enter(int fd);
 void video_backspace();
@@ -53,33 +53,35 @@ void insertKey(char key, int * pos, char * vid){
 }
 
 void scrollMainScreen(){
-    int i=(SCREEN_COLS)*2;   
+    vidmem= (char *) MAIN_SCREEN_ADDRESS;
+    int i=LINE_SIZE;   
     writepos=0; 
     while(i<MAIN_SCREEN_SIZE){
 	vidmem[writepos++]=vidmem[i++];
     }
-    clearLine(LAST_LINE,MAIN_SCREEN_SIZE);
+    clearLine((char *)LAST_LINE_ADDRESS);
     writepos=LAST_LINE;
 }
 
-void clearLine(int initial,int size){
-    while(initial<size){
-	vidmem[initial++]=' ';
-	vidmem[initial++]=WHITE_TXT;
+void clearLine(char * vidmem){
+    int i=0;
+    while(i<LINE_SIZE){
+	vidmem[i++]=' ';
+	vidmem[i++]=WHITE_TXT;
     }
 }
 
 void clear(){
    int line;
    for(line=10;line<MAIN_SCREEN_ROWS;line++){
-	clearLine(line,LINE_SIZE);
+	clearLine((char *)MAIN_SCREEN_ADDRESS);
    }
 }
 
 void clearRegisters(){
    int line;
-   for(line=0;line<UPPER_SCREEN_SIZE-1;line++){
-	clearLine(line,LINE_SIZE);
+   for(line=0;line<UPPER_SCREEN_ROWS-1;line++){
+	clearLine((char *)VIDMEM_ADDRESS);
    }
 }
 

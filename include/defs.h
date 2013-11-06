@@ -32,6 +32,7 @@
 #define CONTROL_R     	    0x13
 #define CONTROL_BREAK	    0x9D
 #define LAST_LINE	    14*80*2
+#define LAST_LINE_ADDRESS   (MAIN_SCREEN_ADDRESS)+(LAST_LINE)
 #define LINE_SIZE	    80*2
 #define TAB_LENGTH          8
 #define SHELL_SIZE          128
