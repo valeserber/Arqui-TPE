@@ -142,7 +142,9 @@ _registerInfo:
 	call    uprintf
 	add     esp, 8
 	mov     eax, [registers]
+	push    eax
 	call    printFlags
+	add     esp, 4
         leave
         ret
     
