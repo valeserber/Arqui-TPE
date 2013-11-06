@@ -83,6 +83,7 @@ void printFlags(word flags){
     flags & (bit << 11) ? uprintf("O") : uprintf(" ");
     uprintf("]");
 }
+
 /*
 void miniscanf(char *fmt, ...){
                         localfmt[i] = '\0';
