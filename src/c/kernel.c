@@ -6,7 +6,7 @@ IDTR idtr;              /* IDTR */
 //BUFFER keyboard_buffer; /* keyboard buffer*/
 
 //int tickpos=640;
-
+extern void _test();
 /**********************************************
 kmain()
 Punto de entrada de código C.
@@ -56,6 +56,7 @@ kmain()
     _Sti();
 
     buffer_initialize(); 
+    _test();
 
    // test1();
     while(1){

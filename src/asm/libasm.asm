@@ -1,6 +1,6 @@
 GLOBAL  _read_msw,_lidt
 GLOBAL  _int_08_hand, _int_09_hand, _int_80h_hand
-GLOBAL  read, write, _registerInfo
+GLOBAL  read, write, _registerInfo, _test
 GLOBAL  _mascaraPIC1, _mascaraPIC2, _Cli, _Sti
 GLOBAL  _debug
 
@@ -74,62 +74,75 @@ write:
     leave
     ret
 
+_test:
+    mov    eax, 0xCAFE
+    mov    ebx, 0x0FE0
+    mov    ecx, 0x0FEA
+    mov    edx, 0x0CE0
+    mov    edi, 0x0DAF
+    mov    esi, 0x0CCC
+    pushad
+    ;add    eax, eax
+    pushfd
+    call  _saveRegisters
+    call  _registerInfo
+    popfd
+    popad
+    ret
+
 _registerInfo:
         push    ebp
         mov     ebp, esp
-	pushad
  	mov     ecx, eaxstr 
-	mov     eax, [esp+4]
+	mov     eax, [registers+32]
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+8]
+	mov     eax, [registers+28]
 	mov     ecx, ecxstr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+12]
+	mov     eax, [registers+24]
 	mov     ecx, edxstr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+16]
+	mov     eax, [registers+20]
 	mov     ecx, ebxstr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+20]
+	mov     eax, [registers+16]
 	mov     ecx, espstr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+24]
+	mov     eax, [registers+12]
 	mov     ecx, ebpstr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+28]
+	mov     eax, [registers+8]
 	mov     ecx, esistr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	mov     eax, [esp+32]
+	mov     eax, [registers+4]
 	mov     ecx, edistr
 	push    eax
 	push    ecx
 	call    uprintf
 	add     esp, 8
-	pushfd
+	mov     eax, [registers]
 	call    printFlags
-	popfd
-	popad
         leave
         ret
     
@@ -150,9 +163,11 @@ _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
 
 _int_09_hand:                   ;Keyboard Handler
     push    ds
-    push    es                  ;Se salvan los registros
-    pusha                       ;Carga de DS y ES con el valor del selector
-    mov     ax, 10h             ;a utilizar.
+    push    es                  
+    pushad                      
+    pushfd
+    call    _saveRegisters
+    mov     ax, 10h             
     mov     ds, ax
     mov     es, ax
     in      al, 60h
@@ -161,10 +176,26 @@ _int_09_hand:                   ;Keyboard Handler
     add     esp, 4
     mov     al, 20h 		;End of Interruption code
     out     20h, al             ;Master PIC IO base address
-    popa
+    popfd
+    popad
     pop     es
     pop     ds
     iret
+
+_saveRegisters:
+    xor eax, eax                ;counter
+    mov ebx, 4                  ;varPos
+cycle:
+    mov ecx, esp                ;ecx apunta al comienzo del stack
+    add ecx, ebx                ;stack[ebx]
+    mov edx, [ecx]              ;edx = valor del registro
+    mov [registers+eax], edx
+    add eax, 4
+    add ebx, 4
+    cmp ebx, 40
+    jne cycle
+    ret
+
 
 _int_80h_hand:
     push    ebp
@@ -208,3 +239,4 @@ section .data
     edistr db "edi 0x%x",9,0
 section .bss
     regBuffer resb 32
+    registers resb 36
