@@ -56,9 +56,8 @@ kmain()
     _Sti();
 
     buffer_initialize(); 
-//    _registerInfo();
-//    printf("%di", printf("cinco"));
-//    printf("testeando %d %s %x", 20, "string", 256);
+
+   // test1();
     while(1){
 	shell_run();
     }

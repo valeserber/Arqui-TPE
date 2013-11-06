@@ -8,11 +8,18 @@ ssize_t __read(int fd, void *buf, size_t count);
 extern void writeToMainScreen(const void * buf,size_t count);
 extern void scrollMainScreen();
 
-int tickpos=640;
+char c='*';
+
+int tickpos=0;
 
 void int_08(){
-    char *video = (char *)0xb8000;
-    video[tickpos+=2]='*';
+    char *video = (char *)MAIN_SCREEN_ADDRESS;
+   // video[tickpos+=2]='*';
+    putchar(c);
+}
+
+void set_char(char ch){
+    c=ch;
 }
 
 void int_09(unsigned char scancode){

@@ -10,6 +10,7 @@ void video_backspace();
 void video_tab(int fd);
 void insertKey(char key, int * pos, char * vid);
 void max_pos(int max);
+void reset_upperWritepos();
 
 int writepos=0;
 int upperWritepos = 0;
@@ -38,6 +39,10 @@ void writeToScreen(char key,int fd){
     	}
 	insertKey(key,&upperWritepos,vidmem);
     }
+}
+
+reset_upperWritepos(){
+	upperWritepos=0;
 }
 
 void insertKey(char key, int * pos, char * vid){

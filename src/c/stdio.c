@@ -3,7 +3,7 @@
 #include "../../include/stdarg.h"
 #include "../../include/stdio.h"
 #include "../../include/string.h"
-#define putchar(x) putc((x), STDOUT)
+
 int vfprintf(int fd, const char * fmt, va_list ap);
 
 int putc(int c, int fd){
