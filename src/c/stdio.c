@@ -4,7 +4,7 @@
 #include "../../include/string.h"
 
 int vfprintf(int fd, const char * fmt, va_list ap);
-void printFlags(word flags);
+void printFlags(dword flags);
 
 int putc(int c, int fd){
     unsigned char ch = c;
@@ -69,18 +69,18 @@ int uprintf(char *fmt, ...){
     return ret;
 }
 
-void printFlags(word flags){
+void printFlags(dword flags){
     unsigned int bit = 1;
     uprintf("eflags   0x%x  [", flags);
-    flags & bit ? uprintf("C") : uprintf(" ");
-    flags & (bit << 2) ? uprintf("P") : uprintf(" ");
-    flags & (bit << 4) ? uprintf("A") : uprintf(" ");
-    flags & (bit << 6) ? uprintf("Z") : uprintf(" ");
-    flags & (bit << 7) ? uprintf("S") : uprintf(" ");
-    flags & (bit << 8) ? uprintf("T") : uprintf(" ");
-    flags & (bit << 9) ? uprintf("IE") : uprintf("  ");
-    flags & (bit << 10) ? uprintf("D") : uprintf(" ");
     flags & (bit << 11) ? uprintf("O") : uprintf(" ");
+    flags & (bit << 10) ? uprintf("D") : uprintf(" ");
+    flags & (bit << 9) ? uprintf("IE") : uprintf("  ");
+    flags & (bit << 8) ? uprintf("T") : uprintf(" ");
+    flags & (bit << 7) ? uprintf("S") : uprintf(" ");
+    flags & (bit << 6) ? uprintf("Z") : uprintf(" ");
+    flags & (bit << 4) ? uprintf("A") : uprintf(" ");
+    flags & (bit << 2) ? uprintf("P") : uprintf(" ");
+    flags & bit ? uprintf("C") : uprintf(" ");
     uprintf("]");
 }
 
