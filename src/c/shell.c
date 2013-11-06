@@ -53,7 +53,6 @@ int addToShellBuffer(){
 			  shell_buffer.buffer[(shell_buffer.shell_pos)++]=' ';
 			  i++;
 		  }
-		  video_tab();
 		  break;
 	default:
 	          shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
