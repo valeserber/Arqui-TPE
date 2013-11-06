@@ -7,6 +7,8 @@ SHELL shell_buffer;
 int addToShellBuffer();
 void initialize_shell();
 void shell_run();
+bool shBufferIsEmpty();
+bool shBufferIsFull();
 
 
 void shell_run(){
@@ -44,7 +46,7 @@ int addToShellBuffer(){
 		  return ENTER;
 		  break;
         case '\b':
-                  if(shell_buffer.shell_pos>0){
+                  if(!shBufferIsEmpty()){
 			shell_buffer.buffer[--(shell_buffer.shell_pos)]=0;
                   }
 		  break;
@@ -55,11 +57,23 @@ int addToShellBuffer(){
 		  }
 		  break;
 	default:
-	          shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
+	          if(!shBufferIsFull()){
+		      shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
+                  }
 		  break;
    }
    return 0;
 }
+
+bool shBufferIsEmpty(){
+    return shell_buffer.shell_pos == 0;
+}
+
+bool shBufferIsFull(){
+    return shell_buffer.shell_pos == SHELL_SIZE;
+}
+
+
 	
 /* solo se admite un comando en una linea
 void searchCommand(int linepos){
