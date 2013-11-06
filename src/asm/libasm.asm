@@ -145,6 +145,43 @@ _registerInfo:
 	push    eax
 	call    printFlags
 	add     esp, 4
+	mov     eax, [registers+36]
+	mov     ecx, gsstr
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+        mov     ecx, fsstr 
+	mov     eax, [registers+40]
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+        mov     ecx, esstr 
+	mov     eax, [registers+44]
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+        mov     ecx, dsstr 
+	mov     eax, [registers+48]
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+        mov     ecx, ssstr 
+	mov     eax, [registers+52]
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+        mov     ecx, csstr 
+	mov     eax, [registers+56]
+	push    eax
+	push    ecx
+	call    uprintf
+	add     esp, 8
+        
         leave
         ret
     
@@ -164,8 +201,12 @@ _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
     iret
 
 _int_09_hand:                   ;Keyboard Handler
+    push    cs
+    push    ss
     push    ds
     push    es                  
+    push    fs
+    push    gs
     pushad                      
     pushfd
     call    _saveRegisters
@@ -180,8 +221,7 @@ _int_09_hand:                   ;Keyboard Handler
     out     20h, al             ;Master PIC IO base address
     popfd
     popad
-    pop     es
-    pop     ds
+    add     esp, 24
     iret
 
 _saveRegisters:
@@ -194,10 +234,9 @@ cycle:
     mov [registers+eax], edx
     add eax, 4
     add ebx, 4
-    cmp ebx, 40
+    cmp ebx, 64
     jne cycle
     ret
-
 
 _int_80h_hand:
     push    ebp
@@ -239,6 +278,13 @@ section .data
     ebpstr db "ebp 0x%x",10,0
     esistr db "esi 0x%x",9,0
     edistr db "edi 0x%x",9,0
+    gsstr  db "gs  0x%x",9,0
+    fsstr  db "fs  0x%x",9,0
+    esstr  db "es  0x%x",9,0
+    dsstr  db "ds  0x%x",10,0
+    ssstr  db "ss  0x%x",9,0
+    csstr  db "cs  0x%x",9,0
+
 section .bss
     regBuffer resb 32
-    registers resb 36
+    registers resb 60

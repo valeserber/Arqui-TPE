@@ -81,7 +81,7 @@ void printFlags(dword flags){
     flags & (bit << 4) ? uprintf("A") : uprintf(" ");
     flags & (bit << 2) ? uprintf("P") : uprintf(" ");
     flags & bit ? uprintf("C") : uprintf(" ");
-    uprintf("]");
+    uprintf("]\n");
 }
 /*
 void miniscanf(char *fmt, ...){
