@@ -8,6 +8,7 @@ EXTERN  int_08
 EXTERN  int_09
 EXTERN  int_80h
 EXTERN  uprintf
+EXTERN  printFlags
 
 
 SECTION .text
@@ -125,6 +126,9 @@ _registerInfo:
 	push    ecx
 	call    uprintf
 	add     esp, 8
+	pushfd
+	call    printFlags
+	popfd
 	popad
         leave
         ret
