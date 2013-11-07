@@ -1,6 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/keyboard.h"
+#include "../../include/stdio.h"
 
 BUFFER keyboard_buffer;
 extern void _registerInfo();
@@ -353,7 +354,7 @@ bool kbBufferIsFull(void){
 }
 
 bool addToKeyboardBuffer(unsigned char ascii_c){
-    if(kbBufferIsFull()) return false; // Se podria agregar un pitido a la motherboard :)
+   if(kbBufferIsFull()) return false; // Se podria agregar un pitido a la motherboard :) 
    keyboard_buffer.buffer[keyboard_buffer.enqueuePos] = ascii_c;
    keyboard_buffer.enqueuePos = (keyboard_buffer.enqueuePos + 1) % BUFFER_SIZE;
 }

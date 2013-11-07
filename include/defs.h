@@ -27,6 +27,7 @@
 #define SHELL_SIZE          128
 #define ENTER	            261
 #define PROMPT_LENGTH       4
+#define COMMAND_SIZE        4
 /*
  * Type definitions
  */
@@ -84,10 +85,5 @@ typedef struct{
   size_t size;
   char * buffer;
 } FILE;
-
-typedef struct{
-  unsigned char buffer[SHELL_SIZE];
-  int shell_pos;
-}SHELL;
 
 #endif

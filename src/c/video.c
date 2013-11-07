@@ -74,7 +74,7 @@ void clearLine(char * vidmem){
 void clear(){
    int line;
    for(line=10;line<MAIN_SCREEN_ROWS;line++){
-	clearLine((char *)MAIN_SCREEN_ADDRESS);
+	clearLine((char *)(MAIN_SCREEN_ADDRESS)+(LINE_SIZE*line));
    }
 }
 
