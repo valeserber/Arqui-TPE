@@ -251,7 +251,7 @@ _int_80h_hand:
     add     esp, 24
     mov     esp, ebp
     pop     ebp
-    ret
+    iret
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
