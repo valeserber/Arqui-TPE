@@ -1,11 +1,4 @@
-
-bool isalpha(int c);
-bool isdigit(int c);
-bool isalnum(int c);
-bool islower(int c);
-bool isupper(int c);
-int tolower(int c);
-int toupper(int c);
+#include "../../include/ctype.h"
 
 bool isalpha(int c){
     return (c >= 'a' && c<= 'z') || (c >= 'A' && c <= 'Z');

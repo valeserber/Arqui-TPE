@@ -1,6 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
+#include "../../include/keyboard.h"
 
 extern BUFFER keyboard_buffer;
 ssize_t __write(int fd, const void * buf, size_t count);
@@ -26,8 +27,7 @@ void int_09(unsigned char scancode){
     _Cli();
     int ascii_c = scancodeToAscii(scancode);
     if(ascii_c !=0){
-       putc(ascii_c,1);
-       addToKeyboardBuffer(ascii_c);
+       putc(ascii_c,STDIN);
     }
     _Sti();
 }
@@ -47,21 +47,13 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
 ssize_t __write(int fd, const void * buf, size_t count){
     unsigned int i=0;    
     while(i<count){
-    	char key= ((char*)buf)[i++];
-    	switch(key){
- 		case '\n':
-			 video_enter(fd);
-			 break;
-		case '\t':
-			 video_tab(fd);
-		         break;	
-		case '\b':
-		  	 video_backspace();
-		 	 break;
-		default:
-			writeToScreen(key,fd);
-			break;
-    	}
+	char key= ((char*)buf)[i++];
+	if(fd==STDIN){
+		addToKeyboardBuffer(key);
+	}
+	else if(fd==STDOUT || fd==REGOUT){
+		video_write(key,fd);
+	}
     }
     return i;
 }
@@ -69,6 +61,10 @@ ssize_t __write(int fd, const void * buf, size_t count){
 ssize_t __read(int fd, void *buf, size_t count){
     int readCharacters = 0;
     if(fd == STDIN){
+	if(kbBufferIsEmpty()){
+		((char*)buf)[readCharacters] = EOF;
+		return readCharacters;
+    	}
         int aux;
         while(readCharacters < count){
 	    if((aux = kbBufferGetNext()) != -1){

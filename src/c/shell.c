@@ -4,7 +4,7 @@
 
 SHELL shell_buffer;
 
-int addToShellBuffer();
+void addToShellBuffer(char c);
 void initialize_shell();
 void shell_run();
 bool shBufferIsEmpty();
@@ -12,19 +12,26 @@ bool shBufferIsFull();
 
 
 void shell_run(){
-   int linepos=keyboardpos();
-   int ans=0;
-   max_pos(shell_buffer.shell_pos);
+  // int linepos=keyboardpos();
+   //int ans=0;
    initialize_shell();
+   max_pos(shell_buffer.shell_pos);
    printf("***>");
-   do{
-       while(linepos==keyboardpos()){
-       }
-       ans=addToShellBuffer();
-       max_pos(shell_buffer.shell_pos);
-       linepos=keyboardpos();
-   }while(ans!=ENTER);
    
+   while(1){
+	char c=getchar();
+	if(c!=EOF){
+		putc((int)c,STDOUT);
+ 		if(c=='\n'){	
+			//searchCommands();
+			return;
+		}
+		else{
+			addToShellBuffer(c);
+               		max_pos(shell_buffer.shell_pos);
+		}
+   	}	   
+   }
 }
 
 void initialize_shell(){
@@ -36,33 +43,26 @@ void initialize_shell(){
 }
 
 
-int addToShellBuffer(){
-   char * buf=(char *)keyboardbuffer();
-   char key= buf[keyboardpos()-1];
+void addToShellBuffer(char c){
    int i=0;
-   switch(key){
-	case '\n':
-		  //searchCommand();
-		  return ENTER;
-		  break;
-        case '\b':
-                  if(!shBufferIsEmpty()){
-			shell_buffer.buffer[--(shell_buffer.shell_pos)]=0;
-                  }
-		  break;
-	case '\t':
-                  while(i<TAB_LENGTH){
-			  shell_buffer.buffer[(shell_buffer.shell_pos)++]=' ';
-			  i++;
-		  }
-		  break;
+   switch(c){
+	case '\b':
+        	if(!shBufferIsEmpty()){
+        	    shell_buffer.buffer[--(shell_buffer.shell_pos)]=0;
+       		}
+		break;
+   	case '\t':
+        	while(i<TAB_LENGTH){
+		    shell_buffer.buffer[(shell_buffer.shell_pos)++]=' ';
+	            i++;
+		}
+	        break;
 	default:
-	          if(!shBufferIsFull()){
-		      shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
-                  }
-		  break;
+        	if(!shBufferIsFull()){
+       		    shell_buffer.buffer[(shell_buffer.shell_pos)++]=c;
+       		}
+		break;
    }
-   return 0;
 }
 
 bool shBufferIsEmpty(){
@@ -72,8 +72,6 @@ bool shBufferIsEmpty(){
 bool shBufferIsFull(){
     return shell_buffer.shell_pos == SHELL_SIZE;
 }
-
-
 	
 /* solo se admite un comando en una linea
 void searchCommand(int linepos){

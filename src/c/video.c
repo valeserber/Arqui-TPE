@@ -81,8 +81,26 @@ void clear(){
 void clearRegisters(){
    int line;
    for(line=0;line<UPPER_SCREEN_ROWS-1;line++){
-	clearLine((char *)VIDMEM_ADDRESS);
+	clearLine((char *)(VIDMEM_ADDRESS)+(LINE_SIZE*line));
    }
+}
+
+void video_write(char c,int fd){
+
+    switch(c){
+ 		case '\n':
+			 video_enter(fd);
+			 break;
+		case '\t':
+			 video_tab(fd);
+		         break;	
+		case '\b':
+		  	 video_backspace();
+		 	 break;
+		default:
+			writeToScreen(c,fd);
+			break;
+    }
 }
 
 void video_enter(int fd){

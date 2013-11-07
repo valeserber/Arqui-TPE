@@ -1,8 +1,10 @@
 #ifndef _STRING_H_
-#define _STRING_H
+#define _STRING_H_
 
 #define NULL ((void*)0)
-char* ltoa(long value, char* buffer, int radix);
+
+size_t strcmp(const char *s, const char *t);
 size_t strlen(const char * str);
+char* ltoa(long value, char* buffer, int radix);
 
 #endif

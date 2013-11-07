@@ -49,7 +49,6 @@ int vfprintf(int fd, const char * fmt, va_list ap){
 	}
     }           
     va_end(ap);
-    _Sti();
     return printedChars;
 }
 
@@ -82,6 +81,7 @@ void printFlags(dword flags){
     flags & (bit << 2) ? uprintf("P") : uprintf(" ");
     flags & bit ? uprintf("C") : uprintf(" ");
     uprintf("]");
+    uprintf("\n");
 }
 
 /*
