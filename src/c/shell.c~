@@ -57,15 +57,9 @@ int addToShellBuffer(){
 		  }
 		  break;
 	default:
-<<<<<<< HEAD
-		  if(shell_buffer.shell_pos!=SHELL_SIZE){
-		          shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
-		  }
-=======
 	          if(!shBufferIsFull()){
 		      shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
                   }
->>>>>>> cb7e401fc549ed947f3c52a3358c69e9050c460f
 		  break;
    }
    return 0;

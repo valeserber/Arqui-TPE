@@ -18,19 +18,8 @@
 #define UPPER_SCREEN_ROWS   10
 #define UPPER_SCREEN_SIZE   SCREEN_COLS*UPPER_SCREEN_ROWS*CHAR_SIZE
 #define INT_MIN             (-2147483647-1)
-#define BUFFER_SIZE	    256
-#define KEYS		    89
-#define NOTHING		    0
 #define SYS_READ 	    3
 #define SYS_WRITE 	    4
-#define LEFT_SHIFT_MAKE     257
-#define RIGHT_SHIFT_MAKE    258
-#define CAPS_LOCK           259
-#define LEFT_SHIFT_BREAK    0xAA
-#define RIGHT_SHIFT_BREAK   0xB6
-#define CONTROL_MAKE	    260
-#define CONTROL_R     	    0x13
-#define CONTROL_BREAK	    0x9D
 #define LAST_LINE	    14*80*2
 #define LAST_LINE_ADDRESS   (MAIN_SCREEN_ADDRESS)+(LAST_LINE)
 #define LINE_SIZE	    80*2
@@ -95,19 +84,6 @@ typedef struct{
   size_t size;
   char * buffer;
 } FILE;
-
-typedef struct{
-    unsigned int shiftOn    : 1;
-    unsigned int controlOn  : 1;
-    unsigned int capsLockOn : 1;
-} flags;
-
-typedef struct{
-  unsigned char buffer[BUFFER_SIZE];
-  int enqueuePos;//buffer_pos;
-  int dequeuePos;
-  flags flag;
-} BUFFER;
 
 typedef struct{
   unsigned char buffer[SHELL_SIZE];

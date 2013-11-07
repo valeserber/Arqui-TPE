@@ -41,26 +41,26 @@ int addToShellBuffer(){
    char key= buf[keyboardpos()-1];
    int i=0;
    switch(key){
-	case '\n':
-		  //searchCommand();
-		  return ENTER;
-		  break;
-        case '\b':
-                  if(!shBufferIsEmpty()){
-			shell_buffer.buffer[--(shell_buffer.shell_pos)]=0;
-                  }
-		  break;
-	case '\t':
-                  while(i<TAB_LENGTH){
-			  shell_buffer.buffer[(shell_buffer.shell_pos)++]=' ';
-			  i++;
-		  }
-		  break;
-	default:
-	          if(!shBufferIsFull()){
-		      shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
-                  }
-		  break;
+   case '\n':
+        //searchCommand();
+        return ENTER;
+        break;
+   case '\b':
+        if(!shBufferIsEmpty()){
+            shell_buffer.buffer[--(shell_buffer.shell_pos)]=0;
+        }
+		break;
+   case '\t':
+        while(i<TAB_LENGTH){
+		    shell_buffer.buffer[(shell_buffer.shell_pos)++]=' ';
+            i++;
+		}
+        break;
+   default:
+        if(!shBufferIsFull()){
+            shell_buffer.buffer[(shell_buffer.shell_pos)++]=key;
+        }
+		break;
    }
    return 0;
 }
@@ -72,8 +72,6 @@ bool shBufferIsEmpty(){
 bool shBufferIsFull(){
     return shell_buffer.shell_pos == SHELL_SIZE;
 }
-
-
 	
 /* solo se admite un comando en una linea
 void searchCommand(int linepos){

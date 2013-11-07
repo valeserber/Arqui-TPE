@@ -1,6 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
+#include "../../include/keyboard.h"
 
 extern BUFFER keyboard_buffer;
 ssize_t __write(int fd, const void * buf, size_t count);

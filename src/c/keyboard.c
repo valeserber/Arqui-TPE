@@ -1,5 +1,6 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
+#include "../../include/keyboard.h"
 
 BUFFER keyboard_buffer;
 extern void _registerInfo();
@@ -233,7 +234,6 @@ int scancodeToAscii(unsigned char scancode){
     }	
     return key;
 }
-
 
 void buffer_initialize(){
     int i;

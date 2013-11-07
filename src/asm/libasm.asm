@@ -1,15 +1,7 @@
 GLOBAL  _read_msw,_lidt
-GLOBAL  _int_08_hand, _int_09_hand, _int_80h_hand
-GLOBAL  read, write, _registerInfo, _test
+GLOBAL  read, write, _test
 GLOBAL  _mascaraPIC1, _mascaraPIC2, _Cli, _Sti
 GLOBAL  _debug
-
-EXTERN  int_08
-EXTERN  int_09
-EXTERN  int_80h
-EXTERN  uprintf
-EXTERN  printFlags
-
 
 SECTION .text
 
@@ -74,184 +66,21 @@ write:
     leave
     ret
 
-_test:
-    mov    eax, 0xCAFE
-    mov    ebx, 0x0FE0
-    mov    ecx, 0x0FEA
-    mov    edx, 0x0CE0
-    mov    edi, 0x0DAF
-    mov    esi, 0x0CCC
-    pushad
-    ;add    eax, eax
-    pushfd
-    call  _saveRegisters
-    call  _registerInfo
-    popfd
-    popad
-    ret
-
-_registerInfo:
-        push    ebp
-        mov     ebp, esp
- 	mov     ecx, eaxstr 
-	mov     eax, [registers+32]
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+28]
-	mov     ecx, ecxstr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+24]
-	mov     ecx, edxstr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+20]
-	mov     ecx, ebxstr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+16]
-	mov     ecx, espstr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+12]
-	mov     ecx, ebpstr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+8]
-	mov     ecx, esistr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers+4]
-	mov     ecx, edistr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-	mov     eax, [registers]
-	push    eax
-	call    printFlags
-	add     esp, 4
-	mov     eax, [registers+36]
-	mov     ecx, gsstr
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-        mov     ecx, fsstr 
-	mov     eax, [registers+40]
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-        mov     ecx, esstr 
-	mov     eax, [registers+44]
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-        mov     ecx, dsstr 
-	mov     eax, [registers+48]
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-        mov     ecx, ssstr 
-	mov     eax, [registers+52]
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-        mov     ecx, csstr 
-	mov     eax, [registers+56]
-	push    eax
-	push    ecx
-	call    uprintf
-	add     esp, 8
-        
-        leave
-        ret
-    
-_int_08_hand:                   ;Handler de INT 8 ( Timer tick)
-    push    ds
-    push    es                  ;Se salvan los registros
-    pusha                       ;Carga de DS y ES con el valor del selector
-    mov     ax, 10h             ;a utilizar.
-    mov     ds, ax
-    mov     es, ax
-    call    int_08
-    mov     al,20h              ;Envio de EOI generico al PIC
-    out     20h,al
-    popa
-    pop     es
-    pop     ds
-    iret
-
-_int_09_hand:                   ;Keyboard Handler
-    push    cs
-    push    ss
-    push    ds
-    push    es                  
-    push    fs
-    push    gs
-    pushad                      
-    pushfd
-    call    _saveRegisters
-    mov     ax, 10h             
-    mov     ds, ax
-    mov     es, ax
-    in      al, 60h
-    push    eax
-    call    int_09
-    add     esp, 4
-    mov     al, 20h 		;End of Interruption code
-    out     20h, al             ;Master PIC IO base address
-    popfd
-    popad
-    add     esp, 24
-    iret
-
-_saveRegisters:
-    xor eax, eax                ;counter
-    mov ebx, 4                  ;varPos
-cycle:
-    mov ecx, esp                ;ecx apunta al comienzo del stack
-    add ecx, ebx                ;stack[ebx]
-    mov edx, [ecx]              ;edx = valor del registro
-    mov [registers+eax], edx
-    add eax, 4
-    add ebx, 4
-    cmp ebx, 64
-    jne cycle
-    ret
-
-_int_80h_hand:
-    push    ebp
-    mov     ebp, esp
-    push    edi
-    push    esi
-    push    edx
-    push    ecx
-    push    ebx
-    push    eax
-    call    int_80h
-    add     esp, 24
-    mov     esp, ebp
-    pop     ebp
-    iret
+;_test:
+;    mov    eax, 0xCAFE
+;    mov    ebx, 0x0FE0
+;    mov    ecx, 0x0FEA
+;    mov    edx, 0x0CE0
+;    mov    edi, 0x0DAF
+;    mov    esi, 0x0CCC
+;    pushad
+;    ;add    eax, eax
+;    pushfd
+;    call  _saveRegisters
+;    call  _registerInfo
+;    popfd
+;    popad
+;    ret
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
@@ -267,24 +96,3 @@ vuelve:
     pop     ax
     pop     bp
     retn
-
-section .data
-    eaxstr db "eax 0x%x",9, 0 ; 0 to null terminate the string
-    regstrlen equ $-eaxstr
-    ecxstr db "ecx 0x%x",9,0
-    edxstr db "edx 0x%x",10,0 ; 10 = \n in ascii
-    ebxstr db "ebx 0x%x",9,0
-    espstr db "esp 0x%x",9,0
-    ebpstr db "ebp 0x%x",10,0
-    esistr db "esi 0x%x",9,0
-    edistr db "edi 0x%x",9,0
-    gsstr  db "gs  0x%x",9,0
-    fsstr  db "fs  0x%x",9,0
-    esstr  db "es  0x%x",9,0
-    dsstr  db "ds  0x%x",10,0
-    ssstr  db "ss  0x%x",9,0
-    csstr  db "cs  0x%x",9,0
-
-section .bss
-    regBuffer resb 32
-    registers resb 60
