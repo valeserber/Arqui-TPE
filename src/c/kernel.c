@@ -56,7 +56,7 @@ kmain()
     _Sti();
 
     buffer_initialize(); 
-  //  _test();
+   // _test();
 
    // test1();
     while(1){
