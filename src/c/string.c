@@ -43,3 +43,22 @@ char* ltoa(long value, char *buffer, int radix){
     }
     return buffer;
 }
+
+int atoi(const char * str){
+    int signflag = 0;
+    int value = 0;
+    int c;
+    while( (c = *str++) ){
+        if(*str == '-'){
+	    signflag++;
+	}else if(!isspace(*str)){
+	    break; 
+	}
+    }
+    while((c -= '0') >= 0 && c <= 9){
+        value *= 10;
+        value += c;
+        c = *str++;
+    }
+    return (signflag % 2 == 0)? value : -value;
+}

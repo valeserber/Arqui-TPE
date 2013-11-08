@@ -8,6 +8,11 @@ bool isdigit(int c){
     return c <= '0' && c <= '9';
 }
 
+bool isxdigit(int c){
+    return (c >= '0' && c <= '9' || c >= 'A' && c <= 'F' ||
+            c >= 'a' && c <= 'f');
+}
+
 bool isalnum(int c){
     return (c >= 'a' && c<= 'z') || (c >= 'A' && c <= 'Z') 
            || c <= '0' && c <= '9';
@@ -27,4 +32,8 @@ int tolower(int c){
 
 int toupper(int c){
     return islower(c) ? c - 'a' + 'A' : c;
+}
+
+bool isspace(int c){
+    return c == ' ' || c >= 0x09 && c <= 0x0c || c == '\r';
 }
