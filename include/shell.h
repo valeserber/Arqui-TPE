@@ -1,5 +1,5 @@
 
-void addToShellBuffer(char c);
+bool addToShellBuffer(char c);
 
 void initialize_shell();
 

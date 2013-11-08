@@ -31,7 +31,7 @@ void writeToScreen(char key,int fd){
     }
     else if(fd==REGOUT){
 	vidmem=(char *)VIDMEM_ADDRESS;
-    	size= UPPER_SCREEN_SIZE-LINE_SIZE;
+    	size= (UPPER_SCREEN_SIZE)-(LINE_SIZE);
     	
         if(upperWritepos == size){
 	 // return;         
@@ -129,7 +129,7 @@ void video_backspace(){
    vidmem=(char *)MAIN_SCREEN_ADDRESS;
    if(maxpos>0){
 	vidmem[--writepos]=WHITE_TXT;
-	vidmem[--writepos]=' ';
+	vidmem[--writepos]='W';
    }
 }
 
