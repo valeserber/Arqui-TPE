@@ -85,9 +85,9 @@ int normal_keyboard[KEYS] = {
         /*0x48*/                NOTHING,
         /*0x49*/                NOTHING,
         /*0x4A*/                NOTHING,
-        /*0x4B*/ /*Left arrow*/ 0x4b * 2,
+        /*0x4B*/ /*Left arrow*/ NOTHING,
         /*0x4C*/                NOTHING,
-        /*0x4D*/ /*Right arrow*/0x4d * 2,
+        /*0x4D*/ /*Right arrow*/NOTHING,
         /*0x4E*/                NOTHING,
         /*0x4F*/                NOTHING,
         /*0x50*/ /*Down arrow*/ NOTHING,
@@ -178,9 +178,9 @@ int special_keyboard[KEYS] = {
         /*0x48*/                NOTHING,
         /*0x49*/   	        NOTHING,
         /*0x4A*/                NOTHING,
-        /*0x4B*/ /*Left arrow*/ 0x4b * 2,
+        /*0x4B*/ /*Left arrow*/ NOTHING,
         /*0x4C*/                NOTHING,
-        /*0x4D*/ /*Right arrow*/0x4d * 2,
+        /*0x4D*/ /*Right arrow*/NOTHING,
         /*0x4E*/                NOTHING,
         /*0x4F*/                NOTHING,
         /*0x50*/ /*Down arrow*/ NOTHING,
@@ -270,9 +270,9 @@ int caps_keyboard[KEYS] = {
         /*0x48*/                NOTHING,
         /*0x49*/                NOTHING,
         /*0x4A*/                NOTHING,
-        /*0x4B*/ /*Left arrow*/ 0x4b * 2,
+        /*0x4B*/ /*Left arrow*/ NOTHING,
         /*0x4C*/                NOTHING,
-        /*0x4D*/ /*Right arrow*/0x4d * 2,
+        /*0x4D*/ /*Right arrow*/NOTHING,
         /*0x4E*/                NOTHING,
         /*0x4F*/                NOTHING,
         /*0x50*/ /*Down arrow*/ NOTHING,
@@ -287,11 +287,13 @@ int caps_keyboard[KEYS] = {
 
 int scancodeToAscii(unsigned char scancode){
     if(scancode & 0x80){ 
+      //  uprintf("break%d  ",keyboard_buffer.flag.capsLockOn);
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
 	}else if(scancode==CONTROL_BREAK){
 		keyboard_buffer.flag.controlOn=false;
 	}
+        uprintf("break");
 	return 0;
     }
     if(scancode==CONTROL_R){
@@ -304,13 +306,16 @@ int scancodeToAscii(unsigned char scancode){
     }
  
     int key= normal_keyboard[scancode];
+  //  uprintf("key%d  ",key);
+    // uprintf("make%d  ",keyboard_buffer.flag.capsLockOn);
     switch(key){
 	case CONTROL_MAKE:
-	    keyboard_buffer.flag.controlOn = true;
+	        keyboard_buffer.flag.controlOn = true;
 		return 0;
 		break;
 	case CAPS_LOCK:
-	    keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
+	        keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
+      //          uprintf("make%d  ",keyboard_buffer.flag.capsLockOn);
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
@@ -320,12 +325,15 @@ int scancodeToAscii(unsigned char scancode){
 		break;
 	default:
 		if(keyboard_buffer.flag.capsLockOn && (!keyboard_buffer.flag.shiftOn)){
+	//		uprintf("opcion1\n");
 			key=caps_keyboard[scancode];
 		}
 		else if((!keyboard_buffer.flag.capsLockOn)&&(keyboard_buffer.flag.shiftOn)){
+	//		uprintf("opcion2\n");
 			key=special_keyboard[scancode];
 		}
 		else if(keyboard_buffer.flag.capsLockOn && keyboard_buffer.flag.shiftOn){
+	//		uprintf("opcion3\n");
 			key=normal_keyboard[scancode];
 	        }
 		break;	

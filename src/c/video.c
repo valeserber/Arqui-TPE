@@ -129,7 +129,7 @@ void video_backspace(){
    vidmem=(char *)MAIN_SCREEN_ADDRESS;
    if(maxpos>0){
 	vidmem[--writepos]=WHITE_TXT;
-	vidmem[--writepos]='W';
+	vidmem[--writepos]=' ';
    }
 }
 

@@ -4,7 +4,7 @@
 #include "../../include/shell.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear"};
+char * command[]={"openCD","infoCD","closeCD","clear","test1"};
 
 void shell_run(){
    initialize_shell();
@@ -63,7 +63,7 @@ bool addToShellBuffer(char c){
 		    return true;
        		}
 		else{
-		    printf("\nThe buffer is full");
+		    printf("\nThe buffer is full\n");
 		}
 		break;
    }

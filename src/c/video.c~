@@ -126,8 +126,6 @@ void video_enter(int fd){
 }
 
 void video_backspace(){
-   
-   uprintf("%d\t",maxpos);
    vidmem=(char *)MAIN_SCREEN_ADDRESS;
    if(maxpos>0){
 	vidmem[--writepos]=WHITE_TXT;

@@ -27,7 +27,7 @@
 #define SHELL_SIZE          128
 #define ENTER	            261
 #define PROMPT_LENGTH       4
-#define COMMAND_SIZE        4
+#define COMMAND_SIZE        5
 /*
  * Type definitions
  */
