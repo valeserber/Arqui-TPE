@@ -6,14 +6,12 @@ extern writepos;
 
 void test1(){
   _Cli();
-  _mascaraPIC1(0xFC); //habilita teclado y timer tick
-  _Sti();
-
   int c1='s';
   int c2='a';
   int c3='i';
-  
   set_char(c1);
+  _mascaraPIC1(0xFC); //habilita teclado y timer tick
+  _Sti();
   while(writepos<80*5*2){
   }
   set_char(c2);
