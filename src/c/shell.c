@@ -4,7 +4,7 @@
 #include "../../include/shell.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear","test1"};
+char * command[]={"openCD","infoCD","closeCD","clear","test1","test2"};
 
 void shell_run(){
    initialize_shell();
@@ -124,6 +124,9 @@ void executeCommand(int c){
 		break;
 	case 4:
 		test1();
+		break;
+	case 5:
+		test2();
 		break;
     }
 }

@@ -122,5 +122,8 @@ void executeCommand(int c){
 	case 3:
 		clear();
 		break;
+	case 4:
+		test1();
+		break;
     }
 }
