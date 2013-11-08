@@ -1,3 +1,4 @@
+#define SHELL_SIZE          256
 
 bool addToShellBuffer(char c);
 

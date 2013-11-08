@@ -23,9 +23,7 @@ void shell_run(){
 			if(addToShellBuffer(c)){
 				putc((int)c,STDOUT);
 			}
-			else if(shBufferIsFull()){
-				return;
-			}
+			
                		max_pos(shell_buffer.shell_pos);
 		}
    	}	   
@@ -62,9 +60,6 @@ bool addToShellBuffer(char c){
        		    shell_buffer.buffer[(shell_buffer.shell_pos)++]=c;
 		    return true;
        		}
-		else{
-		    printf("\nThe buffer is full\n");
-		}
 		break;
    }
    return false;
@@ -80,10 +75,10 @@ bool shBufferIsFull(){
 	
 
 void searchCommand(){
-    char com[150];
+    char com[300];
     int i, j;
 
-    for(i = 0; i < 150; i++){
+    for(i = 0; i < 300; i++){
         com[i] = 0;
     }
     for(i=0;i<shell_buffer.shell_pos;i++){

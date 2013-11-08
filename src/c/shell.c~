@@ -4,7 +4,7 @@
 #include "../../include/shell.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear","test1"};
+char * command[]={"openCD","infoCD","closeCD","clear","test1","test2"};
 
 void shell_run(){
    initialize_shell();
@@ -62,9 +62,6 @@ bool addToShellBuffer(char c){
        		    shell_buffer.buffer[(shell_buffer.shell_pos)++]=c;
 		    return true;
        		}
-		else{
-		    printf("\nThe buffer is full\n");
-		}
 		break;
    }
    return false;
@@ -80,10 +77,10 @@ bool shBufferIsFull(){
 	
 
 void searchCommand(){
-    char com[150];
+    char com[300];
     int i, j;
 
-    for(i = 0; i < 150; i++){
+    for(i = 0; i < 300; i++){
         com[i] = 0;
     }
     for(i=0;i<shell_buffer.shell_pos;i++){
@@ -124,6 +121,9 @@ void executeCommand(int c){
 		break;
 	case 4:
 		test1();
+		break;
+	case 5:
+		test2();
 		break;
     }
 }
