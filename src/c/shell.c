@@ -68,9 +68,12 @@ bool shBufferIsFull(){
 	
 
 void searchCommand(){
-    char * com;
-    int i;
-    int j;
+    char com[30];
+    int i, j;
+
+    for(i = 0; i < 30; i++){
+        com[i] = 0;
+    }
     for(i=0;i<shell_buffer.shell_pos;i++){
 	com[i]=shell_buffer.buffer[i];
     }
@@ -85,9 +88,8 @@ void searchCommand(){
 
 int checkCommand(char * com){
     int i;
-    for(i=0;i<COMMAND_SIZE;i++){printf("%s%s",command[i],com);
+    for(i=0;i<COMMAND_SIZE;i++){
 	if(strcmp(command[i],com)==0){
-               printf("entre");
 		return i;
 	}
     }

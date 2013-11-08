@@ -24,14 +24,12 @@ _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
     iret
 
 _int_09_hand:                   ;Keyboard Handler
-    push    cs
     push    ss
     push    ds
     push    es                  
     push    fs
     push    gs
     pushad                      
-    pushfd
     call    _saveRegisters
     mov     ax, 10h             
     mov     ds, ax
@@ -42,23 +40,23 @@ _int_09_hand:                   ;Keyboard Handler
     add     esp, 4
     mov     al, 20h             ;End of Interruption code
     out     20h, al             ;Master PIC IO base address
-    popfd
     popad
-    add     esp, 24
+    add     esp, 8
+    pop     es
+    pop     ds
+    add     esp, 4
     iret
 
 _saveRegisters:
-    xor eax, eax                ;counter
-    mov ebx, 4                  ;varPos
+    xor     eax, eax                ;counter
+    mov     ecx, esp                ;ecx apunta al comienzo del stack
 cycle:
-    mov ecx, esp                ;ecx apunta al comienzo del stack
-    add ecx, ebx                ;stack[ebx]
-    mov edx, [ecx]              ;edx = valor del registro
-    mov [registers+eax], edx
-    add eax, 4
-    add ebx, 4
-    cmp ebx, 64
-    jne cycle
+    add     ecx, 4                  ;stack[ebx]
+    mov     edx, [ecx]              ;edx = valor del registro
+    mov     [registers+eax], edx
+    add     eax, 4
+    cmp     eax, 60 
+    jne     cycle
     ret
 
 _int_80h_hand:
@@ -71,7 +69,6 @@ _int_80h_hand:
     push    ebx
     push    eax
     call    int_80h
-    add     esp, 24
     mov     esp, ebp
     pop     ebp
     iret
@@ -80,83 +77,83 @@ _registerInfo:
     push    ebp
     mov     ebp, esp
     mov     ecx, eaxstr 
-    mov     eax, [registers+32]
-    push    eax
-    push    ecx
-    call    uprintf
-    add     esp, 8
     mov     eax, [registers+28]
-    mov     ecx, ecxstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers+24]
-    mov     ecx, edxstr
+    mov     ecx, ecxstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers+20]
-    mov     ecx, ebxstr
+    mov     ecx, edxstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers+16]
-    mov     ecx, espstr
+    mov     ecx, ebxstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers+12]
-    mov     ecx, ebpstr
+    mov     ecx, espstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers+8]
-    mov     ecx, esistr
+    mov     ecx, ebpstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers+4]
-    mov     ecx, edistr
+    mov     ecx, esistr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     eax, [registers]
+    mov     ecx, edistr
+    push    eax
+    push    ecx
+    call    uprintf
+    add     esp, 8
+    mov     eax, [registers+60]
     push    eax
     call    printFlags
     add     esp, 4
-    mov     eax, [registers+36]
+    mov     eax, [registers+32]
     mov     ecx, gsstr
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     ecx, fsstr 
-    mov     eax, [registers+40]
+    mov     eax, [registers+36]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     ecx, esstr 
-    mov     eax, [registers+44]
+    mov     eax, [registers+40]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     ecx, dsstr 
-    mov     eax, [registers+48]
+    mov     eax, [registers+44]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
     mov     ecx, ssstr 
-    mov     eax, [registers+52]
+    mov     eax, [registers+48]
     push    eax
     push    ecx
     call    uprintf
@@ -166,12 +163,17 @@ _registerInfo:
     push    eax
     push    ecx
     call    uprintf
+    add     esp, 8
+    mov     ecx, eipstr
+    mov     eax, [registers+52]
+    push    eax
+    push    ecx
+    call    uprintf
     leave
     ret
 
 section .data
     eaxstr db "eax 0x%x",9, 0 ; 0 to null terminate the string
-    regstrlen equ $-eaxstr
     ecxstr db "ecx 0x%x",9,0
     edxstr db "edx 0x%x",10,0 ; 10 = \n in ascii
     ebxstr db "ebx 0x%x",9,0
@@ -185,7 +187,7 @@ section .data
     dsstr  db "ds  0x%x",10,0
     ssstr  db "ss  0x%x",9,0
     csstr  db "cs  0x%x",9,0
+    eipstr db "eip 0x%x",0
 
 section .bss
-    regBuffer resb 32
-    registers resb 60
+    registers resb 70

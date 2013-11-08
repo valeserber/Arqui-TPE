@@ -11,6 +11,7 @@ void video_tab(int fd);
 void insertKey(char key, int * pos, char * vid);
 void max_pos(int max);
 void reset_upperWritepos();
+void reset_writepos();
 
 int writepos=0;
 int upperWritepos = 0;
@@ -45,6 +46,10 @@ void reset_upperWritepos(){
 	upperWritepos=0;
 }
 
+void reset_writepos(){
+	writepos=0;
+}
+
 void insertKey(char key, int * pos, char * vid){
     vid[(*pos)]=key;
     (*pos)++;
@@ -73,9 +78,10 @@ void clearLine(char * vidmem){
 
 void clear(){
    int line;
-   for(line=10;line<MAIN_SCREEN_ROWS;line++){
-	clearLine((char *)MAIN_SCREEN_ADDRESS);
+   for(line=0;line<15;line++){
+	clearLine((char *)(MAIN_SCREEN_ADDRESS)+(LINE_SIZE*line));
    }
+   reset_writepos();
 }
 
 void clearRegisters(){
