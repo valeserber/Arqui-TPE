@@ -46,6 +46,14 @@ void insertKey(char key, int * pos, char * vid){
     (*pos)++;
 }
 
+void paintLetter(int color){
+    int i=writepos;
+    int j;
+    for(j=0;j<4;j++,i--){
+	    vidmem[--i]=color;
+    }
+}
+
 void scrollMainScreen(){
     vidmem= (char *) MAIN_SCREEN_ADDRESS;
     int i=LINE_SIZE;   
@@ -162,7 +170,7 @@ void k_clear_screen()
     };
     while(i<UPPER_SCREEN_SIZE){
         vidmem[i++]=' ';
-        vidmem[i++]=WHITE_SQUARE;
+        vidmem[i++]=LILAC_SQUARE;
     }
     while(i < MAIN_SCREEN_SIZE){
         vidmem[i++]=' ';

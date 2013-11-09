@@ -3,9 +3,10 @@
 #include "../../include/stdio.h"
 #include "../../include/shell.h"
 #include "../../include/keyboard.h"
+#include "../../include/video.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear","test1","test2"};
+char * command[]={"openCD","infoCD","closeCD","clear","test1","test2","help","clearUp"};
 extern _opencd();
 int printNum(int num);
 int printStatus(int num);
@@ -13,6 +14,7 @@ void shell_run(){
    initialize_shell();
    max_pos(shell_buffer.shell_pos);
    printf("***>");
+   paintLetter(LILAC_TXT);
    
    while(1){
 	char c=getchar();
@@ -81,6 +83,9 @@ void searchCommand(){
     char com[300];
     int i, j;
 
+    if(shBufferIsEmpty()){
+	return;
+    }
     for(i = 0; i < 300; i++){
         com[i] = 0;
     }
@@ -115,7 +120,7 @@ void executeCommand(int c){
 		//infoCD();
 		break;
 	case 2:
-		//closeCD();
+		_closecd();
 		break;
 	case 3:
 		clear();
@@ -126,7 +131,27 @@ void executeCommand(int c){
 	case 5:
 		test2();
 		break;
+	case 6:
+		help();
+		break;
+	case 7:
+		clearRegisters();
+		break;
     }
+}
+
+void help(){
+  printf("Commands\n"); //agregar que hace cada cosa
+  printf("openCD\t\n");
+  printf("infoCD\t\n");
+  printf("closeCD\t\n");
+  printf("clear\tClears the main screen\n");
+  printf("clearUp\tClears the upper screen\n");
+  printf("test1\tPrints letters when a timer tick interruption arrives\n");
+  printf("test2\tPrints \n");
+  printf("help\tLists available commands\n");
+  printf("Shortcuts\n");
+  printf("Ctrl+R: \n");
 }
 
 int printStatus(int num){
