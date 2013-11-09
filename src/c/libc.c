@@ -2,6 +2,7 @@
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
 #include "../../include/string.h"
+#include "../../include/video.h"
 
 extern void _write(int fd, const void *buf, size_t count);
 extern void _read(int fd, void *buf, size_t count);

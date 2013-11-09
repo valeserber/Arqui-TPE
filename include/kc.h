@@ -6,9 +6,6 @@
 #ifndef _kc_
 #define _kc_
 
-#define WHITE_TXT 0x07 // Atributo de video. Letras blancas, fondo negro
-#define WHITE_SQUARE 0x77 // Atributo de video. Letras blancas, fondo blanco
-
 /* Muestra la imagen de inicio */
 void showSplashScreen();
 

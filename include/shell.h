@@ -1,22 +1,24 @@
 #define SHELL_SIZE          256
 #define PROMPT_LENGTH       4
-#define COMMAND_SIZE        6
+#define COMMAND_SIZE        8
 
 bool addToShellBuffer(char c);
 
-void initialize_shell();
+void initialize_shell(void);
 
-void shell_run();
+void shell_run(void);
 
-bool shBufferIsEmpty();
+bool shBufferIsEmpty(void);
 
-bool shBufferIsFull();
+bool shBufferIsFull(void);
 
 void executeCommand(int c);
 
 int checkCommand(char * com);
 
-void searchCommand();
+void searchCommand(void);
+
+void help(void);
 
 typedef struct{
   unsigned char buffer[SHELL_SIZE];

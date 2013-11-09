@@ -19,6 +19,7 @@ void writeToScreen(char key,int fd){
 		scrollMainScreen();
     	}
 	insertKey(key,&writepos,vidmem); 
+	set_cursor(getrow(),getcol());
     }
     else if(fd==REGOUT){
 	vidmem=(char *)VIDMEM_ADDRESS;
@@ -44,6 +45,14 @@ void insertKey(char key, int * pos, char * vid){
     (*pos)++;
     vid[(*pos)]=WHITE_TXT; 
     (*pos)++;
+}
+
+void paintLetter(int color){
+    int i=writepos;
+    int j;
+    for(j=0;j<4;j++,i--){
+	    vidmem[--i]=color;
+    }
 }
 
 void scrollMainScreen(){
@@ -120,6 +129,7 @@ void video_backspace(){
 	vidmem[--writepos]=WHITE_TXT;
 	vidmem[--writepos]=' ';
    }
+   set_cursor(getrow(),getcol());
 }
 
 void max_pos(int max){
@@ -144,6 +154,17 @@ void video_tab(int fd){
    for(i=0; i<TAB_LENGTH && i<size; i++){
 	insertKey(' ',pos, vidmem);
    }
+   if(fd==STDOUT){
+	set_cursor(getrow(),getcol());
+   }
+}
+
+int getrow(){
+   return (int)((writepos/160)+10);
+}
+
+int getcol(){
+   return ((writepos/2)%160);
 }
 
 /***************************************************************
@@ -162,7 +183,7 @@ void k_clear_screen()
     };
     while(i<UPPER_SCREEN_SIZE){
         vidmem[i++]=' ';
-        vidmem[i++]=WHITE_SQUARE;
+        vidmem[i++]=LILAC_SQUARE;
     }
     while(i < MAIN_SCREEN_SIZE){
         vidmem[i++]=' ';
