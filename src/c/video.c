@@ -1,6 +1,8 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
+#include "../../include/video.h"
+#include "../../include/keyboard.h"
 
 int writepos=0;
 int upperWritepos = 0;
@@ -23,8 +25,6 @@ void writeToScreen(char key,int fd){
     	size= (UPPER_SCREEN_SIZE)-(LINE_SIZE);
     	
         if(upperWritepos == size){
-	 // return;         
-	//no se que deberia hacer
          upperWritepos = 0;
     	}
 	insertKey(key,&upperWritepos,vidmem);
