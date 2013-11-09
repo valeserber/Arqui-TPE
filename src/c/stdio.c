@@ -85,46 +85,6 @@ void printFlags(dword flags){
     uprintf("\n");
 }
 
-/*
-void miniscanf(char *fmt, ...){
-                        localfmt[i] = '\0';
-                        switch(*++p) {
-                        case 'd':
-                        case 'i':
-                                        ival = va_arg(ap, int *);
-                                        scanf(localfmt, ival);
-                                        break;
-                        case 'x':
-                        case 'X':
-                        case 'u':
-                        case 'o':
-                                        uval = va_arg(ap, unsigned *);
-                                        scanf(localfmt, uval);
-                                        break;
-                        case 'f':
-                                        dval = va_arg(ap, double *);
-                                        scanf(localfmt, dval);
-                                        break;
-                        case 's':
-                                        sval = va_arg(ap, char *);
-                                        scvanf(localfmt, sval);
-                                        break;
-                        default:
-                                        scanf(localfmt);
-                                        break;
-                        }
-                        i = 0;
-        }
-        va_end(ap);
-}
-
-int scanf(const char * fmt, ...){
-    va_list ap;
-    char *p, *sval;
-}
-
-*/
-
 int scanf(const char * fmt, ...){
     va_list ap; //apunta a cada arg sin nombre en orden
     char *p, *sval, *cval;
@@ -137,7 +97,7 @@ int scanf(const char * fmt, ...){
     while((c = getchar()) != '\n' && c != EOF && i < 50){
         if(c == '\b'){
             if(i > 0) i--;
-        }else{
+        }else if(c != 0){
             s[i++] = c;
         }
     }

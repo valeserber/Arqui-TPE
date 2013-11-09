@@ -20,20 +20,6 @@ kmain()
 
    k_clear_screen();
 
-/*Imprime hola mundo. */
-
-   // print_hello();
-
-    /*
-    print("Hello");
-    char buffer[20];
-    long prueba=1234;
-    print(to_string(buffer,prueba));
-    */
-/*Calcula cantidad de memoria*/
-    //print(to_string(buffer,get_memory()));
-
-
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0    */
 
     setup_IDT_entry(&idt[0x08], 0x08, (dword)&_int_08_hand, ACS_INT, 0);
@@ -57,7 +43,9 @@ kmain()
 
     buffer_initialize(); 
    // _test();
-
+   //int integer;
+   //scanf("%d", &integer);
+   //printf("%d",integer);
    // test1();
     while(1){
 	shell_run();

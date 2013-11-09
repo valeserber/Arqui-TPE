@@ -43,7 +43,6 @@ void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, 
     }
 }
 
-//TODO
 ssize_t __write(int fd, const void * buf, size_t count){
     unsigned int i=0;    
     while(i<count){
@@ -61,10 +60,10 @@ ssize_t __write(int fd, const void * buf, size_t count){
 ssize_t __read(int fd, void *buf, size_t count){
     int readCharacters = 0;
     if(fd == STDIN){
-	if(kbBufferIsEmpty()){
-		((char*)buf)[readCharacters] = EOF;
-		return readCharacters;
-    	}
+        if(kbBufferIsEmpty()){
+	    ((char*)buf)[readCharacters] = EOF;
+            return readCharacters;
+	}
         int aux;
         while(readCharacters < count){
 	    if((aux = kbBufferGetNext()) != -1){
