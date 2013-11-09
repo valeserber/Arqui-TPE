@@ -5,7 +5,9 @@
 
 SHELL shell_buffer;
 char * command[]={"openCD","infoCD","closeCD","clear","test1","test2"};
-
+extern _opencd();
+int printNum(int num);
+int printStatus(int num);
 void shell_run(){
    initialize_shell();
    max_pos(shell_buffer.shell_pos);
@@ -106,7 +108,7 @@ int checkCommand(char * com){
 void executeCommand(int c){
     switch(c){
 	case 0:
-		//openCD();
+		_opencd();
 		break;
 	case 1:
 		//infoCD();
@@ -125,3 +127,71 @@ void executeCommand(int c){
 		break;
     }
 }
+
+int printStatus(int num){
+int flag = 0;
+
+// if((num & 0) == 0){
+// printf("No flags ");
+// }
+
+
+if((num & 2) == 2){
+printf("IDX ");
+flag = 1;
+}
+
+if((num & 4) == 4){
+printf("Corr ");
+flag = 1;
+}
+
+if((num & 8) == 8){
+printf("DRQ ");
+flag = 1;
+}
+
+if((num & 16) == 16){
+printf("DSC ");
+flag = 1;
+}
+
+if((num & 32) == 32){
+printf("DF ");
+flag = 1;
+}
+
+if((num & 64) == 64){
+printf("DRDY ");
+flag = 1;
+}
+
+if((num & 128) == 128){
+printf("BSY ");
+flag = 1;
+}
+
+if(flag == 0){
+printf("No flags ");
+}
+
+if((num & 1) == 1){
+printf("Error: ");
+_printError();
+
+flag = 1;
+}
+
+printf("\n");
+
+
+
+return 0;
+}
+
+int printNum(int num){
+        printf("%d",num);
+}
+
+
+

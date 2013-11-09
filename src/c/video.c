@@ -1,17 +1,8 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
-void writeToScreen(char key, int fd);
-void scrollMainScreen();
-void clearLine(char * vidmem);
-void clearRegisters();
-void video_enter(int fd);
-void video_backspace();
-void video_tab(int fd);
-void insertKey(char key, int * pos, char * vid);
-void max_pos(int max);
-void reset_upperWritepos();
-void reset_writepos();
+#include "../../include/video.h"
+#include "../../include/keyboard.h"
 
 int writepos=0;
 int upperWritepos = 0;
@@ -34,8 +25,6 @@ void writeToScreen(char key,int fd){
     	size= (UPPER_SCREEN_SIZE)-(LINE_SIZE);
     	
         if(upperWritepos == size){
-	 // return;         
-	//no se que deberia hacer
          upperWritepos = 0;
     	}
 	insertKey(key,&upperWritepos,vidmem);

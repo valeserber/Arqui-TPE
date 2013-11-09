@@ -4,9 +4,6 @@
 #include "../../include/stdio.h"
 
 BUFFER keyboard_buffer;
-extern void _registerInfo();
-int keyboardpos();
-unsigned char * keyboardbuffer();
 
 int normal_keyboard[KEYS] = {
         //MAKECODE
@@ -287,13 +284,11 @@ int caps_keyboard[KEYS] = {
 
 int scancodeToAscii(unsigned char scancode){
     if(scancode & 0x80){ 
-      //  uprintf("break%d  ",keyboard_buffer.flag.capsLockOn);
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
 		keyboard_buffer.flag.shiftOn=false;
 	}else if(scancode==CONTROL_BREAK){
 		keyboard_buffer.flag.controlOn=false;
 	}
-       // uprintf("break");
 	return 0;
     }
     if(scancode==CONTROL_R){
@@ -306,8 +301,6 @@ int scancodeToAscii(unsigned char scancode){
     }
  
     int key= normal_keyboard[scancode];
-  //  uprintf("key%d  ",key);
-    // uprintf("make%d  ",keyboard_buffer.flag.capsLockOn);
     switch(key){
 	case CONTROL_MAKE:
 	        keyboard_buffer.flag.controlOn = true;
@@ -315,7 +308,6 @@ int scancodeToAscii(unsigned char scancode){
 		break;
 	case CAPS_LOCK:
 	        keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
-      //          uprintf("make%d  ",keyboard_buffer.flag.capsLockOn);
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
@@ -325,15 +317,12 @@ int scancodeToAscii(unsigned char scancode){
 		break;
 	default:
 		if(keyboard_buffer.flag.capsLockOn && (!keyboard_buffer.flag.shiftOn)){
-	//		uprintf("opcion1\n");
 			key=caps_keyboard[scancode];
 		}
 		else if((!keyboard_buffer.flag.capsLockOn)&&(keyboard_buffer.flag.shiftOn)){
-	//		uprintf("opcion2\n");
 			key=special_keyboard[scancode];
 		}
 		else if(keyboard_buffer.flag.capsLockOn && keyboard_buffer.flag.shiftOn){
-	//		uprintf("opcion3\n");
 			key=normal_keyboard[scancode];
 	        }
 		break;	
@@ -373,13 +362,5 @@ int kbBufferGetNext(){
     keyboard_buffer.dequeuePos = (keyboard_buffer.dequeuePos +1) % BUFFER_SIZE;
     return keyboard_buffer.buffer[dequeuePos];
 
-}
-
-int keyboardpos(void){
-   return keyboard_buffer.enqueuePos;
-}
-
-unsigned char * keyboardbuffer(void){
-   return keyboard_buffer.buffer;
 }
 

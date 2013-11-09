@@ -6,10 +6,6 @@
 extern void _write(int fd, const void *buf, size_t count);
 extern void _read(int fd, void *buf, size_t count);
 
-//typedef enum {STDIN, STDOUT, STDERR} stream;
-//typedef enum {SYS_READ = 3, SYS_WRITE = 4} sys_call;
-
-
 /***************************************************************
 *print_hello
 *

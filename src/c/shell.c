@@ -2,6 +2,7 @@
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
 #include "../../include/shell.h"
+#include "../../include/keyboard.h"
 
 SHELL shell_buffer;
 char * command[]={"openCD","infoCD","closeCD","clear","test1","test2"};
