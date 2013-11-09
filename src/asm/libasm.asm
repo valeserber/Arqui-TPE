@@ -143,18 +143,13 @@ waitloop:
     mov     dx, 01f0h       ;Data register
     mov     al, 01eh        ;Prevent/Allow Medium removal Packet command
     out     dx, al
-    xor     al, al          ;al = 0
+    xor     ax, ax          ;ax = 0
     out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
     call    _pollUntilNotBusy
     ;call    _pollDRDY
     mov     dx, 01f7h
@@ -168,20 +163,16 @@ waitloop:
     mov     al, 01bh     ;SCSI command to eject drive tray.
     out     dx, al
 ;The remaining 11 bytes supply parameter info for the command.
-    xor     al, al
+    xor     ax, ax
     out     dx, al
-    out     dx, al
-    out     dx, al
+    out     dx, ax
     mov     al, 2
     out     dx, al
-    xor     al, al
+    xor     ax, ax
     out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
     call    _pollUntilNotBusy
     ret
 
@@ -240,16 +231,11 @@ waitloop2:
     out     dx, al
     xor     ax, ax
     out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
-    out     dx, al
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
     call    _pollUntilNotBusy
     ;call    _pollDRDY
     mov     dx, 0x1F7
@@ -258,32 +244,26 @@ waitloop2:
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
     mov     dx, 0x1f0
-    mov     al, 1Bh
+    mov     al, 01bh
     out     dx, al
-    xor     al, al
+    xor     ax, ax
     out     dx, al
-    out     dx, al
-    out     dx, al
+    out     dx, ax
     mov     al, 3
     out     dx, al
     xor     ax, ax 
     out     dx, al
-    out     dx, al
-out dx, al
-out dx, al
-out dx, al
-out dx, al
-out dx, al
-mov dx, 0x1f7
-in eax, dx
-push eax
-call printStatus
-pop eax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    mov     dx, 0x1f7
+    in      eax, dx
+    push    eax
+    call    printStatus
+    add     esp, 4              ;pop
+    call    _pollUntilNotBusy
+    ret
 
-call _pollUntilNotBusy
-ret
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _infocd:
 
 call _pollUntilNotBusy
