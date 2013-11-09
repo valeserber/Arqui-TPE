@@ -74,12 +74,12 @@ write:
 _opencd:
     call    _pollUntilNotBusy
     xor     ax, ax          ;Selects device 0 (master). 10h = device 1 (slave)
-    mov     dx, 01f6h      ;Drive/Head (read and write) register address
+    mov     dx, 01f6h       ;Drive/Head (read and write) register address
     out     dx, ax
-    mov     dx, 01f1h      ;Error (read) and Features (write) register address
+    mov     dx, 01f1h       ;Error (read) and Features (write) register address
     out     dx, ax
-    mov     dx, 01f7h      ;Command (write) register address
-    mov     ax, 0a0h       ;0A0h = Packet command
+    mov     dx, 01f7h       ;Command (write) register address
+    mov     ax, 0a0h        ;0A0h = Packet command
     out     dx, ax          ;Send command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
@@ -88,98 +88,53 @@ waitloop:
     loopnz  waitloop
 
     call    _pollUntilNotBusy 
-    call    _pollDRQ
-    mov     dx, 01f0h
-    mov     al, 01eh
+    call    _pollUntilDataRequest
+    mov     dx, 01f0h       ;Data register
+    mov     al, 01eh        ;Prevent/Allow Medium removal Packet command
+    out     dx, al
+    xor     al, al          ;al = 0
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    call    _pollUntilNotBusy
+    ;call    _pollDRDY
+    mov     dx, 01f7h
+    mov     ax, 0a0h
+    out     dx, ax
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+;The command packet has a 12-byte standard format, and the first byte of the
+;command packet contains the actual operation code
+    mov     dx, 01f0h    ;Data register address
+    mov     al, 01bh     ;SCSI command to eject drive tray.
+    out     dx, al
+;The remaining 11 bytes supply parameter info for the command.
+    xor     al, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    mov     al, 2
     out     dx, al
     xor     al, al
     out     dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-call _pollUntilNotBusy
-call _pollDRDY
-
-mov dx, 01f7h
-mov ax, 0a0h
-out dx, ax
-
-call _pollUntilNotBusy
-call _pollDRQ
-;The command packet has a 12-byte standard format, and the first byte of the
-;command packet contains the actual operation code
-mov dx, 01f0h    ;Data register address
-mov al, 01bh     ;SCSI command to eject drive tray.
-out dx, al
-;The remaining 11 bytes supply parameter info for the command.
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 2
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-call _pollUntilNotBusy
-ret
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    call    _pollUntilNotBusy
+    ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;pollDRDY no hace falta
-;;pollbsy es fijarse si busy no esta en 1
 ;;polldrq es fijarse que drq este en 1
 ;;0x1E y todo cero es para habilitar la lectora
 ;;para cerrar la lectora no hace falta 0x1E
@@ -192,19 +147,14 @@ cycleBSY:
     and     al, 080h    ;check leftmost bit to see if drive is busy
     jnz     cycleBSY    ;While busy, keep querying until drive is available
     ret
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-_pollDRDY:
-ret
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-_pollDRQ:
+
+_pollUntilDataRequest:
     mov     dx, 01f7h
 cycleDRQ:
     in      al, dx      ;Read from status register
     and     al, 08h     ;Check 3rd bit (Data transfer Requested flag)
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
     ret
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 _printError:
 mov dx, 0x1F1
@@ -217,121 +167,62 @@ ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _closecd:
+    call    _pollUntilNotBusy
+    xor     ax, ax
+    mov     dx, 0x1F6
+    out     dx, ax
+    mov     dx, 0x1F1
+    out     dx, ax 
+    ;DRDY ?
+    mov     dx, 0x1F7
+    mov     ax, 0xA0
+    out     dx, ax
+    
+    mov     ecx, 0ffffh
+waitloop2:
+    loopnz  waitloop2
 
-call _pollUntilNotBusy
-
-mov ax, 00h
-mov dx, 0x1F6
-out dx, ax ; al puerto 1f6 mando un cero
-
-mov dx, 0x1F1
-mov ax, 0
-out dx, ax ; al puerto 1f1 mando un cero
-
-;call _pollDRDY
-
-mov dx, 0x1F7
-mov ax, 0xA0
-out dx, ax ; al puerto 1f7 mando el A0
-
-; puede pasar q tarde un cacho
-
-mov ebx, 65000
-loop97:
-dec ebx
-cmp ebx, 0
-jne loop97
-
-call _pollUntilNotBusy
-call _pollDRQ
-
-mov dx, 0x1F0
-
-mov al, 0x1E
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+    mov     dx, 0x1F0
+    mov     al, 0x1E
+    out     dx, al
+    xor     ax, ax
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    call    _pollUntilNotBusy
+    ;call    _pollDRDY
+    mov     dx, 0x1F7
+    mov     ax, 0xA0
+    out     dx, ax
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+    mov     dx, 0x1f0
+    mov     al, 1Bh
+    out     dx, al
+    xor     al, al
+    out     dx, al
+    out     dx, al
+    out     dx, al
+    mov     al, 3
+    out     dx, al
+    xor     ax, ax 
+    out     dx, al
+    out     dx, al
 out dx, al
-
-mov al, 0
 out dx, al
-
-mov al, 0
 out dx, al
-
-mov al, 0
 out dx, al
-
-mov al, 0
 out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-call _pollUntilNotBusy
-call _pollDRDY
-
-mov dx, 0x1F7
-
-mov ax, 0xA0
-out dx, ax
-
-call _pollUntilNotBusy
-call _pollDRQ
-
-mov dx, 0x1f0
-mov al, 1Bh
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 3
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov eax, 0
 mov dx, 0x1f7
 in eax, dx
 push eax
@@ -367,7 +258,7 @@ cmp ebx, 0
 jne loop982
 
 call _pollUntilNotBusy
-call _pollDRQ
+call _pollUntilDataRequest
 
 mov dx, 0x1F0
 mov al, 0x1E
@@ -407,14 +298,14 @@ mov al, 0
 out dx, al
 
 call _pollUntilNotBusy
-call _pollDRDY
+;call _pollDRDY
 
 mov dx, 0x1F7
 mov ax, 0xA0
 out dx, ax
 
 call _pollUntilNotBusy
-call _pollDRQ
+call _pollUntilDataRequest
 
 mov dx, 0x1f0
 mov al, 1Bh
@@ -464,33 +355,6 @@ pop eax
 call _pollUntilNotBusy
 ret
 
-;openCD:
-;    mov     cx, 6       ;do this 6 times because it's 6 word writes (a word is 2 bytes) 
-;    mov     ds, seg buff 
-;    mov     si, OFFSET buff 
-;                        ;DS:SI now points to the buffer which contains our ATAPI command packet 
-;    cld                 ;clear direction flag so SI gets incremented, not decremented ;
-;
-;COMPACKLOOP: ;command packet sending loop 
-;    mov     dx, 170h    ;data register ;Because we're going to need to write a word (2 bytes), we can't just use an 
-;                        ;8-bit register like AL. For this operation, we'll need to use the full width 
-;                        ;of the 16-bit accumulator AX. We'll use the LODSW opcode, which loads AX 
-;                        ;with whatever DS:SI points to. Not only this, but if the direction flag is 
-;                        ;cleared (which we did a few lines above with the CLD instruction), LODSW 
-;                        ;also auto-increments SI. 
-;    lodsw 
-;    out     dx, ax      ;send the current word of the command packet!!! 
-;                        ; manda una palabra del buff, su paquete de comando 
-;                        ;; escribirle 6 veces en 
-;                        ;donde tengo las direcciones de memoria si tngo en amster y slave 
-;                        ;te mando buff mas indice y voy aumentando el indice en 2, 
-;                        ;entre cada ciclo tiene q haber un tiempo de descanso 
-;                        ;para recomponerse 
-;    mov     dx, 3F6h 
-;                        ;Alternate Status Register 
-;                        ;IN AL, DX ;wait one I/O cycle 
-;    loopnz COMPACKLOOP  ;loop using ecx as a counter
-
 ;_test:
 ;    mov    eax, 0xCAFE
 ;    mov    ebx, 0x0FE0
@@ -521,6 +385,3 @@ vuelve:
     pop     ax
     pop     bp
     retn
-
-;section .bss
-;    buffer db 1Bh, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0
