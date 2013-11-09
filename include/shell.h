@@ -1,4 +1,6 @@
 #define SHELL_SIZE          256
+#define PROMPT_LENGTH       4
+#define COMMAND_SIZE        6
 
 bool addToShellBuffer(char c);
 

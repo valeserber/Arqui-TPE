@@ -9,6 +9,7 @@
 #define CONTROL_MAKE	    260
 #define CONTROL_R     	    0x13
 #define CONTROL_BREAK	    0x9D
+#define TAB_LENGTH          8
 
 /*Convierte de scancode a codigo ascii*/
 int scancodeToAscii(unsigned char scancode);
@@ -19,15 +20,11 @@ bool addToKeyboardBuffer(unsigned char ascii_c);
 /*Inicializa el buffer de teclado*/
 void buffer_initialize(void);
 
-int  keyboardpos(void);
-
 bool kbBufferIsEmpty(void);
 
 bool kbBufferIsFull(void);
 
 int  kbBufferGetNext(void);
-
-unsigned char * keyboardbuffer(void);
 
 typedef struct{
     unsigned int shiftOn    : 1;

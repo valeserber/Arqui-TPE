@@ -3,19 +3,10 @@
 #include "../../include/stdio.h"
 #include "../../include/keyboard.h"
 
-extern BUFFER keyboard_buffer;
-ssize_t __write(int fd, const void * buf, size_t count);
-ssize_t __read(int fd, void *buf, size_t count);
-extern void writeToMainScreen(const void * buf,size_t count);
-extern void scrollMainScreen();
-
 char c='*';
-
-int tickpos=0;
 
 void int_08(){
     char *video = (char *)MAIN_SCREEN_ADDRESS;
-   // video[tickpos+=2]='*';
     putchar(c);
 }
 
