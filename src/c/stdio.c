@@ -17,7 +17,7 @@ int getc(int fd){
 }
 
 int vfprintf(int fd, const char * fmt, va_list ap){
-    char *p, *sval;
+    char *p, *sval, cval;
     int ival;
     char auxBuf[sizeof(int)*8+1]; //Big enough for any possible ltoa value
     int printedChars = 0;
@@ -35,6 +35,15 @@ int vfprintf(int fd, const char * fmt, va_list ap){
 	    case 'x':
 	        printedChars += vfprintf(fd, ltoa(va_arg(ap, int),auxBuf, 16), ap);
 		break;
+            case 'X':
+	        sval = ltoa(va_arg(ap, int), auxBuf, 16);
+                char *aux = sval;
+                while (*sval){
+                    *sval = toupper(*sval);
+                    sval++;
+                }
+                printedChars+= vfprintf(fd, aux, ap);
+                break;                
             case 's':
 	        for(sval = va_arg(ap, char*); *sval; sval++){
 		    putc(*sval, fd);
@@ -43,6 +52,11 @@ int vfprintf(int fd, const char * fmt, va_list ap){
 		break;
             case 'f':
 	    	break;
+            case 'c':
+	        cval = va_arg(ap, char);
+		putc(cval, fd);
+		printedChars++;
+		break;
             } 
 	}
     }           
