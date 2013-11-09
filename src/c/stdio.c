@@ -4,9 +4,6 @@
 #include "../../include/string.h"
 #include "../../include/ctype.h"
 
-int vfprintf(int fd, const char * fmt, va_list ap);
-void printFlags(dword flags);
-
 int putc(int c, int fd){
     unsigned char ch = c;
     write(fd, &ch, 1);

@@ -24,10 +24,9 @@
 #define LAST_LINE_ADDRESS   (MAIN_SCREEN_ADDRESS)+(LAST_LINE)
 #define LINE_SIZE	    80*2
 #define TAB_LENGTH          8
-#define SHELL_SIZE          128
 #define ENTER	            261
 #define PROMPT_LENGTH       4
-#define COMMAND_SIZE        5
+#define COMMAND_SIZE        6
 /*
  * Type definitions
  */

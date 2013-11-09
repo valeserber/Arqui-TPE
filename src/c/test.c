@@ -2,13 +2,14 @@
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
 void test1();
+void test2();
 extern writepos;
 
 void test1(){
   _Cli();
-  int c1='s';
-  int c2='a';
-  int c3='i';
+  char c1='s';
+  char c2='a';
+  char c3='i';
   set_char(c1);
   _mascaraPIC1(0xFC); //habilita teclado y timer tick
   _Sti();
@@ -25,4 +26,27 @@ void test1(){
   _mascaraPIC1(0xFD);//queda habilitado solo el teclado
   _Sti();
 }
+
+void test2(){
+  int i=0;
+  char c;
+  printf("Press n to get the next number or enter to leave\n");
+  while(1){
+	c=getchar();
+	if(c!=EOF){
+		if(c=='\n'){
+                        printf("\n");
+			return;
+		}
+		if(c=='n'){
+			if(i%5==0){
+	 			printf("modulo5\t");
+			}
+			i++;
+		}
+  	}
+  }
+}
+
+
 

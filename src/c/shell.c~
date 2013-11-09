@@ -23,7 +23,9 @@ void shell_run(){
 			if(addToShellBuffer(c)){
 				putc((int)c,STDOUT);
 			}
-			
+			else if(shBufferIsFull()){
+				return;
+			}
                		max_pos(shell_buffer.shell_pos);
 		}
    	}	   

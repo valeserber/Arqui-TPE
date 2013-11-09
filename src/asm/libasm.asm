@@ -66,6 +66,33 @@ write:
     leave
     ret
 
+openCD:
+    mov     cx, 6       ;do this 6 times because it's 6 word writes (a word is 2 bytes) 
+    mov     ds, seg buff 
+    mov     si, OFFSET buff 
+                        ;DS:SI now points to the buffer which contains our ATAPI command packet 
+    cld                 ;clear direction flag so SI gets incremented, not decremented 
+
+COMPACKLOOP: ;command packet sending loop 
+    mov     dx, 170h    ;data register ;Because we're going to need to write a word (2 bytes), we can't just use an 
+                        ;8-bit register like AL. For this operation, we'll need to use the full width 
+                        ;of the 16-bit accumulator AX. We'll use the LODSW opcode, which loads AX 
+                        ;with whatever DS:SI points to. Not only this, but if the direction flag is 
+                        ;cleared (which we did a few lines above with the CLD instruction), LODSW 
+                        ;also auto-increments SI. 
+    lodsw 
+    out     dx, ax      ;send the current word of the command packet!!! 
+                        ; manda una palabra del buff, su paquete de comando 
+                        ;; escribirle 6 veces en 
+                        ;donde tengo las direcciones de memoria si tngo en amster y slave 
+                        ;te mando buff mas indice y voy aumentando el indice en 2, 
+                        ;entre cada ciclo tiene q haber un tiempo de descanso 
+                        ;para recomponerse 
+    mov     dx, 3F6h 
+                        ;Alternate Status Register 
+                        ;IN AL, DX ;wait one I/O cycle 
+    loopnz COMPACKLOOP  ;loop using ecx as a counter
+
 ;_test:
 ;    mov    eax, 0xCAFE
 ;    mov    ebx, 0x0FE0
@@ -96,3 +123,6 @@ vuelve:
     pop     ax
     pop     bp
     retn
+
+section .bss
+    buffer db 1Bh, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0

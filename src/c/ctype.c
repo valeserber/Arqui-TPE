@@ -1,5 +1,6 @@
 #include "../../include/ctype.h"
 
+
 bool isalpha(int c){
     return (c >= 'a' && c<= 'z') || (c >= 'A' && c <= 'Z');
 }
@@ -18,6 +19,10 @@ bool isalnum(int c){
            || c <= '0' && c <= '9';
 }
 
+bool isspace(int c){
+    return c == ' ' || c >= 0x09 && c <= 0x0c || c == '\r';
+}
+
 bool islower(int c){
     return c >= 'a' && c<= 'z';
 }
@@ -32,8 +37,4 @@ int tolower(int c){
 
 int toupper(int c){
     return islower(c) ? c - 'a' + 'A' : c;
-}
-
-bool isspace(int c){
-    return c == ' ' || c >= 0x09 && c <= 0x0c || c == '\r';
 }
