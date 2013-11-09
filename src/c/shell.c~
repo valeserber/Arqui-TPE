@@ -142,17 +142,17 @@ void executeCommand(int c){
 }
 
 void help(){
-  printf("Commands\n"); //agregar que hace cada cosa
-  printf("openCD\t\n");
-  printf("infoCD\t\n");
-  printf("closeCD\t\n");
-  printf("clear\tClears the main screen\n");
+  printf("\tCommands\n"); //agregar que hace cada cosa
+  printf("openCD\t Opens disk tray\n");
+  printf("infoCD\t Reads the CD info\n");
+  printf("closeCD\tCloses disk tray\n");
+  printf("clear\t  Clears the main screen\n");
   printf("clearUp\tClears the upper screen\n");
-  printf("test1\tPrints letters when a timer tick interruption arrives\n");
-  printf("test2\tPrints \n");
-  printf("help\tLists available commands\n");
-  printf("Shortcuts\n");
-  printf("Ctrl+R: \n");
+  printf("test1\t  Prints letters when a timer tick interruption arrives\n");
+  printf("test2\t  Prints \"*\" when a number is multiple of 5. Starts with 0 and adds\t\t1 in each iteration\n");
+  printf("help\t   Lists available commands\n");
+  printf("\tShortcuts\n");
+  printf("Ctrl+R:  Shows the value of the registers at the time the keys were pressed\n");
 }
 
 int printStatus(int num){

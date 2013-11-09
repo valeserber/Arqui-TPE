@@ -40,7 +40,7 @@ void test2(){
 		}
 		if(c=='n'){
 			if(i%5==0){
-	 			printf("modulo5\t");
+	 			printf("*\t");
 			}
 			i++;
 		}
