@@ -17,6 +17,7 @@ kmain()
 /* Borra la pantalla. */
 
    k_clear_screen();
+   set_cursor(10,0);
 
 /* CARGA DE IDT CON LA RUTINA DE ATENCION DE IRQ0,IRQ1 e INT80h. */
 

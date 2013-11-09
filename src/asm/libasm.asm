@@ -7,6 +7,7 @@ EXTERN printStatus
 GLOBAL _printError
 EXTERN printNum
 GLOBAL _closecd
+GLOBAL set_cursor
 
 SECTION .text
 
@@ -71,40 +72,79 @@ write:
     leave
     ret
 
+; Set cursor position (text mode 80x25)
+; @param BL The row on screen, starts from 0
+; @param BH The column on screen, starts from 0
+; SOURCE: http://wiki.osdev.org/Text_Mode_Cursor
 
+set_cursor:     
+    push ebp
+    mov ebp,esp
+    pushf
+    pushad
+                               
+    ;unsigned short position = (row*80) + col;
+    ;AX will contain 'position'
+                
+    mov bl,byte[ebp + 8]
+    mov bh,byte[ebp + 12]
+    mov ax,bx
+    and ax,0ffh             ;set AX to 'row'
+    mov cl,80   
+    mul cl                  ;row*80
+ 
+    mov cx,bx               
+    shr cx,8                ;set CX to 'col'
+    add ax,cx               ;+ col
+    mov cx,ax               ;store 'position' in CX
+ 
+    ;cursor LOW port to vga INDEX register
+    mov al,0fh             
+    mov dx,3d4h             ;VGA port 3D4h
+    out dx,al             
+
+    mov ax,cx               ;restore 'postion' back to AX  
+    mov dx,3d5h             ;VGA port 3D5h
+    out dx,al               ;send to VGA hardware
+
+    ;cursor HIGH port to vga INDEX register
+    mov al,0eh
+    mov dx,3d4h             ;VGA port 3D4h
+    out dx,al
+
+    mov ax,cx               ;restore 'position' back to AX
+    shr ax,8                ;get high byte in 'position'
+    mov dx,3d5h             ;VGA port 3D5h
+    out dx,al               ;send to VGA hardware
+    popad
+    popf
+    mov esp,ebp
+    pop ebp
+    ret
 
 _opencd:
+    call    _pollUntilNotBusy
+    xor     ax, ax          ;Selects device 0 (master). 10h = device 1 (slave)
+    mov     dx, 01f6h      ;Drive/Head (read and write) register address
+    out     dx, ax
+    mov     dx, 01f1h      ;Error (read) and Features (write) register address
+    out     dx, ax
+    mov     dx, 01f7h      ;Command (write) register address
+    mov     ax, 0a0h       ;0A0h = Packet command
+    out     dx, ax          ;Send command
+;After sending the Packet command, the host is to wait 400 nanoseconds
+;before doing anything else.
+    mov     ecx, 0ffffh
+waitloop:
+    loopnz  waitloop
 
-call _pollBSY
-
-mov ax, 00h
-mov dx, 0x1F6
-out dx, ax ; al puerto 1f6 mando un cero
-
-mov dx, 0x1F1
-mov ax, 0
-out dx, ax ; al puerto 1f1 mando un cero
-
-;call _pollDRDY
-
-mov dx, 0x1F7
-mov ax, 0xA0
-out dx, ax ; al puerto 1f7 mando el A0
-
-; puede pasar q tarde un cacho
-
-mov ebx, 65000
-loop9:
-dec ebx
-cmp ebx, 0
-jne loop9
-
-call _pollBSY
-call _pollDRQ
-
-mov dx, 0x1F0
-mov al, 0x1E
-out dx, al
+    call    _pollUntilNotBusy 
+    call    _pollDRQ
+    mov     dx, 01f0h
+    mov     al, 01eh
+    out     dx, al
+    xor     al, al
+    out     dx, al
 
 mov al, 0
 out dx, al
@@ -136,23 +176,21 @@ out dx, al
 mov al, 0
 out dx, al
 
-mov al, 0
-out dx, al
-
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRDY
 
-mov dx, 0x1F7
-mov ax, 0xA0
+mov dx, 01f7h
+mov ax, 0a0h
 out dx, ax
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRQ
-
-mov dx, 0x1f0
-mov al, 1Bh
+;The command packet has a 12-byte standard format, and the first byte of the
+;command packet contains the actual operation code
+mov dx, 01f0h    ;Data register address
+mov al, 01bh     ;SCSI command to eject drive tray.
 out dx, al
-
+;The remaining 11 bytes supply parameter info for the command.
 mov al, 0
 out dx, al
 
@@ -186,14 +224,7 @@ out dx, al
 mov al, 0
 out dx, al
 
-;mov eax, 0
-;mov dx, 0x1f7
-;in eax, dx
-;push eax
-;call printStatus
-;pop eax
-
-call _pollBSY
+call _pollUntilNotBusy
 ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -205,24 +236,24 @@ ret
 ;;para cerrar la lectora no hace falta 0x1E
 ;; solo hace falta 0x1B
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-_pollBSY:
-MOV DX, 1F7h
-LOOP1:
-IN AL, DX
-AND AL, 0x80
-JNE LOOP1
-ret
+_pollUntilNotBusy:
+    mov     dx, 01f7h
+cycleBSY:
+    in      al, dx      ;Read from status register
+    and     al, 080h    ;check leftmost bit to see if drive is busy
+    jnz     cycleBSY    ;While busy, keep querying until drive is available
+    ret
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _pollDRDY:
 ret
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _pollDRQ:
-MOV DX, 1F7h
-LOOP4:
-IN AL, DX
-AND AL,0x08
-JE LOOP4
-ret
+    mov     dx, 01f7h
+cycleDRQ:
+    in      al, dx      ;Read from status register
+    and     al, 08h     ;Check 3rd bit (Data transfer Requested flag)
+    jz      cycleDRQ    ;While there are data transfer requests, keep cycling
+    ret
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -238,7 +269,7 @@ ret
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _closecd:
 
-call _pollBSY
+call _pollUntilNotBusy
 
 mov ax, 00h
 mov dx, 0x1F6
@@ -262,7 +293,7 @@ dec ebx
 cmp ebx, 0
 jne loop97
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRQ
 
 mov dx, 0x1F0
@@ -303,7 +334,7 @@ out dx, al
 mov al, 0
 out dx, al
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRDY
 
 mov dx, 0x1F7
@@ -311,7 +342,7 @@ mov dx, 0x1F7
 mov ax, 0xA0
 out dx, ax
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRQ
 
 mov dx, 0x1f0
@@ -358,13 +389,13 @@ push eax
 call printStatus
 pop eax
 
-call _pollBSY
+call _pollUntilNotBusy
 ret
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _infocd:
 
-call _pollBSY
+call _pollUntilNotBusy
 
 mov ax, 00h
 mov dx, 0x1F6
@@ -386,7 +417,7 @@ dec ebx
 cmp ebx, 0
 jne loop982
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRQ
 
 mov dx, 0x1F0
@@ -426,14 +457,14 @@ out dx, al
 mov al, 0
 out dx, al
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRDY
 
 mov dx, 0x1F7
 mov ax, 0xA0
 out dx, ax
 
-call _pollBSY
+call _pollUntilNotBusy
 call _pollDRQ
 
 mov dx, 0x1f0
@@ -481,7 +512,7 @@ push eax
 call printStatus
 pop eax
 
-call _pollBSY
+call _pollUntilNotBusy
 ret
 
 ;openCD:

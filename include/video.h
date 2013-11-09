@@ -17,3 +17,5 @@ void reset_upperWritepos();
 void reset_writepos();
 void k_clear_screen();
 void paintLetter(int color);
+int getrow(void);
+int getcol(void);

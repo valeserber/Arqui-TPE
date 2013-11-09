@@ -19,6 +19,7 @@ void writeToScreen(char key,int fd){
 		scrollMainScreen();
     	}
 	insertKey(key,&writepos,vidmem); 
+	set_cursor(getrow(),getcol());
     }
     else if(fd==REGOUT){
 	vidmem=(char *)VIDMEM_ADDRESS;
@@ -128,6 +129,7 @@ void video_backspace(){
 	vidmem[--writepos]=WHITE_TXT;
 	vidmem[--writepos]=' ';
    }
+   set_cursor(getrow(),getcol());
 }
 
 void max_pos(int max){
@@ -152,6 +154,17 @@ void video_tab(int fd){
    for(i=0; i<TAB_LENGTH && i<size; i++){
 	insertKey(' ',pos, vidmem);
    }
+   if(fd==STDOUT){
+	set_cursor(getrow(),getcol());
+   }
+}
+
+int getrow(){
+   return (int)((writepos/160)+10);
+}
+
+int getcol(){
+   return ((writepos/2)%160);
 }
 
 /***************************************************************
