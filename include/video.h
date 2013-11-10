@@ -18,5 +18,6 @@ void reset_writepos(void);
 void k_clear_screen(void);
 void paintLetter(int color);
 int getrow(void);
+int get_row(void);
 int getcol(void);
 void video_initialize(void);

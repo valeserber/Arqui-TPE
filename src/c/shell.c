@@ -18,7 +18,7 @@ void shell_run(){
    max_pos(shell_buffer.shell_pos);
    printf("***>");
    paintLetter(LILAC_TXT);
-   set_cursor(getrow(),4);
+   set_cursor(get_row(),4);
 
    while(1){
 	char c=getchar();

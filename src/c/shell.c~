@@ -12,6 +12,7 @@ extern _infocd();
 extern _closecd();
 int printNum(int num);
 int printStatus(int num);
+
 void shell_run(){
    initialize_shell();
    max_pos(shell_buffer.shell_pos);

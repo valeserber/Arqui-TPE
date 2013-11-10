@@ -166,8 +166,15 @@ void video_tab(int fd){
    }
 }
 
-int getrow(){
+int get_row(){
    return ((int)(writepos/160))+10;
+}
+int getrow(){
+   int r= ((int)(writepos/160))+10;
+   if(r%2==1){
+      return r-1; 
+   }
+   return r;
 }
 
 int getcol(){
