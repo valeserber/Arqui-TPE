@@ -31,20 +31,20 @@ _mascaraPIC1:                   ;Escribe mascara del PIC 1
 _mascaraPIC2:                   ;Escribe mascara del PIC 2
     push    ebp
     mov     ebp, esp
-    mov     ax, [ss:ebp+8]      ;ax = mascara de 16 bits
+    mov     ax, [ss:ebp+8]      ;ax = 16 bit mask
     out     0A1h, al
     pop     ebp
     retn
 
 _read_msw:
-    smsw    ax                  ;Obtiene la Machine Status Word
+    smsw    ax                  ;Get machine status word
     retn
 
-_lidt:                          ;Carga el IDTR
+_lidt:                          ;Load IDTR
     push    ebp
     mov     ebp, esp
     push    ebx
-    mov     ebx, [ss: ebp + 6]  ;ds:bx = puntero a IDTR
+    mov     ebx, [ss:ebp+6]     ;ds:bx = IDTR pointer
     rol     ebx,16
     lidt    [ds: ebx]           ;load IDTR
     pop     ebx
@@ -234,14 +234,14 @@ _infocd:
     call    _pollUntilNotBusy
     xor     ax, ax
     mov     dx, 0x1f6
-    out     dx, ax              ;Select master device
+    out     dx, al              ;Select master device
     
     mov     ecx, 0xffff
 waitloop3:
     loopnz  waitloop3
     
     mov     dx, 0x1f1
-    out     dx, ax              ;Set Features register to 0
+    out     dx, al              ;Set Features register to 0
     mov     dx, 0x1f4
     mov     ax, 0x08
     out     dx, ax              ;Set LBA1 register to 0x0008
@@ -250,6 +250,11 @@ waitloop3:
     mov     dx, 0x1f7
     mov     al, 0xa0
     out     dx, al              ;Send packet command
+
+    mov     ecx, 0xffff
+waitloop4:
+    loopnz  waitloop4
+
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
     ;mov     dx, 0x1f0
@@ -279,7 +284,7 @@ waitloop3:
     out     dx, ax
     out     dx, ax
     call    _pollUntilNotBusy
-    call    _pollUntilDataRequest
+    ;call    _pollUntilDataRequest
 
     mov     ecx, 4
     xor     ebx, ebx
@@ -310,7 +315,7 @@ _pollUntilDataRequest:
     mov     dx, 0x1f7
 cycleDRQ:
     in      al, dx      ;Read from status register
-    and     al, 0x08     ;Check 3rd bit (Data transfer Requested flag)
+    and     al, 0x08    ;Check 3rd bit (Data transfer Requested flag)
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
     ret
 
