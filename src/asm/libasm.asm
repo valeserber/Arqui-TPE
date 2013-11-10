@@ -310,7 +310,7 @@ _pollUntilDataRequest:
     mov     dx, 0x1f7
 cycleDRQ:
     in      al, dx      ;Read from status register
-    and     al, 0x8     ;Check 3rd bit (Data transfer Requested flag)
+    and     al, 0x08     ;Check 3rd bit (Data transfer Requested flag)
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
     ret
 
