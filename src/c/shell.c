@@ -8,8 +8,11 @@
 SHELL shell_buffer;
 char * command[]={"openCD","infoCD","closeCD","clear","test1","test2","help","clearUp"};
 extern _opencd();
+extern _infocd();
+extern _closecd();
 int printNum(int num);
 int printStatus(int num);
+
 void shell_run(){
    initialize_shell();
    max_pos(shell_buffer.shell_pos);
@@ -118,7 +121,7 @@ void executeCommand(int c){
 		_opencd();
 		break;
 	case 1:
-		//infoCD();
+		_infocd();
 		break;
 	case 2:
 		_closecd();
@@ -220,5 +223,7 @@ int printNum(int num){
         printf("%d",num);
 }
 
-
+void printCapacity(unsigned int lba, unsigned int blockLength){
+    printf("Capacity = %d", (lba+1)*blockLength);
+}
 

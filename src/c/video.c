@@ -4,10 +4,17 @@
 #include "../../include/video.h"
 #include "../../include/keyboard.h"
 
-int writepos=0;
-int upperWritepos = 0;
-char *vidmem= (char *)MAIN_SCREEN_ADDRESS;
-int maxpos=0;
+int writepos;
+int upperWritepos;
+char *vidmem;
+int maxpos;
+
+void video_initialize(){
+    writepos=0;
+    upperWritepos=0;
+    vidmem=(char *)MAIN_SCREEN_ADDRESS;
+    maxpos=0;
+}
 
 void writeToScreen(char key,int fd){
     int size;
@@ -160,7 +167,7 @@ void video_tab(int fd){
 }
 
 int getrow(){
-   return (int)((writepos/160)+10);
+   return ((int)(writepos/160))+10;
 }
 
 int getcol(){

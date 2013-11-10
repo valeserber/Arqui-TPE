@@ -6,8 +6,10 @@ GLOBAL _opencd
 EXTERN printStatus
 GLOBAL _printError
 EXTERN printNum
+EXTERN printCapacity
 GLOBAL _closecd
 GLOBAL set_cursor
+GLOBAL _infocd
 
 SECTION .text
 
@@ -125,23 +127,23 @@ set_cursor:
 _opencd:
     call    _pollUntilNotBusy
     xor     ax, ax          ;Selects device 0 (master). 10h = device 1 (slave)
-    mov     dx, 01f6h       ;Drive/Head (read and write) register address
+    mov     dx, 0x1f6       ;Drive/Head (read and write) register address
     out     dx, ax
-    mov     dx, 01f1h       ;Error (read) and Features (write) register address
+    mov     dx, 0x1f1       ;Error (read) and Features (write) register address
     out     dx, ax
-    mov     dx, 01f7h       ;Command (write) register address
-    mov     ax, 0a0h        ;0A0h = Packet command
-    out     dx, ax          ;Send command
+    mov     dx, 0x1f7       ;Command (write) register address
+    mov     al, 0xa0        ;0A0h = Packet command
+    out     dx, al          ;Send Packet command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
-    mov     ecx, 0ffffh
+    mov     ecx, 0xffff
 waitloop:
     loopnz  waitloop
 
     call    _pollUntilNotBusy 
     call    _pollUntilDataRequest
-    mov     dx, 01f0h       ;Data register
-    mov     al, 01eh        ;Prevent/Allow Medium removal Packet command
+    mov     dx, 0x1f0       ;Data register
+    mov     al, 0x1e        ;Prevent/Allow Medium removal Packet command
     out     dx, al
     xor     ax, ax          ;ax = 0
     out     dx, al
@@ -151,22 +153,21 @@ waitloop:
     out     dx, ax
     out     dx, ax
     call    _pollUntilNotBusy
-    ;call    _pollDRDY
-    mov     dx, 01f7h
-    mov     ax, 0a0h
-    out     dx, ax
+    mov     dx, 0x1f7
+    mov     al, 0xa0
+    out     dx, al
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
 ;The command packet has a 12-byte standard format, and the first byte of the
 ;command packet contains the actual operation code
-    mov     dx, 01f0h    ;Data register address
-    mov     al, 01bh     ;SCSI command to eject drive tray.
+    mov     dx, 0x1f0    ;Data register address
+    mov     al, 0x1b     ;Start/Stop Unit command
     out     dx, al
 ;The remaining 11 bytes supply parameter info for the command.
     xor     ax, ax
     out     dx, al
     out     dx, ax
-    mov     al, 2
+    mov     al, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible
     out     dx, al
     xor     ax, ax
     out     dx, al
@@ -176,58 +177,25 @@ waitloop:
     call    _pollUntilNotBusy
     ret
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;polldrq es fijarse que drq este en 1
-;;0x1E y todo cero es para habilitar la lectora
-;;para cerrar la lectora no hace falta 0x1E
-;; solo hace falta 0x1B
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-_pollUntilNotBusy:
-    mov     dx, 01f7h
-cycleBSY:
-    in      al, dx      ;Read from status register
-    and     al, 080h    ;check leftmost bit to see if drive is busy
-    jnz     cycleBSY    ;While busy, keep querying until drive is available
-    ret
-
-_pollUntilDataRequest:
-    mov     dx, 01f7h
-cycleDRQ:
-    in      al, dx      ;Read from status register
-    and     al, 08h     ;Check 3rd bit (Data transfer Requested flag)
-    jz      cycleDRQ    ;While there are data transfer requests, keep cycling
-    ret
-
-_printError:
-mov dx, 0x1F1
-mov ax, 0
-in al, dx
-push eax
-call printNum
-pop eax
-ret
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 _closecd:
     call    _pollUntilNotBusy
     xor     ax, ax
-    mov     dx, 0x1F6
+    mov     dx, 0x1f6
     out     dx, ax
-    mov     dx, 0x1F1
+    mov     dx, 0x1f1
     out     dx, ax 
-    ;DRDY ?
-    mov     dx, 0x1F7
-    mov     ax, 0xA0
+    mov     dx, 0x1f7
+    mov     ax, 0xa0
     out     dx, ax
     
-    mov     ecx, 0ffffh
+    mov     ecx, 0xffff
 waitloop2:
     loopnz  waitloop2
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
-    mov     dx, 0x1F0
-    mov     al, 0x1E
+    mov     dx, 0x1f0
+    mov     al, 0x1e
     out     dx, al
     xor     ax, ax
     out     dx, al
@@ -237,19 +205,18 @@ waitloop2:
     out     dx, ax
     out     dx, ax
     call    _pollUntilNotBusy
-    ;call    _pollDRDY
-    mov     dx, 0x1F7
-    mov     ax, 0xA0
+    mov     dx, 0x1f7
+    mov     ax, 0xa0
     out     dx, ax
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
     mov     dx, 0x1f0
-    mov     al, 01bh
+    mov     al, 0x1b        ;Start/Stop Unit command
     out     dx, al
     xor     ax, ax
     out     dx, al
     out     dx, ax
-    mov     al, 3
+    mov     al, 3           ;LoEj & Start bits enabled (Eject disc if possible)
     out     dx, al
     xor     ax, ax 
     out     dx, al
@@ -265,125 +232,96 @@ waitloop2:
     ret
 
 _infocd:
+    call    _pollUntilNotBusy
+    xor     ax, ax
+    mov     dx, 0x1f6
+    out     dx, ax              ;Select master device
+    
+    mov     ecx, 0xffff
+waitloop3:
+    loopnz  waitloop3
+    
+    mov     dx, 0x1f1
+    out     dx, ax              ;Set Features register to 0
+    mov     dx, 0x1f4
+    mov     ax, 0x08
+    out     dx, ax              ;Set LBA1 register to 0x0008
+    mov     dx, 0x1f5
+    out     dx, ax              ;Set LBA2 register to 0x0008
+    mov     dx, 0x1f7
+    mov     al, 0xa0
+    out     dx, al              ;Send packet command
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+    ;mov     dx, 0x1f0
+    ;mov     al, 0x1e  ;Ver si tengo que prevenir el removal cambiando el bit adecuado
+    ;out     dx, al
+    ;xor     ax, ax
+    ;out     dx, al
+    ;out     dx, ax
+    ;out     dx, ax
+    ;out     dx, ax
+    ;out     dx, ax
+    ;out     dx, ax
+    ;call    _pollUntilNotBusy
+    ;mov     dx, 0x1f7
+    ;mov     ax, 0xf0
+    ;out     dx, ax
+    ;call    _pollUntilNotBusy
+    ;call    _pollUntilDataRequest
+    mov     dx, 0x1f0
+    mov     al, 0x25            ;Read capacity command
+    out     dx, al
+    xor     ax, ax
+    out     dx, al
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
 
-call _pollUntilNotBusy
+    mov     ecx, 4
+    xor     ebx, ebx
+getCapacityInfo:
+    in      ax, dx
+    mov     [array+ebx], ax
+    add     ebx, 2
+    loopnz  getCapacityInfo
 
-mov ax, 00h
-mov dx, 0x1F6
-out dx, ax ; al puerto 1f6 mando un cero
+    mov     eax, [array]
+    mov     ebx, [array+4]
+    push    ebx
+    push    eax
+    call    printCapacity
+    add     esp, 8
+    ;call    _pollUntilNotBusy
+    ret
 
+_pollUntilNotBusy:
+    mov     dx, 0x1f7
+cycleBSY:
+    in      al, dx      ;Read from status register
+    and     al, 0x80    ;Check leftmost bit to see if drive is busy
+    jnz     cycleBSY    ;While busy, keep querying until drive is available
+    ret
+
+_pollUntilDataRequest:
+    mov     dx, 0x1f7
+cycleDRQ:
+    in      al, dx      ;Read from status register
+    and     al, 0x08     ;Check 3rd bit (Data transfer Requested flag)
+    jz      cycleDRQ    ;While there are data transfer requests, keep cycling
+    ret
+
+_printError:
 mov dx, 0x1F1
 mov ax, 0
-out dx, ax ; al puerto 1f1 mando un cero
-
-;call _pollDRDY
-mov dx, 0x1F7
-mov ax, 0xA0
-out dx, ax ; al puerto 1f7 mando el A0
-
-; puede pasar q tarde un cacho
-mov ebx, 65000
-loop982:
-dec ebx
-cmp ebx, 0
-jne loop982
-
-call _pollUntilNotBusy
-call _pollUntilDataRequest
-
-mov dx, 0x1F0
-mov al, 0x1E
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-call _pollUntilNotBusy
-;call _pollDRDY
-
-mov dx, 0x1F7
-mov ax, 0xA0
-out dx, ax
-
-call _pollUntilNotBusy
-call _pollUntilDataRequest
-
-mov dx, 0x1f0
-mov al, 1Bh
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 2
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov eax, 0
-mov dx, 0x1f7
-
-in eax, dx
+in al, dx
 push eax
-call printStatus
+call printNum
 pop eax
-
-call _pollUntilNotBusy
 ret
 
 ;_test:
@@ -416,3 +354,6 @@ vuelve:
     pop     ax
     pop     bp
     retn
+
+section .bss
+    array resb 8

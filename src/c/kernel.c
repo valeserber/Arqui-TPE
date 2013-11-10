@@ -41,6 +41,7 @@ kmain()
 
 /* Inicializa el buffer de teclado vacio*/
     buffer_initialize(); 
+    video_initialize();
    
    //int integer;
    //scanf("%d", &integer);
