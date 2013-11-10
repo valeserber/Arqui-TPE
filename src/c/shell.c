@@ -220,5 +220,7 @@ int printNum(int num){
         printf("%d",num);
 }
 
-
+void printCapacity(unsigned int lba, unsigned int blockLength){
+    printf("Capacity = %d", (lba+1)*blockLength);
+}
 

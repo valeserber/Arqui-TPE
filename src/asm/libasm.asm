@@ -6,6 +6,7 @@ GLOBAL _opencd
 EXTERN printStatus
 GLOBAL _printError
 EXTERN printNum
+EXTERN printCapacity
 GLOBAL _closecd
 GLOBAL set_cursor
 
@@ -151,7 +152,7 @@ waitloop:
     out     dx, ax
     out     dx, ax
     call    _pollUntilNotBusy
-    ;call    _pollDRDY
+    ;DRDY ?
     mov     dx, 01f7h
     mov     ax, 0a0h
     out     dx, ax
@@ -265,126 +266,66 @@ waitloop2:
     ret
 
 _infocd:
+    call    _pollUntilNotBusy
+    xor     ax, ax
+    mov     dx, 0x1f6
+    out     dx, ax
+    mov     dx, 0x1f1
+    out     dx, ax
+    ;DRDY
+    mov     dx, 0x1f7
+    mov     ax, 0xa0
+    out     dx, ax 
+    
+    mov     ecx, 0ffffh
+waitloop3:
+    loopnz  waitloop3
 
-call _pollUntilNotBusy
-
-mov ax, 00h
-mov dx, 0x1F6
-out dx, ax ; al puerto 1f6 mando un cero
-
-mov dx, 0x1F1
-mov ax, 0
-out dx, ax ; al puerto 1f1 mando un cero
-
-;call _pollDRDY
-mov dx, 0x1F7
-mov ax, 0xA0
-out dx, ax ; al puerto 1f7 mando el A0
-
-; puede pasar q tarde un cacho
-mov ebx, 65000
-loop982:
-dec ebx
-cmp ebx, 0
-jne loop982
-
-call _pollUntilNotBusy
-call _pollUntilDataRequest
-
-mov dx, 0x1F0
-mov al, 0x1E
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-call _pollUntilNotBusy
-;call _pollDRDY
-
-mov dx, 0x1F7
-mov ax, 0xA0
-out dx, ax
-
-call _pollUntilNotBusy
-call _pollUntilDataRequest
-
-mov dx, 0x1f0
-mov al, 1Bh
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 2
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov al, 0
-out dx, al
-
-mov eax, 0
-mov dx, 0x1f7
-
-in eax, dx
-push eax
-call printStatus
-pop eax
-
-call _pollUntilNotBusy
-ret
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+    mov     dx, 0x1f0
+    mov     al, 0x1e  ;Ver si tengo que prevenir el removal cambiando el bit adecuado
+    out     dx, al
+    xor     ax, ax
+    out     dx, al
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    call    _pollUntilNotBusy
+    ;DRDY
+    mov     dx, 0x1f7
+    mov     ax, 0xf0
+    out     dx, ax
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+    mov     dx, 0x1f0
+    mov     al, 0x25            ;Read capacity command
+    out     dx, al
+    xor     ax, ax
+    out     dx, al
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    mov     dx, 0x1f0
+    mov     ecx, 4
+    xor     ebx, ebx
+getCapacityInfo:
+    in      ax, dx
+    mov     [array+ebx], ax
+    add     ebx, 2
+    loopnz  getCapacityInfo
+    mov     eax, [array]
+    mov     ebx, [array+4]
+    push    ebx
+    push    eax
+    call    printCapacity
+    add     esp, 8
+    ;call    _pollUntilNotBusy
+    ret
 
 ;_test:
 ;    mov    eax, 0xCAFE
@@ -416,3 +357,6 @@ vuelve:
     pop     ax
     pop     bp
     retn
+
+section .bss
+    array resb 8
