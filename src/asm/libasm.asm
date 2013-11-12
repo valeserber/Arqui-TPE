@@ -223,11 +223,11 @@ waitloop2:
     out     dx, ax
     out     dx, ax
     out     dx, ax
-    mov     dx, 0x1f7
-    in      eax, dx
-    push    eax
-    call    printStatus
-    add     esp, 4              ;pop
+    ;mov     dx, 0x1f7
+    ;in      eax, dx
+    ;push    eax
+    ;call    printStatus
+    ;add     esp, 4              ;pop
     call    _pollUntilNotBusy
     ret
 
@@ -320,14 +320,14 @@ cycleDRQ:
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
     ret
 
-_printError:
-mov dx, 0x1F1
-mov ax, 0
-in al, dx
-push eax
-call printNum
-pop eax
-ret
+;_printError:
+;mov dx, 0x1F1
+;mov ax, 0
+;in al, dx
+;push eax
+;call printNum
+;pop eax
+;ret
 
 ;_test:
 ;    mov    eax, 0xCAFE

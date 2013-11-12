@@ -351,9 +351,11 @@ bool kbBufferIsFull(void){
 }
 
 bool addToKeyboardBuffer(unsigned char ascii_c){
-   if(kbBufferIsFull()) return false; // Se podria agregar un pitido a la motherboard :) 
-   keyboard_buffer.buffer[keyboard_buffer.enqueuePos] = ascii_c;
-   keyboard_buffer.enqueuePos = (keyboard_buffer.enqueuePos + 1) % BUFFER_SIZE;
+    _Cli();
+    if(kbBufferIsFull()) return false; // Se podria agregar un pitido a la motherboard :) 
+    keyboard_buffer.buffer[keyboard_buffer.enqueuePos] = ascii_c;
+    keyboard_buffer.enqueuePos = (keyboard_buffer.enqueuePos + 1) % BUFFER_SIZE;
+    _Sti();
 }
 
 int kbBufferGetNext(){
@@ -361,6 +363,5 @@ int kbBufferGetNext(){
     int dequeuePos = keyboard_buffer.dequeuePos;
     keyboard_buffer.dequeuePos = (keyboard_buffer.dequeuePos +1) % BUFFER_SIZE;
     return keyboard_buffer.buffer[dequeuePos];
-
 }
 

@@ -159,7 +159,7 @@ void help(){
   printf("\tShortcuts\n");
   printf("Ctrl+R:  Shows the value of the registers at the time the keys were pressed\n");
 }
-
+/*
 int printStatus(int num){
 int flag = 0;
 
@@ -224,6 +224,7 @@ return 0;
 int printNum(int num){
         printf("%d",num);
 }
+*/
 
 void printCapacity(unsigned int lba, unsigned int blockLength){
     printf("Capacity = %d", (lba+1)*blockLength);

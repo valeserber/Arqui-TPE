@@ -34,7 +34,12 @@ void test1(){
 }
 
 void test2(){
-  int i=0;
+   int integer=2;
+   scanf("%d", &integer);
+   printf("%d",integer);
+
+
+/*  int i=0;
   char c;
   printf("Press n to get the next number or enter to leave\n");
   while(1){
@@ -51,7 +56,7 @@ void test2(){
 			i++;
 		}
   	}
-  }
+}*/  
 }
 
 
