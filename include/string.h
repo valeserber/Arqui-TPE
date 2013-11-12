@@ -6,7 +6,7 @@
  * Compares the C string s to the string t, character by character until
  * the characters differ or a terminating null-character is reached.
  * Returns zero if both strings are equal, greater than zero if the first
- * character that does not match has a greater value in s than in t, or 
+ * character that does not match has a greater value in s than in t, or
  * less than zero on the contrary.
  */
 size_t strcmp(const char *s, const char *t);
@@ -38,7 +38,9 @@ char* ltoa(long value, char* buffer, int radix);
  */
 int atoi(const char * str);
 
-/*Converts hexa number to int*/ 
+/*
+ * Converts a string representing a hexadecimal number to int
+ */
 int atohexa(char * buffer);
 
 int hexatoint(char n);
