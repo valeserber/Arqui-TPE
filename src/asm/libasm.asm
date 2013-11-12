@@ -185,12 +185,9 @@ _opencd:
 
 _closecd:
     call    _pollUntilNotBusy
-    ;xor     ax, ax
     mov     al, 0x10
     mov     dx, 0x1f6
     out     dx, al
-;    mov     dx, 0x1f1
-;    out     dx, ax
     mov     dx, 0x1f7
     mov     al, 0xa0
     out     dx, al
@@ -201,22 +198,7 @@ waitloop2:
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
-;    mov     dx, 0x1f0
-;    mov     al, 0x1e
-;    out     dx, al
-;    xor     ax, ax
-;    out     dx, al
-;    out     dx, ax
-;    out     dx, ax
-;    out     dx, ax
-;    out     dx, ax
-;    out     dx, ax
-;    call    _pollUntilNotBusy
-;    mov     dx, 0x1f7
-;    mov     ax, 0xa0
-;    out     dx, ax
-;    call    _pollUntilNotBusy
-;    call    _pollUntilDataRequest
+
     mov     dx, 0x1f0
     mov     ax, 0x1b        ;Start/Stop Unit command
     out     dx, ax
