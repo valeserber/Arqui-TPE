@@ -24,27 +24,14 @@ _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
     iret
 
 _int_09_hand:                   ;Keyboard Handler
-    ;mov ecx, debugstr
-    ;push ecx
-    ;call uprintf
-    ;add     esp, 4
-    ;push    eax
-    ;mov     eax, [esp+4]
-    ;mov     [preIntState], eax 
-    ;mov     eax, [esp+8]
-    ;mov     [preIntState+4], eax 
-    ;mov     eax, [esp+12]
-    ;mov     [preIntState+8], eax 
-    ;pop     eax
-
     push    ss
     push    ds
-    push    es                  
+    push    es
     push    fs
     push    gs
-    pushad                      
+    pushad
     call    _saveRegisters
-    mov     ax, 10h             
+    mov     ax, 10h
     mov     ds, ax
     mov     es, ax
     in      al, 60h
@@ -68,7 +55,7 @@ cycle:
     mov     edx, [ecx]              ;edx = valor del registro
     mov     [registers+eax], edx
     add     eax, 4
-    cmp     eax, 68 
+    cmp     eax, 68
     jne     cycle
     ret
 
@@ -89,7 +76,7 @@ _int_80h_hand:
 _registerInfo:
     push    ebp
     mov     ebp, esp
-    mov     ecx, eaxstr 
+    mov     ecx, eaxstr
     mov     eax, [registers+28]
     push    eax
     push    ecx
@@ -147,31 +134,31 @@ _registerInfo:
     push    ecx
     call    uprintf
     add     esp, 8
-    mov     ecx, fsstr 
+    mov     ecx, fsstr
     mov     eax, [registers+36]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
-    mov     ecx, esstr 
+    mov     ecx, esstr
     mov     eax, [registers+40]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
-    mov     ecx, dsstr 
+    mov     ecx, dsstr
     mov     eax, [registers+44]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
-    mov     ecx, ssstr 
+    mov     ecx, ssstr
     mov     eax, [registers+48]
     push    eax
     push    ecx
     call    uprintf
     add     esp, 8
-    mov     ecx, csstr 
+    mov     ecx, csstr
     mov     eax, [registers+56]
     ;mov     eax, [preIntState+8]
     push    eax
@@ -206,4 +193,3 @@ section .data
 
 section .bss
     registers resb 70
-    ;preIntState resb 20

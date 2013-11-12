@@ -14,11 +14,11 @@ GLOBAL _infocd
 SECTION .text
 
 _Cli:
-    cli                         ;limpia flag de interrupciones
+    cli                         ;Clears the Interrupt Enable flag
     ret
 
 _Sti:
-    sti                         ;habilita interrupciones por flag
+    sti                         ;Enables the IE flag
     ret
 
 _mascaraPIC1:                   ;Escribe mascara del PIC 1
@@ -91,33 +91,33 @@ set_cursor:
     mov     bl, byte[ebp + 8]
     mov     bh, byte[ebp + 12]
     mov     ax, bx
-    and     ax, 0ffh             ;set AX to 'row'
+    and     ax, 0ffh            ;set AX to 'row'
     mov     cl, 80
     mul     cl                  ;row*80
 
     mov     cx, bx
-    shr     cx, 8                ;set CX to 'col'
-    add     ax, cx               ;+ col
-    mov     cx, ax               ;store 'position' in CX
+    shr     cx, 8               ;set CX to 'col'
+    add     ax, cx              ;+ col
+    mov     cx, ax              ;store 'position' in CX
 
     ;cursor LOW port to vga INDEX register
     mov     al, 0fh
-    mov     dx, 3d4h             ;VGA port 3D4h
+    mov     dx, 3d4h            ;VGA port 3D4h
     out     dx, al
 
-    mov     ax, cx               ;restore 'postion' back to AX
-    mov     dx, 3d5h             ;VGA port 3D5h
-    out     dx, al               ;send to VGA hardware
+    mov     ax, cx              ;restore 'postion' back to AX
+    mov     dx, 3d5h            ;VGA port 3D5h
+    out     dx, al              ;send to VGA hardware
 
     ;cursor HIGH port to vga INDEX register
     mov     al, 0eh
-    mov     dx, 3d4h             ;VGA port 3D4h
+    mov     dx, 3d4h            ;VGA port 3D4h
     out     dx, al
 
-    mov     ax, cx               ;restore 'position' back to AX
-    shr     ax, 8                ;get high byte in 'position'
-    mov     dx, 3d5h             ;VGA port 3D5h
-    out     dx, al               ;send to VGA hardware
+    mov     ax, cx              ;restore 'position' back to AX
+    shr     ax, 8               ;get high byte in 'position'
+    mov     dx, 3d5h            ;VGA port 3D5h
+    out     dx, al              ;send to VGA hardware
     popad
     popf
     mov     esp,ebp
@@ -158,15 +158,15 @@ waitloop:
 ;    out     dx, ax
 ;    out     dx, ax
 ;    out     dx, ax
-    call    _pollUntilNotBusy
-    call    _pollUntilDataRequest
-    mov     dx, 0x1f7
-    mov     al, 0xa0
-    out     dx, al
+;   call    _pollUntilNotBusy
+;    call    _pollUntilDataRequest
+;    mov     dx, 0x1f7
+;    mov     al, 0xa0
+;    out     dx, al
 
-    mov     ecx, 0xffff
-waitloop9:
-    loopnz  waitloop9
+;    mov     ecx, 0xffff
+;waitloop9:
+;    loopnz  waitloop9
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
@@ -182,6 +182,13 @@ waitloop9:
     out     dx, ax
     out     dx, ax
     out     dx, ax
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+
+    mov     dx, 0x1f7
+    mov     ax, 0xa0
+    out     dx, al
+
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
 
@@ -319,6 +326,13 @@ getCapacityInfo:
     call    printCapacity
     add     esp, 8
     ;call    _pollUntilNotBusy
+    ret
+
+_wait400ns:                 ;CPU dependant!
+    mov     ecx, 0xffff
+keepWaiting:
+    nop
+    loopnz  keepWaiting
     ret
 
 _pollUntilNotBusy:

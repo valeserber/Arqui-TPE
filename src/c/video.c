@@ -20,22 +20,20 @@ void writeToScreen(char key,int fd){
     int size;
     int * pos;
     if(fd==STDOUT){
-	vidmem=(char *)MAIN_SCREEN_ADDRESS;
+        vidmem=(char *)MAIN_SCREEN_ADDRESS;
     	size= MAIN_SCREEN_SIZE;
-        if(writepos == size){  
-		scrollMainScreen();
+        if(writepos == size){
+            scrollMainScreen();
     	}
-	insertKey(key,&writepos,vidmem); 
-	set_cursor(getrow(),getcol());
-    }
-    else if(fd==REGOUT){
-	vidmem=(char *)VIDMEM_ADDRESS;
-    	size= (UPPER_SCREEN_SIZE)-(LINE_SIZE);
-    	
+	    insertKey(key,&writepos,vidmem);
+	    set_cursor(getrow(),getcol());
+    }else if(fd==REGOUT){
+        vidmem=(char *)VIDMEM_ADDRESS;
+        size= (UPPER_SCREEN_SIZE)-(LINE_SIZE);
         if(upperWritepos == size){
-         upperWritepos = 0;
-    	}
-	insertKey(key,&upperWritepos,vidmem);
+            upperWritepos = 0;
+        }
+        insertKey(key,&upperWritepos,vidmem);
     }
 }
 
@@ -50,7 +48,7 @@ void reset_writepos(){
 void insertKey(char key, int * pos, char * vid){
     vid[(*pos)]=key;
     (*pos)++;
-    vid[(*pos)]=WHITE_TXT; 
+    vid[(*pos)]=WHITE_TXT;
     (*pos)++;
 }
 
@@ -64,10 +62,10 @@ void paintLetter(int color){
 
 void scrollMainScreen(){
     vidmem= (char *) MAIN_SCREEN_ADDRESS;
-    int i=LINE_SIZE;   
-    writepos=0; 
+    int i=LINE_SIZE;
+    writepos=0;
     while(i<MAIN_SCREEN_SIZE){
-	vidmem[writepos++]=vidmem[i++];
+	    vidmem[writepos++]=vidmem[i++];
     }
     clearLine((char *)LAST_LINE_ADDRESS);
     writepos=LAST_LINE;
@@ -97,88 +95,84 @@ void clearRegisters(){
 }
 
 void video_write(char c,int fd){
-
     switch(c){
- 		case '\n':
-			 video_enter(fd);
-			 break;
-		case '\t':
-			 video_tab(fd);
-		         break;	
-		case '\b':
-		  	 video_backspace();
-		 	 break;
-		default:
-			writeToScreen(c,fd);
-			break;
+        case '\n':
+            video_enter(fd);
+            break;
+        case '\t':
+            video_tab(fd);
+            break;
+        case '\b':
+            video_backspace();
+            break;
+        default:
+            writeToScreen(c,fd);
+            break;
     }
 }
 
 void video_enter(int fd){
-   if(fd==STDOUT){
-  	while((writepos%160)!=0){
-		writepos+=2;
-   	}
-	if(writepos == MAIN_SCREEN_SIZE){  
-		scrollMainScreen();
+    if(fd==STDOUT){
+        while((writepos%160)!=0){
+            writepos+=2;
         }
-   }
-   else if(fd==REGOUT){
-	while((upperWritepos%160)!=0){
-		upperWritepos+=2;
-	}
-   }
+        if(writepos == MAIN_SCREEN_SIZE){
+            scrollMainScreen();
+        }
+    }else if(fd==REGOUT){
+        while((upperWritepos%160)!=0){
+            upperWritepos+=2;
+        }
+    }
 }
 
 void video_backspace(){
-   vidmem=(char *)MAIN_SCREEN_ADDRESS;
-   if(maxpos>0){
-	vidmem[--writepos]=WHITE_TXT;
-	vidmem[--writepos]=' ';
-   }
-   set_cursor(getrow(),getcol());
+    vidmem=(char *)MAIN_SCREEN_ADDRESS;
+    if(maxpos>0){
+        vidmem[--writepos]=WHITE_TXT;
+        vidmem[--writepos]=' ';
+    }
+    set_cursor(getrow(),getcol());
 }
 
 void max_pos(int max){
-   maxpos=max;
+    maxpos=max;
 }
 
 void video_tab(int fd){
-  
-   int i=0;
-   int size=0;
-   int * pos;
-   if(fd==STDOUT){
-   	 vidmem=(char *)MAIN_SCREEN_ADDRESS;
-         size=MAIN_SCREEN_SIZE;
-         pos=&writepos;
-   }
-   else if(fd==REGOUT){
-         vidmem=(char *)VIDMEM_ADDRESS;
-	 size=UPPER_SCREEN_SIZE;
-	 pos=&upperWritepos;
-   }
-   for(i=0; i<TAB_LENGTH && i<size; i++){
-	insertKey(' ',pos, vidmem);
-   }
-   if(fd==STDOUT){
-	set_cursor(getrow(),getcol());
-   }
+    int i=0;
+    int size=0;
+    int * pos;
+    if(fd==STDOUT){
+        vidmem=(char *)MAIN_SCREEN_ADDRESS;
+        size=MAIN_SCREEN_SIZE;
+        pos=&writepos;
+    }else if(fd==REGOUT){
+        vidmem=(char *)VIDMEM_ADDRESS;
+        size=UPPER_SCREEN_SIZE;
+        pos=&upperWritepos;
+    }
+    for(i=0; i<TAB_LENGTH && i<size; i++){
+        insertKey(' ',pos, vidmem);
+    }
+    if(fd==STDOUT){
+        set_cursor(getrow(),getcol());
+    }
 }
 
 int get_row(){
-   return ((int)(writepos/160))+10;
+    return ((int)(writepos/160))+10;
 }
 int getrow(){
-   int r= ((int)(writepos/160))+10;
-   if(r%2==1){
-      return r-1; 
-   }
-   return r;
+    int r= ((int)(writepos/160))+10;
+    if(r%2==1){
+        return r-1;
+    }
+    return r;
 }
 
 int getcol(){
-   return ((writepos/2)%160);
+    return ((writepos/2)%160);
 }
 
 /***************************************************************
@@ -187,8 +181,7 @@ int getcol(){
 * Borra la pantalla en modo texto color.
 ****************************************************************/
 
-void k_clear_screen()
-{
+void k_clear_screen(){
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;
     while(i < UPPER_SCREEN_SIZE-LINE_SIZE){

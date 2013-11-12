@@ -43,7 +43,7 @@ int vfprintf(int fd, const char * fmt, va_list ap){
                     sval++;
                 }
                 printedChars+= vfprintf(fd, aux, ap);
-                break;                
+                break;
             case 's':
 	        for(sval = va_arg(ap, char*); *sval; sval++){
 		    putc(*sval, fd);
@@ -57,9 +57,9 @@ int vfprintf(int fd, const char * fmt, va_list ap){
 		putc(cval, fd);
 		printedChars++;
 		break;
-            } 
+            }
 	}
-    }           
+    }
     va_end(ap);
     return printedChars;
 }
@@ -103,23 +103,21 @@ int scanf(const char * fmt, ...){
     int charsRead=0,i=0, k, j;
     char c;
     va_start(ap, fmt); //hace que ap apunte al 1er arg sin nombre
-
-        while((c = getchar()) != '\n' && i < BUFFER_LENGTH)
-        {
-                if(c!=0){
-                        if(c == '\b' && i >= 1){
-                                i--;
-                                putc(c ,1);
-                        }
-                        if(c != '\b' && c!='\n'){
-                                s[i] = c;
-                                i++;
-                                putc(c ,1);        
-                        }
-                }
+    while((c = getchar()) != '\n' && i < BUFFER_LENGTH)
+    {
+        if(c!=0){
+            if(c == '\b' && i >= 1){
+                i--;
+                 putc(c ,1);
+            }
+            if(c != '\b' && c!='\n'){
+                s[i++] = c;
+                putc(c ,1);
+            }
         }
-        s[i] = '\0';
-        
+    }
+    s[i] = '\0';
+
     /* Lo analizo */
     i = 0;
     char aux [50] = {0};
@@ -133,7 +131,7 @@ int scanf(const char * fmt, ...){
                 ival = va_arg(ap,int *);
                 while(isdigit(s[j])){
                     aux[i++] = s[j++];
-		}
+                }
                 aux[i] = '\0';
                 if(aux[0] == '\0')  return charsRead;
                 *ival=atoi(aux);
