@@ -1,4 +1,4 @@
-sudo ./compila
+sudo ./compila.sh
 sudo mkdir -p isodir
 sudo mkdir -p isodir/boot
 sudo cp     bin/kernel.bin isodir/boot/kernel.bin

@@ -6,7 +6,7 @@
 #include "../../include/video.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear","test1","test2","help","clearUp"};
+char * command[]={"openCD","infoCD","closeCD","clear","test","help","clearUp","test1","test2"};
 extern _opencd();
 extern _infocd();
 extern _closecd();
@@ -130,16 +130,19 @@ void executeCommand(int c){
 		clear();
 		break;
 	case 4:
-		test1();
+		test();
 		break;
 	case 5:
-		test2();
-		break;
-	case 6:
 		help();
 		break;
-	case 7:
+	case 6:
 		clearRegisters();
+		break;
+	case 7:
+		test1();
+		break;
+	case 8:
+		test2();
 		break;
     }
 }
@@ -151,13 +154,12 @@ void help(){
   printf("closeCD\tCloses disk tray\n");
   printf("clear\t  Clears the main screen\n");
   printf("clearUp\tClears the upper screen\n");
-  printf("test1\t  Prints letters when a timer tick interruption arrives\n");
-  printf("test2\t  Prints \"*\" when a number is multiple of 5.Starts with 0 and adds 1 in each iteration\n");
+  printf("test\t   Lists available tests\n");
   printf("help\t   Lists available commands\n");
   printf("\tShortcuts\n");
   printf("Ctrl+R:  Shows the value of the registers at the time the keys were pressed\n");
 }
-
+/*
 int printStatus(int num){
 int flag = 0;
 
@@ -222,6 +224,7 @@ return 0;
 int printNum(int num){
         printf("%d",num);
 }
+*/
 
 void printCapacity(unsigned int lba, unsigned int blockLength){
     printf("Capacity = %d", (lba+1)*blockLength);
