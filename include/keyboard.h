@@ -34,7 +34,7 @@ typedef struct{
 
 typedef struct{
   unsigned char buffer[BUFFER_SIZE];
-  int enqueuePos;//buffer_pos;
+  int enqueuePos;
   int dequeuePos;
   flags flag;
 } BUFFER;
