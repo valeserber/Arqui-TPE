@@ -1,13 +1,7 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
-void test();
-void test1();
-void test2();
-void test3();
-void test4();
-void test5();
-void test6();
+#include "../../include/shell.h"
 
 extern writepos;
 
@@ -19,6 +13,53 @@ void test(){
   printf("test4\t  Tests scanf. Expects string, and prints the income\n");
   printf("test5\t  Tests scanf. Expects hexadecimal number, and prints the income as a decimal number\n");
   printf("test6\t  Shifts a number to show carry flag's behaviour\n");
+  printf("test7\t  Tests printf using percentage x\n");
+}
+
+void executeCommand(int c){
+    switch(c){
+    case 0:
+        _opencd();
+        break;
+    case 1:
+        _infocd();
+        break;
+    case 2:
+        _closecd();
+        break;
+    case 3:
+        clear();
+        break;
+    case 4:
+        test();
+        break;
+    case 5:
+        help();
+        break;
+    case 6:
+        clearRegisters();
+        break;
+    case 7:
+        test1();
+        break;
+    case 8:
+        test2();
+        break;
+    case 9:
+        test3();
+        break;
+    case 10:
+        test4();
+        break;
+    case 11:
+        test5();
+        break;
+    case 12:
+        test6();
+        break;
+    case 13:
+	test7();
+    }
 }
 
 void test1(){
@@ -102,4 +143,8 @@ void test6(){
 		}
   	}
   }
+}
+
+void test7(){
+  printf("%x\n",1455);
 }
