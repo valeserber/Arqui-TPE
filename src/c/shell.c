@@ -6,7 +6,7 @@
 #include "../../include/video.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear","test","help","clearUp","test1","test2"};
+char * command[]={"openCD","infoCD","closeCD","clear","test","help","clearUp","test1","test2","test3","test4","test5"};
 extern _opencd();
 extern _infocd();
 extern _closecd();
@@ -144,6 +144,16 @@ void executeCommand(int c){
 	case 8:
 		test2();
 		break;
+	case 9:
+		test3();
+		break;
+	case 10:
+		test4();
+		break;
+	case 11:
+		test5();
+		break;
+
     }
 }
 

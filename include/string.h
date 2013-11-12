@@ -38,4 +38,9 @@ char* ltoa(long value, char* buffer, int radix);
  */
 int atoi(const char * str);
 
+/*Converts hexa number to int*/ 
+int atohexa(char * buffer);
+
+int hexatoint(char n);
+
 #endif

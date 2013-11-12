@@ -7,6 +7,7 @@
 #define STDIN  2
 #define STDERR 3
 #define EOF   -1
+#define BUFFER_LENGTH 128
 
 #define putchar(x) putc((x), STDOUT)
 #define getchar() getc(STDIN)

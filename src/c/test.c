@@ -1,14 +1,21 @@
 #include "../../include/kc.h"
 #include "../../include/defs.h"
 #include "../../include/stdio.h"
+void test();
 void test1();
 void test2();
+void test3();
+void test4();
+void test5();
 extern writepos;
 
 void test(){
   printf("\tTests\n");
   printf("test1\t  Prints letters when a timer tick interruption arrives\n");
   printf("test2\t  Prints \"*\" when a number is multiple of 5.Starts with 0 and adds 1 in each iteration\n");
+  printf("test3\t  Tests scanf. Expects integer, and prints the income\n");
+  printf("test4\t  Tests scanf. Expects string, and prints the income\n");
+  printf("test5\t  Tests scanf. Expects hexadecimal number, and prints the income as a decimal number\n");
 }
 
 void test1(){
@@ -34,12 +41,8 @@ void test1(){
 }
 
 void test2(){
-   int integer=2;
-   scanf("%d", &integer);
-   printf("%d",integer);
-
-
-/*  int i=0;
+  
+  int i=0;
   char c;
   printf("Press n to get the next number or enter to leave\n");
   while(1){
@@ -56,8 +59,25 @@ void test2(){
 			i++;
 		}
   	}
-}*/  
+  }
 }
 
+  void test3(){
+    int integer;
+    scanf("%d", &integer);
+    printf("\t%d\n",integer);
+  }
+
+  void test4(){
+    char string[10]={0};
+    scanf("%s",string);
+    printf("\t%s\n",string);
+  }
+
+  void test5(){
+    int num;
+    scanf("%x",&num);
+    printf("\t%d\n",num);
+  }
 
 

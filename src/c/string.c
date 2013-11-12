@@ -1,7 +1,6 @@
 #include "../../include/defs.h"
 #include "../../include/string.h"
 
-
 /***************************************************************
 *strlen
 *
@@ -42,6 +41,69 @@ char* ltoa(long value, char *buffer, int radix){
         buffer[i--]=aux;
     }
     return buffer;
+}
+
+int atohexa(char * buffer){
+   int ans=0;
+   int base=16;
+   int n;
+   if((*buffer)=='\0') return 0;
+   int i=0;
+   int l=strlen(buffer);
+   
+   char * aux;
+   for(i=0;i<l;i++){
+	aux[i]=0;
+   }
+   i=0;
+     
+   int stop=l-1;
+   while(buffer[i]){
+        if(isxdigit(buffer[i])){
+		aux[stop--]=buffer[i++];
+	}
+	else{
+		return 0;
+	}
+   }
+  
+   i=0;
+   n=hexatoint(aux[i++]);
+   ans=ans+n;
+   while(i<l){
+        n=hexatoint(aux[i++]);
+        ans=ans+(n*base);
+        base*=base;
+   }
+   return ans;
+}
+
+int hexatoint(char n){
+   int num=0;
+   switch(n){
+	case 'A':
+ 	case 'a': return 10;
+			break;
+	case 'B':
+	case 'b': return 11;
+			break;
+	case 'c':
+	case 'C': return 12;
+			break;
+	case 'd':
+	case 'D': return 13;
+			break;
+	case 'e':
+	case 'E': return 14;
+			break;
+	case 'f':
+	case 'F': return 15;
+			break;
+	default:
+		  num=n-'0';
+		  break;
+   }
+  return num;
 }
 
 int atoi(const char * str){

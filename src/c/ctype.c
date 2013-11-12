@@ -6,7 +6,7 @@ bool isalpha(int c){
 }
 
 bool isdigit(int c){
-    return c <= '0' && c <= '9';
+    return ((c >= '0') && (c <= '9'));
 }
 
 bool isxdigit(int c){

@@ -52,15 +52,6 @@ ssize_t __write(int fd, const void * buf, size_t count){
 ssize_t __read(int fd, void *buf, size_t count){
     int readCharacters = 0;
     if(fd == STDIN){
-        //int inc =0;
-        //while(kbBufferIsEmpty()){
-	//    printf("%d", inc++);
-	//}
-
-        //if(kbBufferIsEmpty()){
-	//    ((char*)buf)[readCharacters] = EOF;
-        //    return readCharacters;
-	//}
         int aux;
         while(readCharacters < count){
 	    if((aux = kbBufferGetNext()) != -1){
