@@ -111,3 +111,32 @@ void test6(){
 
 }
 
+/*
+void test7(){
+  char c;
+  int v1=01111;
+  int v2=30;
+  int v3=50;
+  int v4=70;
+  printf("Press n to get the set of variables or enter to leave\n");
+  while(1){
+	c=getchar();
+	if(c!=EOF){
+		if(c=='\n'){
+                        printf("\n");
+			return;
+		}
+		if(c=='n'){
+			printf("v1:%d ",v1);
+			printf("v2:%d ",v2);
+			printf("v3:%d ",v3);
+			printf("v4:%d\n",v4);
+			v1+=1;
+			v2+=1;
+			v3+=1;
+			v4+=1;
+		}
+  	}
+  }
+
+}*/
