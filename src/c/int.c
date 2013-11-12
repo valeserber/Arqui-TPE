@@ -24,6 +24,7 @@ void int_09(unsigned char scancode){
 }
 
 void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5){
+    _Sti();
     switch(sysCallNumber){
         case SYS_WRITE:
             __write((int)arg1, (void *)arg2, (size_t)arg3);
@@ -51,16 +52,21 @@ ssize_t __write(int fd, const void * buf, size_t count){
 ssize_t __read(int fd, void *buf, size_t count){
     int readCharacters = 0;
     if(fd == STDIN){
-        if(kbBufferIsEmpty()){
-	    ((char*)buf)[readCharacters] = EOF;
-            return readCharacters;
-	}
+        //int inc =0;
+        //while(kbBufferIsEmpty()){
+	//    printf("%d", inc++);
+	//}
+
+        //if(kbBufferIsEmpty()){
+	//    ((char*)buf)[readCharacters] = EOF;
+        //    return readCharacters;
+	//}
         int aux;
         while(readCharacters < count){
 	    if((aux = kbBufferGetNext()) != -1){
                 ((char*)buf)[readCharacters] = aux;
+	        readCharacters++;
             }
-	    readCharacters++;
 	}
     }
     return readCharacters;

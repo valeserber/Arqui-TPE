@@ -24,6 +24,19 @@ _int_08_hand:                   ;Handler de INT 8 ( Timer tick)
     iret
 
 _int_09_hand:                   ;Keyboard Handler
+    ;mov ecx, debugstr
+    ;push ecx
+    ;call uprintf
+    ;add     esp, 4
+    ;push    eax
+    ;mov     eax, [esp+4]
+    ;mov     [preIntState], eax 
+    ;mov     eax, [esp+8]
+    ;mov     [preIntState+4], eax 
+    ;mov     eax, [esp+12]
+    ;mov     [preIntState+8], eax 
+    ;pop     eax
+
     push    ss
     push    ds
     push    es                  
@@ -55,7 +68,7 @@ cycle:
     mov     edx, [ecx]              ;edx = valor del registro
     mov     [registers+eax], edx
     add     eax, 4
-    cmp     eax, 60 
+    cmp     eax, 68 
     jne     cycle
     ret
 
@@ -128,8 +141,8 @@ _registerInfo:
     push    eax
     call    printFlags
     add     esp, 4
-    mov     eax, [registers+32]
     mov     ecx, gsstr
+    mov     eax, [registers+32]
     push    eax
     push    ecx
     call    uprintf
@@ -160,6 +173,7 @@ _registerInfo:
     add     esp, 8
     mov     ecx, csstr 
     mov     eax, [registers+56]
+    ;mov     eax, [preIntState+8]
     push    eax
     push    ecx
     call    uprintf
@@ -173,6 +187,7 @@ _registerInfo:
     ret
 
 section .data
+    debugstr db "eip: %x, cs: %x, flags: %x",10,0
     eaxstr db "eax 0x%x",9, 0 ; 0 to null terminate the string
     ecxstr db "ecx 0x%x",9,0
     edxstr db "edx 0x%x",10,0 ; 10 = \n in ascii
@@ -191,3 +206,4 @@ section .data
 
 section .bss
     registers resb 70
+    ;preIntState resb 20

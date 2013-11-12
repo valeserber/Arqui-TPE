@@ -152,7 +152,7 @@ void help(){
   printf("clear\t  Clears the main screen\n");
   printf("clearUp\tClears the upper screen\n");
   printf("test1\t  Prints letters when a timer tick interruption arrives\n");
-  printf("test2\t  Prints \"*\" when a number is multiple of 5.Starts with 0 and adds\t\t1 in each iteration\n");
+  printf("test2\t  Prints \"*\" when a number is multiple of 5.Starts with 0 and adds 1 in each iteration\n");
   printf("help\t   Lists available commands\n");
   printf("\tShortcuts\n");
   printf("Ctrl+R:  Shows the value of the registers at the time the keys were pressed\n");
