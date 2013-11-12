@@ -126,32 +126,33 @@ set_cursor:
 
 _opencd:
     call    _pollUntilNotBusy
-    xor     ax, ax          ;Selects device 0 (master). 10h = device 1 (slave)
+    ;xor     ax, ax          ;Selects device 0 (master). 10h = device 1 (slave)
+    mov     ax,10h
     mov     dx, 0x1f6       ;Drive/Head (read and write) register address
     out     dx, ax
     mov     dx, 0x1f1       ;Error (read) and Features (write) register address
     out     dx, ax
     mov     dx, 0x1f7       ;Command (write) register address
-    mov     al, 0xa0        ;0A0h = Packet command
-    out     dx, al          ;Send Packet command
+    mov     ax, 0xa0        ;0A0h = Packet command
+    out     dx, ax          ;Send Packet command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
     mov     ecx, 0xffff
 waitloop:
     loopnz  waitloop
 
-    call    _pollUntilNotBusy 
-    call    _pollUntilDataRequest
-    mov     dx, 0x1f0       ;Data register
-    mov     al, 0x1e        ;Prevent/Allow Medium removal Packet command
-    out     dx, al
-    xor     ax, ax          ;ax = 0
-    out     dx, al
-    out     dx, ax
-    out     dx, ax
-    out     dx, ax
-    out     dx, ax
-    out     dx, ax
+;    call    _pollUntilNotBusy 
+;    call    _pollUntilDataRequest
+;    mov     dx, 0x1f0       ;Data register
+;    mov     al, 0x1e        ;Prevent/Allow Medium removal Packet command
+;    out     dx, al
+;    xor     ax, ax          ;ax = 0
+;    out     dx, al
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
     call    _pollUntilNotBusy
     mov     dx, 0x1f7
     mov     al, 0xa0
@@ -161,16 +162,14 @@ waitloop:
 ;The command packet has a 12-byte standard format, and the first byte of the
 ;command packet contains the actual operation code
     mov     dx, 0x1f0    ;Data register address
-    mov     al, 0x1b     ;Start/Stop Unit command
-    out     dx, al
+    mov     ax, 0x1b     ;Start/Stop Unit command
+    out     dx, ax
 ;The remaining 11 bytes supply parameter info for the command.
     xor     ax, ax
-    out     dx, al
     out     dx, ax
-    mov     al, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible
-    out     dx, al
+    mov     al, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible    
     xor     ax, ax
-    out     dx, al
+    out     dx, ax
     out     dx, ax
     out     dx, ax
     out     dx, ax

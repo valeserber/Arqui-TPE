@@ -23,7 +23,7 @@ void int_09(unsigned char scancode){
     _Sti();
 }
 
-void int_80h(unsigned int sysCallNumber, unsigned int arg1, int arg2, int arg3, int arg4, int arg5){
+void int_80h(dword sysCallNumber, dword arg1, dword arg2, dword arg3, dword arg4, dword arg5){
     _Sti();
     switch(sysCallNumber){
         case SYS_WRITE:
