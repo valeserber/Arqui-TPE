@@ -5,6 +5,12 @@ void test1();
 void test2();
 extern writepos;
 
+void test(){
+  printf("\tTests\n");
+  printf("test1\t  Prints letters when a timer tick interruption arrives\n");
+  printf("test2\t  Prints \"*\" when a number is multiple of 5.Starts with 0 and adds 1 in each iteration\n");
+}
+
 void test1(){
   _Cli();
   char c1='s';
