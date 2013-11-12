@@ -132,7 +132,7 @@ _opencd:
     out     dx, al
     mov     dx, 0x1f1       ;Error (read) and Features (write) register address
     xor     ax, ax
-    out     dx, ax
+    out     dx, al
     mov     dx, 3f6h        ;Device control register
     mov     al, 00001010b   ;nIEN = 2nd bit to the right
     out     dx, al          ;nIEN is now one!
@@ -141,7 +141,7 @@ _opencd:
     out     dx, al          ;Send Packet command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
-    mov     ecx, 0xffff
+    mov     ecx, 0x1ffff
 waitloop:
     loopnz  waitloop
 
@@ -162,8 +162,14 @@ waitloop:
     mov     dx, 0x1f7
     mov     al, 0xa0
     out     dx, al
+
+    mov     ecx, 0x1ffff
+waitloop9:
+    loopnz  waitloop9
+
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
+
 ;The command packet has a 12-byte standard format, and the first byte of the
 ;command packet contains the actual operation code
     mov     dx, 0x1f0    ;Data register address
@@ -177,6 +183,13 @@ waitloop:
     out     dx, ax
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
+
+    mov     dx, 0x1f7
+    mov     al, 0xa0
+    out     dx, al
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+
     mov     dx, 0x1f0
     mov     ax, 0x1b     ;Start/Stop Unit command
     out     dx, ax
@@ -233,7 +246,7 @@ waitloop2:
     out     dx, ax
     mov     al, 3           ;LoEj & Start bits enabled (Eject disc if possible)
     out     dx, al
-    xor     ax, ax 
+    xor     ax, ax
     out     dx, al
     out     dx, ax
     out     dx, ax
@@ -251,11 +264,11 @@ _infocd:
     xor     ax, ax
     mov     dx, 0x1f6
     out     dx, al              ;Select master device
-    
+
     mov     ecx, 0xffff
 waitloop3:
     loopnz  waitloop3
-    
+
     mov     dx, 0x1f1
     out     dx, al              ;Set Features register to 0
     mov     dx, 0x1f4
@@ -321,18 +334,26 @@ getCapacityInfo:
 
 _pollUntilNotBusy:
     mov     dx, 0x1f7
+    mov     edi, 0xfffff
 cycleBSY:
+    dec     edi
+    jz      exitBSY     ;If it's taking too long, abort
     in      al, dx      ;Read from status register
     and     al, 0x80    ;Check leftmost bit to see if drive is busy
     jnz     cycleBSY    ;While busy, keep querying until drive is available
+exitBSY:
     ret
 
 _pollUntilDataRequest:
     mov     dx, 0x1f7
+    mov     edi, 0xfffff
 cycleDRQ:
+    dec     edi
+    jz      exitDRQ
     in      al, dx      ;Read from status register
     and     al, 0x08    ;Check 3rd bit (Data transfer Requested flag)
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
+exitDRQ:
     ret
 
 ;_printError:
