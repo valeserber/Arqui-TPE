@@ -8,6 +8,7 @@ void test3();
 void test4();
 void test5();
 void test6();
+void test7();
 extern writepos;
 
 void test(){
@@ -18,6 +19,7 @@ void test(){
   printf("test4\t  Tests scanf. Expects string, and prints the income\n");
   printf("test5\t  Tests scanf. Expects hexadecimal number, and prints the income as a decimal number\n");
   printf("test6\t  Adds 1 to a set of variables and prints them\n");
+  printf("test7\t  Shifts a number to show carry flag's behaviour\n");
 }
 
 void test1(){
@@ -110,9 +112,11 @@ void test6(){
   }
 
 }
-/*
+
 void test7(){
-  int v1=80h;
+  int i=0;
+  char c;
+  char v1=0x80;
   printf("Press n to get the next number or enter to leave\n");
   while(1){
 	c=getchar();
@@ -122,9 +126,9 @@ void test7(){
 			return;
 		}
 		if(c=='n'){
-			v1 << i;
+			v1<<=i;
+  			i++;
 		}
   	}
   }
-
-}*/
+}

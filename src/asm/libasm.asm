@@ -141,7 +141,7 @@ _opencd:
     out     dx, al          ;Send Packet command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
-wait:
+;wait:
     mov     ecx, 0xffff
 waitloop:
     loopnz  waitloop
