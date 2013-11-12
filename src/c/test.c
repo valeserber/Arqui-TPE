@@ -88,7 +88,7 @@ void test6(){
   int v2=30;
   int v3=50;
   int v4=70;
-  printf("Press n to get the set of variables or enter to leave\n");
+  printf("Press n to get the next set of variables or enter to leave\n");
   while(1){
 	c=getchar();
 	if(c!=EOF){
@@ -110,15 +110,10 @@ void test6(){
   }
 
 }
-
 /*
 void test7(){
-  char c;
-  int v1=01111;
-  int v2=30;
-  int v3=50;
-  int v4=70;
-  printf("Press n to get the set of variables or enter to leave\n");
+  int v1=80h;
+  printf("Press n to get the next number or enter to leave\n");
   while(1){
 	c=getchar();
 	if(c!=EOF){
@@ -127,14 +122,7 @@ void test7(){
 			return;
 		}
 		if(c=='n'){
-			printf("v1:%d ",v1);
-			printf("v2:%d ",v2);
-			printf("v3:%d ",v3);
-			printf("v4:%d\n",v4);
-			v1+=1;
-			v2+=1;
-			v3+=1;
-			v4+=1;
+			v1 << i;
 		}
   	}
   }
