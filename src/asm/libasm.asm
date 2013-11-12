@@ -141,7 +141,7 @@ _opencd:
     out     dx, al          ;Send Packet command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
-wait:
+;wait:
     mov     ecx, 0xffff
 waitloop:
     loopnz  waitloop
@@ -185,13 +185,13 @@ waitloop9:
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
 
-;    mov     dx, 0x1f0
-;    mov     ax, 0x1b     ;Start/Stop Unit command
-;    out     dx, ax
+    mov     dx, 0x1f0
+    mov     ax, 0x1b     ;Start/Stop Unit command
+    out     dx, ax
 ;The remaining 11 bytes supply parameter info for the command.
-;    xor     ax, ax
-;    out     dx, ax
-;    mov     ax, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible
+    xor     ax, ax
+    out     dx, ax
+    mov     ax, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible
     out     dx, ax
     xor     ax, ax
     out     dx, ax
