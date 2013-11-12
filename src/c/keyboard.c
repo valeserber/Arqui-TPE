@@ -352,7 +352,7 @@ bool kbBufferIsFull(void){
 
 bool addToKeyboardBuffer(unsigned char ascii_c){
     _Cli();
-    if(kbBufferIsFull()) return false; // Se podria agregar un pitido a la motherboard :) 
+    if(kbBufferIsFull()) return false; 
     keyboard_buffer.buffer[keyboard_buffer.enqueuePos] = ascii_c;
     keyboard_buffer.enqueuePos = (keyboard_buffer.enqueuePos + 1) % BUFFER_SIZE;
     _Sti();
