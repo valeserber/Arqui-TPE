@@ -184,19 +184,13 @@ waitloop9:
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
 
-    mov     dx, 0x1f7
-    mov     al, 0xa0
-    out     dx, al
-    call    _pollUntilNotBusy
-    call    _pollUntilDataRequest
-
-    mov     dx, 0x1f0
-    mov     ax, 0x1b     ;Start/Stop Unit command
-    out     dx, ax
+;    mov     dx, 0x1f0
+;    mov     ax, 0x1b     ;Start/Stop Unit command
+;    out     dx, ax
 ;The remaining 11 bytes supply parameter info for the command.
-    xor     ax, ax
-    out     dx, ax
-    mov     ax, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible
+;    xor     ax, ax
+;    out     dx, ax
+;    mov     ax, 2       ;LoEj bit in 1, Start bit in 0: Eject disc if possible
     out     dx, ax
     xor     ax, ax
     out     dx, ax
@@ -207,55 +201,49 @@ waitloop9:
 
 _closecd:
     call    _pollUntilNotBusy
-    xor     ax, ax
+    ;xor     ax, ax
+    mov     al, 0x10
     mov     dx, 0x1f6
-    out     dx, ax
-    mov     dx, 0x1f1
-    out     dx, ax 
+    out     dx, al
+;    mov     dx, 0x1f1
+;    out     dx, ax
     mov     dx, 0x1f7
-    mov     ax, 0xa0
-    out     dx, ax
-    
+    mov     al, 0xa0
+    out     dx, al
+
     mov     ecx, 0xffff
 waitloop2:
     loopnz  waitloop2
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
+;    mov     dx, 0x1f0
+;    mov     al, 0x1e
+;    out     dx, al
+;    xor     ax, ax
+;    out     dx, al
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    call    _pollUntilNotBusy
+;    mov     dx, 0x1f7
+;    mov     ax, 0xa0
+;    out     dx, ax
+;    call    _pollUntilNotBusy
+;    call    _pollUntilDataRequest
     mov     dx, 0x1f0
-    mov     al, 0x1e
-    out     dx, al
+    mov     ax, 0x1b        ;Start/Stop Unit command
+    out     dx, ax
     xor     ax, ax
-    out     dx, al
     out     dx, ax
+    mov     ax, 3           ;LoEj & Start bits enabled (Eject disc if possible)
     out     dx, ax
-    out     dx, ax
-    out     dx, ax
-    out     dx, ax
-    call    _pollUntilNotBusy
-    mov     dx, 0x1f7
-    mov     ax, 0xa0
-    out     dx, ax
-    call    _pollUntilNotBusy
-    call    _pollUntilDataRequest
-    mov     dx, 0x1f0
-    mov     al, 0x1b        ;Start/Stop Unit command
-    out     dx, al
     xor     ax, ax
-    out     dx, al
-    out     dx, ax
-    mov     al, 3           ;LoEj & Start bits enabled (Eject disc if possible)
-    out     dx, al
-    xor     ax, ax
-    out     dx, al
     out     dx, ax
     out     dx, ax
     out     dx, ax
-    ;mov     dx, 0x1f7
-    ;in      eax, dx
-    ;push    eax
-    ;call    printStatus
-    ;add     esp, 4              ;pop
     call    _pollUntilNotBusy
     ret
 
@@ -334,7 +322,7 @@ getCapacityInfo:
 
 _pollUntilNotBusy:
     mov     dx, 0x1f7
-    mov     edi, 0xfffff
+    mov     edi, 0xaffff
 cycleBSY:
     dec     edi
     jz      exitBSY     ;If it's taking too long, abort
@@ -346,7 +334,7 @@ exitBSY:
 
 _pollUntilDataRequest:
     mov     dx, 0x1f7
-    mov     edi, 0xfffff
+    mov     edi, 0xaffff
 cycleDRQ:
     dec     edi
     jz      exitDRQ
@@ -355,31 +343,6 @@ cycleDRQ:
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
 exitDRQ:
     ret
-
-;_printError:
-;mov dx, 0x1F1
-;mov ax, 0
-;in al, dx
-;push eax
-;call printNum
-;pop eax
-;ret
-
-;_test:
-;    mov    eax, 0xCAFE
-;    mov    ebx, 0x0FE0
-;    mov    ecx, 0x0FEA
-;    mov    edx, 0x0CE0
-;    mov    edi, 0x0DAF
-;    mov    esi, 0x0CCC
-;    pushad
-;    ;add    eax, eax
-;    pushfd
-;    call  _saveRegisters
-;    call  _registerInfo
-;    popfd
-;    popad
-;    ret
 
 ; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
