@@ -124,7 +124,7 @@ set_cursor:
     ret
 
 _opencd:
-    jmp     checkIDE
+    jmp     checkIDEtoOpen
 primaryIDE:
     call    _pollPrimUntilNotBusy
     mov     dx, 0x1f6
@@ -133,48 +133,36 @@ primaryIDE:
     mov     dx, 0x1f1
     xor     al, al
     out     dx, al
-
     mov     dx, 0x3f6
     mov     al, 00001010b
     out     dx, al
-
     mov     dx, 0x1f7
     mov     al, 0xa0
     out     dx, al
-
     call    _pollPrimUntilNotBusy
     call    _pollPrimUntilDataRequest
-
     mov     dx, 0x1f0
     mov     ax, 0x1E
     out     dx, ax
-
     xor     ax, ax
     out     dx, ax
     out     dx, ax
     out     dx, ax
     out     dx, ax
     out     dx, ax
-
     call    _pollPrimUntilNotBusy
-
     mov     dx, 0x1f7
     mov     al, 0xA0
     out     dx, al
-
     call    _pollPrimUntilNotBusy
     call    _pollPrimUntilDataRequest
-
     mov     dx, 0x1f0
     mov     ax, 0x1b
     out     dx, ax
-
     xor     ax, ax
     out     dx, ax
-
     mov     ax, 2
     out     dx, ax
-
     xor     ax, ax
     out     dx, ax
     out     dx, ax
@@ -228,7 +216,7 @@ secondaryIDE:
     call    _pollSecUntilNotBusy
     ret
 
-checkIDE:
+checkIDEtoOpen:
     mov     dx, 0x1f7
     mov     edi, 0xffffffff
 cycle1:
@@ -239,6 +227,7 @@ cycle1:
     jz      cycle1
     jmp     primaryIDE
 trySeconday:
+    mov     dx, 0x177
     mov     edi, 0xffffffff
 cycle2:
     dec     edi
@@ -248,20 +237,31 @@ cycle2:
     jz      cycle2
     jmp     secondaryIDE
 
-
-
-
-
-
-
-
-
-
-
-
+checkIDEtoClose:
+    mov     dx, 0x1f7
+    mov     edi, 0xffffffff
+cycle3:
+    dec     edi
+    jz      tryToCloseSecondary
+    in      al, dx
+    and     al, 0x80
+    jz      cycle3
+    jmp     closePrimaryIDE
+tryToCloseSecondary:
+    mov     dx, 0x177
+    mov     edi, 0xffffffff
+cycle4:
+    dec     edi
+    jz      exit
+    in      al, dx
+    and     al, 0x80
+    jz      cycle4
+    jmp     closeSecondaryIDE
 
 
 _closecd:
+    jmp checkIDEtoClose
+closePrimaryIDE:
     call    _pollPrimUntilNotBusy
     mov     al, 0x10
     mov     dx, 0x1f6
@@ -289,6 +289,36 @@ waitloop2:
     out     dx, ax
     out     dx, ax
     call    _pollPrimUntilNotBusy
+    ret
+
+closeSecondaryIDE:
+    call    _pollSecUntilNotBusy
+    mov     al, 0x10
+    mov     dx, 0x176
+    out     dx, al
+    mov     dx, 0x177
+    mov     al, 0xa0
+    out     dx, al
+
+    mov     ecx, 0xffff
+waitloop6:
+    loopnz  waitloop6
+
+    call    _pollSecUntilNotBusy
+    call    _pollSecUntilDataRequest
+
+    mov     dx, 0x170
+    mov     ax, 0x1b        ;Start/Stop Unit command
+    out     dx, ax
+    xor     ax, ax
+    out     dx, ax
+    mov     ax, 3           ;LoEj & Start bits enabled (Eject disc if possible)
+    out     dx, ax
+    xor     ax, ax
+    out     dx, ax
+    out     dx, ax
+    out     dx, ax
+    call    _pollSecUntilNotBusy
     ret
 
 _infocd:
