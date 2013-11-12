@@ -79,49 +79,49 @@ write:
 ; @param BH The column on screen, starts from 0
 ; SOURCE: http://wiki.osdev.org/Text_Mode_Cursor
 
-set_cursor:     
-    push ebp
-    mov ebp,esp
+set_cursor:
+    push    ebp
+    mov     ebp,esp
     pushf
     pushad
-                               
+
     ;unsigned short position = (row*80) + col;
     ;AX will contain 'position'
-                
-    mov bl,byte[ebp + 8]
-    mov bh,byte[ebp + 12]
-    mov ax,bx
-    and ax,0ffh             ;set AX to 'row'
-    mov cl,80   
-    mul cl                  ;row*80
- 
-    mov cx,bx               
-    shr cx,8                ;set CX to 'col'
-    add ax,cx               ;+ col
-    mov cx,ax               ;store 'position' in CX
- 
-    ;cursor LOW port to vga INDEX register
-    mov al,0fh             
-    mov dx,3d4h             ;VGA port 3D4h
-    out dx,al             
 
-    mov ax,cx               ;restore 'postion' back to AX  
-    mov dx,3d5h             ;VGA port 3D5h
-    out dx,al               ;send to VGA hardware
+    mov     bl, byte[ebp + 8]
+    mov     bh, byte[ebp + 12]
+    mov     ax, bx
+    and     ax, 0ffh             ;set AX to 'row'
+    mov     cl, 80
+    mul     cl                  ;row*80
+
+    mov     cx, bx
+    shr     cx, 8                ;set CX to 'col'
+    add     ax, cx               ;+ col
+    mov     cx, ax               ;store 'position' in CX
+
+    ;cursor LOW port to vga INDEX register
+    mov     al, 0fh
+    mov     dx, 3d4h             ;VGA port 3D4h
+    out     dx, al
+
+    mov     ax, cx               ;restore 'postion' back to AX
+    mov     dx, 3d5h             ;VGA port 3D5h
+    out     dx, al               ;send to VGA hardware
 
     ;cursor HIGH port to vga INDEX register
-    mov al,0eh
-    mov dx,3d4h             ;VGA port 3D4h
-    out dx,al
+    mov     al, 0eh
+    mov     dx, 3d4h             ;VGA port 3D4h
+    out     dx, al
 
-    mov ax,cx               ;restore 'position' back to AX
-    shr ax,8                ;get high byte in 'position'
-    mov dx,3d5h             ;VGA port 3D5h
-    out dx,al               ;send to VGA hardware
+    mov     ax, cx               ;restore 'position' back to AX
+    shr     ax, 8                ;get high byte in 'position'
+    mov     dx, 3d5h             ;VGA port 3D5h
+    out     dx, al               ;send to VGA hardware
     popad
     popf
-    mov esp,ebp
-    pop ebp
+    mov     esp,ebp
+    pop     ebp
     ret
 
 _opencd:
@@ -141,11 +141,12 @@ _opencd:
     out     dx, al          ;Send Packet command
 ;After sending the Packet command, the host is to wait 400 nanoseconds
 ;before doing anything else.
-    mov     ecx, 0x1ffff
+wait:
+    mov     ecx, 0xffff
 waitloop:
     loopnz  waitloop
 
-;    call    _pollUntilNotBusy 
+;    call    _pollUntilNotBusy
 ;    call    _pollUntilDataRequest
 ;    mov     dx, 0x1f0       ;Data register
 ;    mov     al, 0x1e        ;Prevent/Allow Medium removal Packet command
@@ -163,7 +164,7 @@ waitloop:
     mov     al, 0xa0
     out     dx, al
 
-    mov     ecx, 0x1ffff
+    mov     ecx, 0xffff
 waitloop9:
     loopnz  waitloop9
 
@@ -322,10 +323,10 @@ getCapacityInfo:
 
 _pollUntilNotBusy:
     mov     dx, 0x1f7
-    mov     edi, 0xaffff
+    ;mov     edi, 0xffffffff
 cycleBSY:
-    dec     edi
-    jz      exitBSY     ;If it's taking too long, abort
+    ;dec     edi
+    ;jz      exitBSY     ;If it's taking too long, abort
     in      al, dx      ;Read from status register
     and     al, 0x80    ;Check leftmost bit to see if drive is busy
     jnz     cycleBSY    ;While busy, keep querying until drive is available
@@ -334,10 +335,10 @@ exitBSY:
 
 _pollUntilDataRequest:
     mov     dx, 0x1f7
-    mov     edi, 0xaffff
+    ;mov     edi, 0x1fffff
 cycleDRQ:
-    dec     edi
-    jz      exitDRQ
+    ;dec     edi
+    ;jz      exitDRQ
     in      al, dx      ;Read from status register
     and     al, 0x08    ;Check 3rd bit (Data transfer Requested flag)
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
