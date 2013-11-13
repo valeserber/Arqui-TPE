@@ -218,7 +218,7 @@ secondaryIDE:
 
 checkIDEtoOpen:
     mov     dx, 0x1f7
-    mov     edi, 0xffffffff
+    mov     edi, 0xffffff
 cycle1:
     dec     edi
     jz      trySecondary
@@ -228,7 +228,7 @@ cycle1:
     jmp     primaryIDE
 trySeconday:
     mov     dx, 0x177
-    mov     edi, 0xffffffff
+    mov     edi, 0xffffff
 cycle2:
     dec     edi
     jz      exit
@@ -239,7 +239,7 @@ cycle2:
 
 checkIDEtoClose:
     mov     dx, 0x1f7
-    mov     edi, 0xffffffff
+    mov     edi, 0xffffff
 cycle3:
     dec     edi
     jz      tryToCloseSecondary
@@ -249,7 +249,7 @@ cycle3:
     jmp     closePrimaryIDE
 tryToCloseSecondary:
     mov     dx, 0x177
-    mov     edi, 0xffffffff
+    mov     edi, 0xffffff
 cycle4:
     dec     edi
     jz      exit
