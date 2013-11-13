@@ -124,48 +124,51 @@ set_cursor:
     ret
 
 _opencd:
-    call    _pollUntilNotBusy
-checkIDEtoOpen:
-    mov     dx, 0x1f7
-    mov     edi, 0xffffff
-cycle1:
-    dec     edi
-    jz      trySecondary
-    in      al, dx
-    and     al, 0x80
-    jz      cycle1
-    jmp     primaryIDE
-trySeconday:
-    mov     dx, 0x177
-    mov     edi, 0xffffff
-cycle2:
-    dec     edi
-    jz      exit
-    in      al, dx
-    and     al, 0x80
-    jz      cycle2
-    jmp     secondaryIDE
 
-checkIDEtoClose:
-    mov     dx, 0x1f7
-    mov     edi, 0xffffff
-cycle3:
-    dec     edi
-    jz      tryToCloseSecondary
-    in      al, dx
-    and     al, 0x80
-    jz      cycle3
-    jmp     closePrimaryIDE
-tryToCloseSecondary:
-    mov     dx, 0x177
-    mov     edi, 0xffffff
-cycle4:
-    dec     edi
-    jz      exit
-    in      al, dx
-    and     al, 0x80
-    jz      cycle4
-    jmp     closeSecondaryIDE
+    call    _pollUntilNotBusy
+
+    mov dx, 0x1f6
+    mov al, 10h
+    out dx, al 
+    mov dx, 0x1f1
+    xor al, al
+    out dx, al 
+
+    mov dx, 3f6h       ;Device Control register
+    mov al, 00001010b  ;nIEN is the second bit from the right here
+    out dx, al         ;nIEN is now one!
+
+    mov dx, 0x1f7
+    mov al, 0xA0       ;ATAPI COMMAND
+    out dx, al 
+
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+
+    mov dx, 0x1f0
+    mov ax, 0x1E
+    out dx, ax
+
+    xor ax, ax
+    out dx, ax
+    out dx, ax
+    out dx, ax
+    out dx, ax
+    out dx, ax
+
+    call    _pollUntilNotBusy
+  
+    mov dx, 0x1f7
+    mov al, 0xA0
+    out dx, al
+
+    call    _pollUntilNotBusy
+    call    _pollUntilDataRequest
+
+    mov dx, 0x1f0
+    mov ax, 1Bh
+    out dx, ax
+
     xor ax, ax
     out dx, ax
 
@@ -182,9 +185,12 @@ cycle4:
 
 _closecd:
     call    _pollUntilNotBusy
+    ;xor     ax, ax
     mov     al, 0x10
     mov     dx, 0x1f6
     out     dx, al
+;    mov     dx, 0x1f1
+;    out     dx, ax
     mov     dx, 0x1f7
     mov     al, 0xa0
     out     dx, al
@@ -195,7 +201,22 @@ waitloop2:
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
-
+;    mov     dx, 0x1f0
+;    mov     al, 0x1e
+;    out     dx, al
+;    xor     ax, ax
+;    out     dx, al
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    out     dx, ax
+;    call    _pollUntilNotBusy
+;    mov     dx, 0x1f7
+;    mov     ax, 0xa0
+;    out     dx, ax
+;    call    _pollUntilNotBusy
+;    call    _pollUntilDataRequest
     mov     dx, 0x1f0
     mov     ax, 0x1b        ;Start/Stop Unit command
     out     dx, ax
@@ -314,7 +335,7 @@ cycleDRQ:
 exitDRQ:
     ret
 
-; Debug para el BOCHS, detiene la ejecución; Para continuar colocar en el BOCHSDBG: set $eax=0
+; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
 ;
 
 _debug:
