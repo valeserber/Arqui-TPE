@@ -3,7 +3,7 @@
 #include "../../include/keyboard.h"
 #include "../../include/stdio.h"
 
-BUFFER keyboard_buffer;
+BUFFER kb_buffer;
 
 int normal_keyboard[KEYS] = {
         //MAKECODE
@@ -285,14 +285,14 @@ int caps_keyboard[KEYS] = {
 int scancodeToAscii(unsigned char scancode){
     if(scancode & 0x80){ 
 	if((scancode==LEFT_SHIFT_BREAK)||(scancode==RIGHT_SHIFT_BREAK)){
-		keyboard_buffer.flag.shiftOn=false;
+		kb_buffer.flag.shiftOn=false;
 	}else if(scancode==CONTROL_BREAK){
-		keyboard_buffer.flag.controlOn=false;
+		kb_buffer.flag.controlOn=false;
 	}
 	return 0;
     }
     if(scancode==CONTROL_R){
-	if(keyboard_buffer.flag.controlOn==true){		
+	if(kb_buffer.flag.controlOn==true){		
 		clearRegisters();
 		reset_upperWritepos();
 		_registerInfo();		
@@ -303,26 +303,26 @@ int scancodeToAscii(unsigned char scancode){
     int key= normal_keyboard[scancode];
     switch(key){
 	case CONTROL_MAKE:
-	        keyboard_buffer.flag.controlOn = true;
+	        kb_buffer.flag.controlOn = true;
 		return 0;
 		break;
 	case CAPS_LOCK:
-	        keyboard_buffer.flag.capsLockOn = !keyboard_buffer.flag.capsLockOn;
+	        kb_buffer.flag.capsLockOn = !kb_buffer.flag.capsLockOn;
                 return 0;
 		break;
 	case LEFT_SHIFT_MAKE:
 	case RIGHT_SHIFT_MAKE:
-	    keyboard_buffer.flag.shiftOn= true;
+	    kb_buffer.flag.shiftOn= true;
 		return 0;
 		break;
 	default:
-		if(keyboard_buffer.flag.capsLockOn && (!keyboard_buffer.flag.shiftOn)){
+		if(kb_buffer.flag.capsLockOn && (!kb_buffer.flag.shiftOn)){
 			key=caps_keyboard[scancode];
 		}
-		else if((!keyboard_buffer.flag.capsLockOn)&&(keyboard_buffer.flag.shiftOn)){
+		else if((!kb_buffer.flag.capsLockOn)&&(kb_buffer.flag.shiftOn)){
 			key=special_keyboard[scancode];
 		}
-		else if(keyboard_buffer.flag.capsLockOn && keyboard_buffer.flag.shiftOn){
+		else if(kb_buffer.flag.capsLockOn && kb_buffer.flag.shiftOn){
 			key=normal_keyboard[scancode];
 	        }
 		break;	
@@ -332,36 +332,36 @@ int scancodeToAscii(unsigned char scancode){
 
 void buffer_initialize(){
     int i;
-    keyboard_buffer.enqueuePos = keyboard_buffer.dequeuePos = 0;
+    kb_buffer.enqueuePos = kb_buffer.dequeuePos = 0;
    
     for( i = 0; i < BUFFER_SIZE; i++){
-        keyboard_buffer.buffer[i] = 0;
+        kb_buffer.buffer[i] = 0;
     }
-    keyboard_buffer.flag.shiftOn=false;
-    keyboard_buffer.flag.controlOn=false;
-    keyboard_buffer.flag.capsLockOn=false;
+    kb_buffer.flag.shiftOn=false;
+    kb_buffer.flag.controlOn=false;
+    kb_buffer.flag.capsLockOn=false;
 }
 
 bool kbBufferIsEmpty(void){
-    return keyboard_buffer.enqueuePos == keyboard_buffer.dequeuePos;
+    return kb_buffer.enqueuePos == kb_buffer.dequeuePos;
 }
 
 bool kbBufferIsFull(void){
-    return keyboard_buffer.enqueuePos == keyboard_buffer.dequeuePos-1;
+    return kb_buffer.enqueuePos == kb_buffer.dequeuePos-1;
 }
 
 bool addToKeyboardBuffer(unsigned char ascii_c){
     _Cli();
     if(kbBufferIsFull()) return false; 
-    keyboard_buffer.buffer[keyboard_buffer.enqueuePos] = ascii_c;
-    keyboard_buffer.enqueuePos = (keyboard_buffer.enqueuePos + 1) % BUFFER_SIZE;
+    kb_buffer.buffer[kb_buffer.enqueuePos] = ascii_c;
+    kb_buffer.enqueuePos = (kb_buffer.enqueuePos + 1) % BUFFER_SIZE;
     _Sti();
 }
 
 int kbBufferGetNext(){
     if(kbBufferIsEmpty()) return -1;
-    int dequeuePos = keyboard_buffer.dequeuePos;
-    keyboard_buffer.dequeuePos = (keyboard_buffer.dequeuePos +1) % BUFFER_SIZE;
-    return keyboard_buffer.buffer[dequeuePos];
+    int dequeuePos = kb_buffer.dequeuePos;
+    kb_buffer.dequeuePos = (kb_buffer.dequeuePos +1) % BUFFER_SIZE;
+    return kb_buffer.buffer[dequeuePos];
 }
 

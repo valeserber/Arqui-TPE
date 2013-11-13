@@ -6,7 +6,8 @@
 #include "../../include/video.h"
 
 SHELL shell_buffer;
-char * command[]={"openCD","infoCD","closeCD","clear","test","help","clearUp","test1","test2","test3","test4","test5","test6","test7"};
+char *command[]={"openCD","infoCD","closeCD","clear","test","help","clearUp",
+                  "test1","test2","test3","test4","test5","test6","test7"};
 extern _opencd();
 extern _infocd();
 extern _closecd();
@@ -121,7 +122,7 @@ void help(){
     printf("test\t   Lists available tests\n");
     printf("help\t   Lists available commands\n");
     printf("\tShortcuts\n");
-    printf("Ctrl+R:  Shows the value of the registers at the time the keys were pressed\n");
+    printf("Ctrl+R:  Show registers at the time the keys were pressed\n");
 }
 
 void printCapacity(unsigned int lba, unsigned int blockLength){

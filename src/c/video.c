@@ -175,12 +175,6 @@ int getcol(){
     return ((writepos/2)%160);
 }
 
-/***************************************************************
-*k_clear_screen
-*
-* Borra la pantalla en modo texto color.
-****************************************************************/
-
 void k_clear_screen(){
     char *vidmem = (char *) VIDMEM_ADDRESS;
     unsigned int i=0;

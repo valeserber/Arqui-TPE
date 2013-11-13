@@ -189,8 +189,6 @@ _closecd:
     mov     al, 0x10
     mov     dx, 0x1f6
     out     dx, al
-;    mov     dx, 0x1f1
-;    out     dx, ax
     mov     dx, 0x1f7
     mov     al, 0xa0
     out     dx, al
@@ -201,28 +199,12 @@ waitloop2:
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
-;    mov     dx, 0x1f0
-;    mov     al, 0x1e
-;    out     dx, al
-;    xor     ax, ax
-;    out     dx, al
-;    out     dx, ax
-;    out     dx, ax
-;    out     dx, ax
-;    out     dx, ax
-;    out     dx, ax
-;    call    _pollUntilNotBusy
-;    mov     dx, 0x1f7
-;    mov     ax, 0xa0
-;    out     dx, ax
-;    call    _pollUntilNotBusy
-;    call    _pollUntilDataRequest
     mov     dx, 0x1f0
     mov     ax, 0x1b        ;Start/Stop Unit command
     out     dx, ax
     xor     ax, ax
     out     dx, ax
-    mov     ax, 3           ;LoEj & Start bits enabled (Eject disc if possible)
+    mov     ax, 3           ;LoEj & Start bits on (Eject disc if possible)
     out     dx, ax
     xor     ax, ax
     out     dx, ax
@@ -258,22 +240,6 @@ waitloop4:
 
     call    _pollUntilNotBusy
     call    _pollUntilDataRequest
-    ;mov     dx, 0x1f0
-    ;mov     al, 0x1e  ;Ver si tengo que prevenir el removal cambiando el bit adecuado
-    ;out     dx, al
-    ;xor     ax, ax
-    ;out     dx, al
-    ;out     dx, ax
-    ;out     dx, ax
-    ;out     dx, ax
-    ;out     dx, ax
-    ;out     dx, ax
-    ;call    _pollUntilNotBusy
-    ;mov     dx, 0x1f7
-    ;mov     ax, 0xf0
-    ;out     dx, ax
-    ;call    _pollUntilNotBusy
-    ;call    _pollUntilDataRequest
     mov     dx, 0x1f0
     mov     al, 0x25            ;Read capacity command
     out     dx, al
@@ -285,7 +251,6 @@ waitloop4:
     out     dx, ax
     out     dx, ax
     call    _pollUntilNotBusy
-    ;call    _pollUntilDataRequest
 
     mov     ecx, 4
     xor     ebx, ebx
@@ -304,19 +269,9 @@ getCapacityInfo:
     ;call    _pollUntilNotBusy
     ret
 
-_wait400ns:                 ;CPU dependant!
-    mov     ecx, 0xffff
-keepWaiting:
-    nop
-    loopnz  keepWaiting
-    ret
-
 _pollUntilNotBusy:
     mov     dx, 0x1f7
-    ;mov     edi, 0xffffffff
 cycleBSY:
-    ;dec     edi
-    ;jz      exitBSY     ;If it's taking too long, abort
     in      al, dx      ;Read from status register
     and     al, 0x80    ;Check leftmost bit to see if drive is busy
     jnz     cycleBSY    ;While busy, keep querying until drive is available
@@ -325,18 +280,16 @@ exitBSY:
 
 _pollUntilDataRequest:
     mov     dx, 0x1f7
-    ;mov     edi, 0x1fffff
 cycleDRQ:
-    ;dec     edi
-    ;jz      exitDRQ
+
     in      al, dx      ;Read from status register
     and     al, 0x08    ;Check 3rd bit (Data transfer Requested flag)
     jz      cycleDRQ    ;While there are data transfer requests, keep cycling
 exitDRQ:
     ret
 
-; Debug para el BOCHS, detiene la ejecució; Para continuar colocar en el BOCHSDBG: set $eax=0
-;
+; Debug para el BOCHS, detiene la ejecució
+; Para continuar colocar en el BOCHSDBG: set $eax=0
 
 _debug:
     push    bp

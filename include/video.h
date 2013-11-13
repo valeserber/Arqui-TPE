@@ -1,6 +1,6 @@
-#define WHITE_TXT     0x07 // Fondo negro, letras blancas
-#define LILAC_SQUARE  0x97 // Fondo lila, letras blancas
-#define LILAC_TXT     0x09 // Fondo negro, letras lila
+#define WHITE_TXT     0x07 // Black background, white letters
+#define LILAC_SQUARE  0x97 // Lilac background, white letters
+#define LILAC_TXT     0x09 // Black background, lilac letters
 
 void writeToScreen(char key, int fd);
 void scrollMainScreen(void);
@@ -15,6 +15,12 @@ void insertKey(char key, int * pos, char * vid);
 void max_pos(int max);
 void reset_upperWritepos(void);
 void reset_writepos(void);
+
+/***************************************************************
+*k_clear_screen
+*
+* Borra la pantalla en modo texto color.
+****************************************************************/
 void k_clear_screen(void);
 void paintLetter(int color);
 int getrow(void);

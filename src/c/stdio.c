@@ -27,38 +27,36 @@ int vfprintf(int fd, const char * fmt, va_list ap){
             putc(*p, fd);
 	    printedChars++;
         }else{
-	    switch(*++p){
-	    case 'i':
-            case 'd':
-	        printedChars += vfprintf(fd, ltoa(va_arg(ap, int), auxBuf,10), ap);
-	        break;
-	    case 'x':
-	        printedChars += vfprintf(fd, ltoa(va_arg(ap, int),auxBuf, 16), ap);
-		break;
+	        switch(*++p){
+	        case 'i':
+                case 'd':
+	            printedChars+=vfprintf(fd,ltoa(va_arg(ap,int),auxBuf,10),ap);
+	            break;
+	        case 'x':
+	            printedChars+=vfprintf(fd,ltoa(va_arg(ap,int),auxBuf,16),ap);
+		        break;
             case 'X':
-	        sval = ltoa(va_arg(ap, int), auxBuf, 16);
+	            sval = ltoa(va_arg(ap, int), auxBuf, 16);
                 char *aux = sval;
                 while (*sval){
                     *sval = toupper(*sval);
                     sval++;
                 }
-                printedChars+= vfprintf(fd, aux, ap);
+                printedChars += vfprintf(fd, aux, ap);
                 break;
             case 's':
-	        for(sval = va_arg(ap, char*); *sval; sval++){
-		    putc(*sval, fd);
-		    printedChars++;
-		}
-		break;
-            case 'f':
-	    	break;
+	            for(sval = va_arg(ap, char*); *sval; sval++){
+                    putc(*sval, fd);
+                    printedChars++;
+                }
+                break;
             case 'c':
-	        cval = va_arg(ap, char);
-		putc(cval, fd);
-		printedChars++;
-		break;
+                cval = va_arg(ap, char);
+                putc(cval, fd);
+                printedChars++;
+		        break;
             }
-	}
+	    }
     }
     va_end(ap);
     return printedChars;
