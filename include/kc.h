@@ -15,12 +15,6 @@ void wait(int time);
 /* Limpia la pantalla */
 void k_clear_screen();
 
-/*Imprime hola mundo */
-void print_hello();
-
-/*Imprime en pantalla*/
-void print(char * str);
-
 /*Calcula cantidad de memoria*/
 size_t get_memory();
 
@@ -31,10 +25,5 @@ char * to_string(char * str, long number);
 void setup_IDT_entry (DESCR_INT *item, byte selector, dword offset,
         byte access, byte cero);
 
-char * tostring(char* str, int number);
-
-void write_registers(char * vidmem,int size);
-
-void shell_run();
 
 #endif

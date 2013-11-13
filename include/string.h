@@ -43,6 +43,9 @@ int atoi(const char * str);
  */
 int atohexa(char * buffer);
 
+/*
+ * Converts a char representing a hexadecimal number to int
+ */
 int hexatoint(char n);
 
 #endif

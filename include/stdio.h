@@ -43,7 +43,18 @@ int printf(char *fmt, ...);
  */
 int uprintf(char *fmt, ...);
 
+/*
+ *Prints only the flags which value is 1.
+ */
 void printFlags(dword flags);
 
+/*
+ * Reads data from stdin and stores them according to the parameter format
+ * into the locations pointed by the additional arguments.
+ * The additional arguments should point to already allocated objects of 
+ * the type specified by their corresponding format specifier within the 
+ * format string.
+ */
 int scanf(const char * fmt, ...);
+
 #endif

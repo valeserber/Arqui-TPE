@@ -76,10 +76,5 @@ typedef struct {
   dword base;
 } IDTR;
 
-typedef struct{
-  int fd;
-  size_t size;
-  char * buffer;
-} FILE;
 
 #endif
