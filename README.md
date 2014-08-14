@@ -4,15 +4,17 @@
 
 
 - Desarrollado parte en C y parte en Assembler
+
+- División entre Kernel y User space
  
 - Se implementó un shell
  
 - Se implementó printf, scanf
  
-- Se implementó la INT 80
+- Se implementó la INT 80h
  
 - Se implementó la entrada estándar de teclado con interrupciones
 
-- Pueden verse los valores de los registros
+- Puede verse los valores de los registros con Ctlr+R
 
 - Puede abrir y cerrar la disquetera
