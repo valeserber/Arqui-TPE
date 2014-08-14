@@ -20,4 +20,5 @@
 - Puede abrir y cerrar la disquetera
 
 Más información en: https://github.com/valeserber/Arqui-TPE/blob/master/docs/Informe.docx.pdf
+
 Manual de Usuario: https://github.com/valeserber/Arqui-TPE/blob/master/docs/Manual%20de%20usuario.pdf
