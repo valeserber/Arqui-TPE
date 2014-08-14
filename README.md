@@ -18,3 +18,5 @@
 - Puede verse los valores de los registros con Ctlr+R
 
 - Puede abrir y cerrar la disquetera
+
+Más información en: https://github.com/valeserber/Arqui-TPE/blob/master/docs/Informe.docx.pdf
